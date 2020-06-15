@@ -47,6 +47,9 @@ function App() {
             <Route path="/workshops">
               <WorkshopsRouter />
             </Route>
+            <Route path="/lost">
+              <NotFound />
+            </Route>
             <Route component={NotFound} />
           </Switch>
         </Router>
