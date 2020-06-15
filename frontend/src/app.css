@@ -1,3 +1,11 @@
+a {
+  padding: 10px 20px !important;
+}
+
+.full-height {
+  height: calc(100vh - 80px) !important;
+}
+
 .card {
   position: relative;
 }

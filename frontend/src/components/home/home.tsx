@@ -15,14 +15,12 @@ export default function Home() {
   });
   return (
     <>
-      <AppHeader />
       <HomeHero />
       <HomeSearch />
       <animated.div style={homeAnimation}>
         <HomeCategories />
         <HomeWorkshops />
       </animated.div>
-      <AppFooter />
     </>
   );
 }

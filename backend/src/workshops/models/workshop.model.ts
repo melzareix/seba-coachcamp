@@ -2,13 +2,12 @@ import { prop, Ref, index, arrayProp } from '@typegoose/typegoose';
 import { Instructor } from 'src/instructors/models/instructor.model';
 import { Review } from './review.model';
 import { Offering } from './offering.model';
-import { string } from 'yargs';
 
 export enum Categories {
   COMMUNICATIONS = 'Communications',
   CREATIVITY = 'Creativity',
   TEAMWORk = 'TeamWork',
-  DEPENDABILITY = 'Dependability',
+  EMOTIONALINTELLIGENCE = 'Emotional-Intelligence',
   ADAPTABILITY = 'Adaptability',
   LEADERSHIP = 'Leadership',
   PROBLEM_SOLVING = 'Problem-solving',

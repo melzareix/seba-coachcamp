@@ -6,7 +6,7 @@ export default function WorkshopCard(props: any) {
   return (
     <Box fill className="card" background="dark-1" onClick={() => alert(1)}>
       <Image fit="cover" opacity={opacity} src={props.image} />
-      <Heading textAlign="center" className="workshop-title" level="1">
+      <Heading textAlign="center" className="workshop-title" level="2">
         {props.title}
       </Heading>
     </Box>
