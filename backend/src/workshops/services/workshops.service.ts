@@ -16,6 +16,10 @@ export class WorkshopsService {
     return await this.workshopModel.create(workshop);
   }
 
+  async update(id: string, workshop: WorkshopCreateDto): Promise<Workshop> {
+    return await this.workshopModel.findByIdAndUpdate(id, workshop);
+  }
+
   async findAll(): Promise<Workshop[]> {
     return await this.workshopModel.find().exec();
   }

@@ -1,9 +1,9 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Put, Body, Post } from '@nestjs/common';
 import { WorkshopsService } from '../services/workshops.service';
 import { Workshop, Categories } from '../models/workshop.model';
 import { ApiTags } from '@nestjs/swagger';
 import { Locations } from '../models/offering.model';
-import { WorkshopSearchDto } from '../workshops.types';
+import { WorkshopSearchDto, WorkshopCreateDto } from '../workshops.types';
 
 @ApiTags('Workshops')
 @Controller('workshops')
@@ -30,5 +30,15 @@ export class WorkshopsController {
   @Get(':id')
   async getWorkshop(@Param('id') id: string): Promise<Workshop | null> {
     return await this.workshopService.findById(id);
+  }
+
+  @Put(':id')
+  async updateWorkshop(@Param('id') id: string, @Body() updatedWorkShop: WorkshopCreateDto): Promise< Workshop | null> {
+    return await this.workshopService.update(id, updatedWorkShop)
+  }
+
+  @Post()
+  async createWorkshop(@Body() updatedWorkShop: WorkshopCreateDto): Promise< Workshop | null> {
+    return await this.workshopService.create(updatedWorkShop)
   }
 }
