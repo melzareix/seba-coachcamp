@@ -3,6 +3,7 @@ import { Workshop } from './workshop.model';
 import { Instructor } from 'src/instructors/models/instructor.model';
 import { Coupon } from './coupon.model';
 import { Transaction } from './transaction.model';
+import { Offering } from './offering.model';
 
 export enum BookingStatus {
   PENDING = 'Pending',
@@ -13,6 +14,9 @@ export enum BookingStatus {
 export class Booking {
   @prop({ required: true, ref: 'Workshop' })
   _workshop: Ref<Workshop>;
+
+  @prop({ required: true, ref: 'Offering' })
+  _offering: Ref<Offering>;
 
   @prop({ ref: 'Instructor' })
   _instructor: Ref<Instructor>;

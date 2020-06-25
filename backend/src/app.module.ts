@@ -7,6 +7,7 @@ import { TypegooseModule } from 'nestjs-typegoose';
 import { InstructorsModule } from './instructors/instructors.module';
 import { StudentsModule } from './students/students.module';
 import { SeedsModule } from './seeds/seeds.module';
+import { StripeModule } from 'nestjs-stripe';
 
 @Module({
   imports: [
@@ -25,6 +26,10 @@ import { SeedsModule } from './seeds/seeds.module';
     InstructorsModule,
     StudentsModule,
     SeedsModule,
+    StripeModule.forRoot({
+      apiKey: 'sk_test_dBig0b9lzrkUOFOZsGLE1GSd',
+      apiVersion: "2020-03-02"
+    }),
   ],
   controllers: [AppController],
   providers: [],

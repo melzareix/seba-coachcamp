@@ -16,3 +16,7 @@ export class WorkshopCreateDto {
   offerings: Offering[];
   gallery: string[];
 }
+
+export class offringWithId {
+  id: string;
+}
