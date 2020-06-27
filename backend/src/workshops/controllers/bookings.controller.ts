@@ -45,10 +45,6 @@ export class BookingsController {
   async createBooking(
     @Body() createBooking: BookingCreateDto,
   ): Promise<Booking | null> {
-    console.log(createBooking);
-    // @ts-ignore
-    console.log(createBooking.hady);
-
     const workshop = await this.workshopsService.findById(
       String(createBooking._workshop),
     );
@@ -77,7 +73,6 @@ export class BookingsController {
     const coupon = await this.couponsService.findById(
       String(createBooking._coupon),
     );
-    console.log(coupon);
 
     if (
       !coupon ||
