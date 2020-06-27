@@ -6,5 +6,4 @@ export class CouponCreateDto {
   endDate: Date;
   code: string;
   discount: number;
-  _deleted: false;
 }

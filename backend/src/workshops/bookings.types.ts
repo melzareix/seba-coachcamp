@@ -9,5 +9,4 @@ export class BookingCreateDto {
   _transaction: ObjectId;
   status: BookingStatus;
   date: Date;
-  _deleted: false;
 }

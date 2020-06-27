@@ -17,6 +17,6 @@ export class Coupon {
   @prop({ required: true })
   discount: number;
 
-  @prop({ default: false, required: false })
-  _deleted: boolean;
+  @prop({ default: false })
+  _deleted?: boolean;
 }

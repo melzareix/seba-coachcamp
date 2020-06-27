@@ -34,5 +34,5 @@ export class Booking {
   date: Date;
 
   @prop({ default: false })
-  _deleted: boolean;
+  _deleted?: boolean;
 }
