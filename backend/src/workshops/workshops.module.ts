@@ -11,11 +11,25 @@ import { Booking } from './models/booking.model';
 import { Offering } from './models/offering.model';
 import { Coupon } from './models/coupon.model';
 import { CouponsService } from './services/coupons.service';
+import { CouponsController } from './controllers/coupons.controller';
 
 @Module({
-  imports: [CommandModule, TypegooseModule.forFeature([Workshop]), TypegooseModule.forFeature([Booking]), TypegooseModule.forFeature([Offering]), TypegooseModule.forFeature([Coupon])],
-  providers: [WorkshopsService, BookingsService, OfferingsService, CouponsService],
-  controllers: [WorkshopsController, BookingsController],
-  exports: [WorkshopsService, BookingsService, OfferingsService, CouponsService],
+  imports: [
+    CommandModule,
+    TypegooseModule.forFeature([Workshop, Booking, Offering, Coupon]),
+  ],
+  providers: [
+    WorkshopsService,
+    BookingsService,
+    OfferingsService,
+    CouponsService,
+  ],
+  controllers: [WorkshopsController, BookingsController, CouponsController],
+  exports: [
+    WorkshopsService,
+    BookingsService,
+    OfferingsService,
+    CouponsService,
+  ],
 })
 export class WorkshopsModule {}

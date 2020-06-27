@@ -26,9 +26,16 @@ import { StripeModule } from 'nestjs-stripe';
     InstructorsModule,
     StudentsModule,
     SeedsModule,
-    StripeModule.forRoot({
-      apiKey: 'sk_test_dBig0b9lzrkUOFOZsGLE1GSd',
-      apiVersion: "2020-03-02"
+    StripeModule.forRootAsync({
+      useFactory: (configService: ConfigService) => {
+        // TODO: fix "TypeError: Cannot read property 'get' of undefined" and uncomment
+        // const apiKey = configService.get<string>('stripe.apiKey');
+        // const apiVersion = configService.get<Stripe.LatestApiVersion>('stripe.apiVersion');
+        return {
+          apiKey: 'sk_test_dBig0b9lzrkUOFOZsGLE1GSd',
+          apiVersion: '2020-03-02',
+        };
+      },
     }),
   ],
   controllers: [AppController],

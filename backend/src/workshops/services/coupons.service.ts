@@ -6,17 +6,16 @@ import { CouponCreateDto } from '../coupons.types';
 
 @Injectable()
 export class CouponsService {
-    constructor(
-        @InjectModel(Coupon)
-        private readonly couponModel: ReturnModelType<typeof Coupon>,
-      ) {}
+  constructor(
+    @InjectModel(Coupon)
+    private readonly couponModel: ReturnModelType<typeof Coupon>,
+  ) {}
 
-    async findById(id: string): Promise<Coupon> {
-        return await this.couponModel.findById(id)
-    }
+  async findById(id: string): Promise<Coupon> {
+    return await this.couponModel.findById(id);
+  }
 
-    async create(createCoupon: CouponCreateDto): Promise<Coupon> {
-        return await this.couponModel.create(createCoupon);
-    }
-
+  async create(createCoupon: CouponCreateDto): Promise<Coupon> {
+    return await this.couponModel.create(createCoupon);
+  }
 }

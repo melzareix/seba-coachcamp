@@ -17,6 +17,11 @@ export class WorkshopCreateDto {
   gallery: string[];
 }
 
-export class offringWithId {
-  id: string;
+export class WorkshopUpdateDto {
+  name?: string;
+  description?: string;
+  category?: Categories;
+  _instructor?: ObjectId;
+  offerings?: Offering[];
+  gallery?: string[];
 }
