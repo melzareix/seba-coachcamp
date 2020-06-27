@@ -111,7 +111,6 @@ export class BookingsController {
     const savedTransaction = await this.transactionsService.create(transaction);
     // @ts-ignore
     req._transaction = mongoose.Types.ObjectId(savedTransaction.id);
-    // @ts-ignore
 
     const booking = {
       _offering: req._offering,
