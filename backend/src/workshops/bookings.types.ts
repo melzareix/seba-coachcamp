@@ -10,3 +10,14 @@ export class BookingCreateDto {
   status: BookingStatus;
   date: Date;
 }
+
+export class BookOfferingDto {
+  _offering: ObjectId;
+  _workshop: ObjectId;
+  _instructor: ObjectId;
+  _coupon: ObjectId;
+  _transaction: ObjectId;
+  status: BookingStatus;
+  date: Date;
+  token: string;
+}

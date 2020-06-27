@@ -12,17 +12,26 @@ import { Offering } from './models/offering.model';
 import { Coupon } from './models/coupon.model';
 import { CouponsService } from './services/coupons.service';
 import { CouponsController } from './controllers/coupons.controller';
+import { Transaction } from './models/transaction.model';
+import { TransactionsService } from './services/transactions.service';
 
 @Module({
   imports: [
     CommandModule,
-    TypegooseModule.forFeature([Workshop, Booking, Offering, Coupon]),
+    TypegooseModule.forFeature([
+      Workshop,
+      Booking,
+      Offering,
+      Coupon,
+      Transaction,
+    ]),
   ],
   providers: [
     WorkshopsService,
     BookingsService,
     OfferingsService,
     CouponsService,
+    TransactionsService,
   ],
   controllers: [WorkshopsController, BookingsController, CouponsController],
   exports: [
@@ -30,6 +39,7 @@ import { CouponsController } from './controllers/coupons.controller';
     BookingsService,
     OfferingsService,
     CouponsService,
+    TransactionsService,
   ],
 })
 export class WorkshopsModule {}

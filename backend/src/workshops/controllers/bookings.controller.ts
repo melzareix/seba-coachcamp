@@ -14,13 +14,16 @@ import { Locations, Offering } from '../models/offering.model';
 import { WorkshopSearchDto, WorkshopCreateDto } from '../workshops.types';
 import { BookingsService } from '../services/bookings.service';
 import { WorkshopsService } from '../services/workshops.service';
-import { BookingCreateDto } from '../bookings.types';
-import { Booking } from '../models/booking.model';
+import { BookingCreateDto, BookOfferingDto } from '../bookings.types';
+import { Booking, BookingStatus } from '../models/booking.model';
 import { get } from 'http';
 import { CouponsService } from '../services/coupons.service';
 import Stripe from 'stripe';
 import { InjectStripe } from 'nestjs-stripe';
 import { OfferingsService } from '../services/offerings.service';
+import { mongoose } from '@typegoose/typegoose';
+import { TransactionCreateDto } from '../transactions.types';
+import { TransactionsService } from '../services/transactions.service';
 
 @ApiTags('Bookings')
 @Controller('bookings')
@@ -30,6 +33,7 @@ export class BookingsController {
     public workshopsService: WorkshopsService,
     public couponsService: CouponsService,
     public offeringsService: OfferingsService,
+    public transactionsService: TransactionsService,
     @InjectStripe() private readonly stripeClient: Stripe,
   ) {}
 
@@ -42,14 +46,12 @@ export class BookingsController {
   // 5.save the transaction
   // 6. save the booking
   @Post('')
-  async createBooking(
-    @Body() createBooking: BookingCreateDto,
-  ): Promise<Booking | null> {
+  async createBooking(@Body() req: BookOfferingDto): Promise<Booking | null> {
     const workshop = await this.workshopsService.findById(
-      String(createBooking._workshop),
+      String(req._workshop),
     );
     const requstedOffering = await this.offeringsService.findById(
-      String(createBooking._offering),
+      String(req._offering),
     );
 
     let resultOffering: Offering;
@@ -70,14 +72,9 @@ export class BookingsController {
       // TODO: throw an error 400
     }
 
-    const coupon = await this.couponsService.findById(
-      String(createBooking._coupon),
-    );
+    const coupon = await this.couponsService.findById(String(req._coupon));
 
-    if (
-      !coupon ||
-      String(coupon._workshop) !== String(createBooking._workshop)
-    ) {
+    if (!coupon || String(coupon._workshop) !== String(req._workshop)) {
       Logger.error('Coupon Invalid');
       return null;
       // TODO: Throw error. 400
@@ -96,10 +93,36 @@ export class BookingsController {
     const transfer = await this.stripeClient.charges.create({
       amount: price,
       currency: 'eur',
-      source: 'get token from req', // TODO: get token from request
+      source: req.token, // TODO: get token from request
       description: 'Charge for coach-camp',
     });
 
-    return await this.bookingService.create(createBooking);
+    if (!transfer) {
+      Logger.error('Transaction not processed.');
+    }
+    const transaction = {
+      _instructor: workshop._instructor,
+      _student: null, // get auth user? or email?
+      stripe_charge: transfer.id,
+      amount: price,
+      date: new Date(),
+    } as TransactionCreateDto;
+
+    const savedTransaction = await this.transactionsService.create(transaction);
+    // @ts-ignore
+    req._transaction = mongoose.Types.ObjectId(savedTransaction.id);
+    // @ts-ignore
+
+    const booking = {
+      _offering: req._offering,
+      _workshop: req._workshop,
+      _instructor: workshop._instructor,
+      _coupon: req._coupon,
+      _transaction: req._transaction,
+      status: BookingStatus.PENDING,
+      date: new Date(),
+    } as BookingCreateDto;
+
+    return await this.bookingService.create(booking);
   }
 }
