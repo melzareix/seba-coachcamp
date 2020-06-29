@@ -8,6 +8,7 @@ import { InstructorsModule } from './instructors/instructors.module';
 import { StudentsModule } from './students/students.module';
 import { SeedsModule } from './seeds/seeds.module';
 import { StripeModule } from 'nestjs-stripe';
+import Stripe from 'stripe';
 
 @Module({
   imports: [
@@ -28,14 +29,16 @@ import { StripeModule } from 'nestjs-stripe';
     SeedsModule,
     StripeModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
-        // TODO: fix "TypeError: Cannot read property 'get' of undefined" and uncomment
-        // const apiKey = configService.get<string>('stripe.apiKey');
-        // const apiVersion = configService.get<Stripe.LatestApiVersion>('stripe.apiVersion');
+        const apiKey = configService.get<string>('stripe.apiKey');
+        const apiVersion = configService.get<Stripe.LatestApiVersion>(
+          'stripe.apiVersion',
+        );
         return {
-          apiKey: 'sk_test_dBig0b9lzrkUOFOZsGLE1GSd',
-          apiVersion: '2020-03-02',
+          apiKey,
+          apiVersion,
         };
       },
+      inject: [ConfigService],
     }),
   ],
   controllers: [AppController],
