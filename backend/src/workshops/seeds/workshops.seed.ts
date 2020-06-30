@@ -1,6 +1,7 @@
 import { Command } from 'nestjs-command';
 import { Injectable } from '@nestjs/common';
 import { WorkshopsService } from '../services/workshops.service';
+import { ReviewsService } from '../services/reviews.service';
 import { Categories } from '../models/workshop.model';
 import { ObjectId } from 'mongodb';
 import * as faker from 'faker';
@@ -8,7 +9,7 @@ import { instructorIds, workshopLocs } from 'src/seeds/constants';
 
 @Injectable()
 export class WorkshopsSeed {
-  constructor(private readonly workshopsService: WorkshopsService) {}
+  constructor(private readonly workshopsService: WorkshopsService,private readonly reviewsService: ReviewsService) {}
 
   @Command({
     command: 'seed:workshops',
@@ -60,6 +61,13 @@ export class WorkshopsSeed {
     autoExit: true,
   })
   async seedReviews(): Promise<void> {
-    //
+    for (const [idx, id] of instructorIds.entries()) {
+      await this.reviewsService.create({
+        rating:faker.random.number(10),
+        description:faker.random.words(7),
+        reports:faker.random.number(10),
+        _instructor: new ObjectId(id),
+      });
+    }
   }
 }

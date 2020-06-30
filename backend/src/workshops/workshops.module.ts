@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { WorkshopsService } from './services/workshops.service';
+import { ReviewsService } from './services/reviews.service';
 import { WorkshopsController } from './controllers/workshops.controller';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { Workshop } from './models/workshop.model';
+import {Review} from './models/review.model'
 import { CommandModule } from 'nestjs-command';
 import { BookingsController } from './controllers/bookings.controller';
 import { BookingsService } from './services/bookings.service';
@@ -24,6 +26,7 @@ import { TransactionsService } from './services/transactions.service';
       Offering,
       Coupon,
       Transaction,
+      Review,
     ]),
   ],
   providers: [
@@ -32,6 +35,7 @@ import { TransactionsService } from './services/transactions.service';
     OfferingsService,
     CouponsService,
     TransactionsService,
+    ReviewsService,
   ],
   controllers: [WorkshopsController, BookingsController, CouponsController],
   exports: [
@@ -40,6 +44,7 @@ import { TransactionsService } from './services/transactions.service';
     OfferingsService,
     CouponsService,
     TransactionsService,
+    ReviewsService,
   ],
 })
 export class WorkshopsModule {}

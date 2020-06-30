@@ -15,5 +15,5 @@ export class Review {
   reports: number;
 
   @prop({ default: false })
-  _deleted: boolean;
+  _deleted?: boolean;
 }
