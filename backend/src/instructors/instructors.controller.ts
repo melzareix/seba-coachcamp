@@ -1,16 +1,34 @@
-import { Controller, Query, Get, Param } from '@nestjs/common';
+import { Controller, Query, Get, Param, Body, Post } from '@nestjs/common';
 import { Instructor } from './models/instructor.model';
 import { InstructorsService } from './services/instructors.service';
-import { InstructorCreateDto } from './instructors.types';
+import {
+  InstructorCreateDto,
+  InstructorLoginRespone,
+  InstructorLoginDto,
+} from './instructors.types';
 import { Workshop } from 'src/workshops/models/workshop.model';
+import { InstructorAuth } from './decorators/instructor.auth';
 
 @Controller('instructors')
 export class InstructorsController {
   constructor(public instructorsService: InstructorsService) {}
+
+  @Post('/register')
   async registerInstructor(
-    @Query() instructorCreateDto: InstructorCreateDto,
-  ): Promise<Instructor> {
-    return this.instructorsService.create(instructorCreateDto);
+    @Body() instructorCreateDto: InstructorCreateDto,
+  ): Promise<InstructorLoginRespone> {
+    await this.instructorsService.create(instructorCreateDto);
+    return this.instructorsService.login({
+      email: instructorCreateDto.email,
+      password: instructorCreateDto.password,
+    });
+  }
+
+  @Post('/login')
+  async loginInstructor(
+    @Body() body: InstructorLoginDto,
+  ): Promise<InstructorLoginRespone> {
+    return this.instructorsService.login(body);
   }
 
   @Get(':id')
@@ -34,5 +52,11 @@ export class InstructorsController {
     @Param('id') id: string,
   ): Promise<Workshop[] | null> {
     return this.instructorsService.findInstructorWorkshops(id);
+  }
+
+  @Get(':workshop_id/secret')
+  @InstructorAuth()
+  getShit(): string {
+    return 'hello';
   }
 }

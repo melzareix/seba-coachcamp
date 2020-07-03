@@ -7,6 +7,7 @@ import { WorkshopSearchDto, WorkshopCreateDto } from '../workshops.types';
 import { OfferingsService } from '../services/offerings.service';
 import { OfferingCreateDto } from '../offerings.types';
 import { CouponsService } from '../services/coupons.service';
+import { InstructorAuth } from 'src/instructors/decorators/instructor.auth';
 
 @ApiTags('Workshops')
 @Controller('workshops')
@@ -25,10 +26,16 @@ export class WorkshopsController {
   }
 
   @Get('paginated/:skip/:limit')
-  async getPaginatedWorkshops(@Param('skip') skip: string,@Param('limit') limit: string): Promise<Workshop[]> {
-    return await this.workshopService.findPaginated(parseInt(skip),parseInt(limit));
+  async getPaginatedWorkshops(
+    @Param('skip') skip: string,
+    @Param('limit') limit: string,
+  ): Promise<Workshop[]> {
+    return await this.workshopService.findPaginated(
+      parseInt(skip),
+      parseInt(limit),
+    );
   }
- 
+
   @Get('categories')
   getCategories(): Categories[] {
     return Object.values(Categories);

@@ -4,7 +4,7 @@ import { ReviewsService } from './services/reviews.service';
 import { WorkshopsController } from './controllers/workshops.controller';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { Workshop } from './models/workshop.model';
-import {Review} from './models/review.model'
+import { Review } from './models/review.model';
 import { CommandModule } from 'nestjs-command';
 import { BookingsController } from './controllers/bookings.controller';
 import { BookingsService } from './services/bookings.service';

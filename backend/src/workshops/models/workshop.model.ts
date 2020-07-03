@@ -2,6 +2,7 @@ import { prop, Ref, index, arrayProp } from '@typegoose/typegoose';
 import { Instructor } from 'src/instructors/models/instructor.model';
 import { Review } from './review.model';
 import { Offering } from './offering.model';
+import { ObjectId } from 'mongodb';
 
 export enum Categories {
   COMMUNICATIONS = 'Communications',
@@ -18,6 +19,8 @@ export enum Categories {
   description: 'text',
 })
 export class Workshop {
+  _id?: ObjectId;
+
   @prop({ required: true })
   name: string;
 
