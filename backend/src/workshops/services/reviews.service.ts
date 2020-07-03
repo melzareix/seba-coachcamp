@@ -22,7 +22,9 @@ export class ReviewsService {
   async findAll(): Promise<Review[]> {
     return await this.reviewModel.find().exec();
   }
-
+  async findById(id: string): Promise<Review | null> {
+    return await this.reviewModel.findById(id);
+  }
   async findReviewsForInstructor(instructorId: string): Promise<Review[]> {
     return await this.reviewModel.find({"instructor":instructorId});
   }
