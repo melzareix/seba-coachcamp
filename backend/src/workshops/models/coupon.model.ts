@@ -18,5 +18,5 @@ export class Coupon {
   discount: number;
 
   @prop({ default: false })
-  _deleted: boolean;
+  _deleted?: boolean;
 }

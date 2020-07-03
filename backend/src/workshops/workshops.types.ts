@@ -16,3 +16,12 @@ export class WorkshopCreateDto {
   offerings: Offering[];
   gallery: string[];
 }
+
+export class WorkshopUpdateDto {
+  name?: string;
+  description?: string;
+  category?: Categories;
+  _instructor?: ObjectId;
+  offerings?: Offering[];
+  gallery?: string[];
+}
