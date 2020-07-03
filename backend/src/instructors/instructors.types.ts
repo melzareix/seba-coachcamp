@@ -6,3 +6,12 @@ export class InstructorCreateDto {
   description: string;
   phone: string;
 }
+
+export class InstructorLoginRespone {
+  token: string;
+}
+
+export class InstructorLoginDto {
+  email: string;
+  password: string;
+}
