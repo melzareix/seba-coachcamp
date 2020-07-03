@@ -1,60 +1,72 @@
+// @ts-ignore
+import Skeleton from '@yisheng90/react-loading';
 import { Box, Grommet } from 'grommet';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { GuardProvider, GuardFunction } from 'react-router-guards';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './app.css';
+import AuthRouter from './components/auth/auth-router';
 import AppFooter from './components/common/footer';
 import AppHeader from './components/common/header';
-import Home from './components/home/home';
-import WorkshopsList from './components/workshop/explore-workshops';
-import Workshop from './components/workshop/workshop';
-import WorkshopsRouter from './components/workshop/workshops-router';
 import NotFound from './components/common/notfound';
+import Home from './components/home/home';
+import WorkshopsRouter from './components/workshop/workshops-router';
+import theme from './utils/theme';
 
-const theme = {
-  global: {
-    colors: {
-      brand: '#333',
-    },
-    font: {
-      family: 'Work Sans',
-      size: '18px',
-      height: '20px',
-    },
-  },
-  anchor: {
-    color: 'dark-1',
-    hover: {
-      extend: () => {
-        return {
-          color: '#555555',
-        };
-      },
-      textDecoration: 'none',
-    },
-  },
+const requireLogin: GuardFunction = (to, from, next) => {
+  const token = window.localStorage.getItem('token');
+  if (to.meta.auth) {
+    if (token) {
+      next();
+    }
+    next.redirect('/auth/login');
+  } else {
+    next();
+  }
+};
+
+const redirectIfLoggedIn: GuardFunction = (to, from, next) => {
+  const token = window.localStorage.getItem('token');
+  if (to.meta.redirect && token) {
+    next.redirect('/');
+  } else {
+    next();
+  }
 };
 
 function App() {
   return (
     <Grommet theme={theme}>
-      <Box height="high" width="full" overflow="hidden">
-        <AppHeader />
-        <Router>
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route path="/workshops">
-              <WorkshopsRouter />
-            </Route>
-            <Route path="/lost">
-              <NotFound />
-            </Route>
-            <Route component={NotFound} />
-          </Switch>
-        </Router>
-        <AppFooter />
-      </Box>
+      <Router>
+        <Box height="high" width="full" overflow="hidden">
+          <AppHeader />
+          <GuardProvider
+            guards={[requireLogin, redirectIfLoggedIn]}
+            loading={Skeleton}
+            error={NotFound}
+          >
+            <Switch>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route path="/workshops">
+                <WorkshopsRouter />
+              </Route>
+              <Route path="/auth">
+                <AuthRouter />
+              </Route>
+              <Route path="/lost">
+                <NotFound />
+              </Route>
+              <Route component={NotFound} />
+            </Switch>
+          </GuardProvider>
+          <ToastContainer closeOnClick draggable autoClose={1000} position="bottom-right" />
+          <AppFooter />
+        </Box>
+      </Router>
     </Grommet>
   );
 }

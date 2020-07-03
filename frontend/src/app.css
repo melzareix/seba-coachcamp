@@ -3,7 +3,7 @@ a {
 }
 
 .full-height {
-  height: calc(100vh - 80px) !important;
+  height: calc(100vh - 120px) !important;
 }
 
 .card {
@@ -135,4 +135,11 @@ a {
 .pagination-sm > li:last-child > span {
   border-bottom-right-radius: 3px;
   border-top-right-radius: 3px;
+}
+
+.errors {
+  color: red;
+  font-size: 12px;
+  text-transform: capitalize;
+  padding-left: 10px;
 }
