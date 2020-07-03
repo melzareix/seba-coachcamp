@@ -2,8 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { Workshop } from '../models/workshop.model';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { WorkshopSearchDto, WorkshopCreateDto } from '../workshops.types';
-import { string } from 'yargs';
+import {
+  WorkshopSearchDto,
+  WorkshopCreateDto,
+  WorkshopUpdateDto,
+} from '../workshops.types';
 
 @Injectable()
 export class WorkshopsService {
@@ -16,7 +19,7 @@ export class WorkshopsService {
     return await this.workshopModel.create(workshop);
   }
 
-  async update(id: string, workshop: WorkshopCreateDto): Promise<Workshop> {
+  async update(id: string, workshop: WorkshopUpdateDto): Promise<Workshop> {
     return await this.workshopModel.findByIdAndUpdate(id, workshop);
   }
 

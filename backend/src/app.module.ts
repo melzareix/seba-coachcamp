@@ -7,6 +7,8 @@ import { TypegooseModule } from 'nestjs-typegoose';
 import { InstructorsModule } from './instructors/instructors.module';
 import { StudentsModule } from './students/students.module';
 import { SeedsModule } from './seeds/seeds.module';
+import { StripeModule } from 'nestjs-stripe';
+import Stripe from 'stripe';
 
 @Module({
   imports: [
@@ -25,6 +27,19 @@ import { SeedsModule } from './seeds/seeds.module';
     InstructorsModule,
     StudentsModule,
     SeedsModule,
+    StripeModule.forRootAsync({
+      useFactory: (configService: ConfigService) => {
+        const apiKey = configService.get<string>('stripe.apiKey');
+        const apiVersion = configService.get<Stripe.LatestApiVersion>(
+          'stripe.apiVersion',
+        );
+        return {
+          apiKey,
+          apiVersion,
+        };
+      },
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
   providers: [],
