@@ -6,7 +6,7 @@ import ReactStars from 'react-stars';
 export default function WorkshopCard(props: any) {
   const opacity = props.opacity || '0.3';
   return (
-    <Box fill className="card" background="brand" onClick={() => alert(1)}>
+    <Box fill className="card" background="brand">
       <Image fit="cover" opacity={opacity} src={props.image} />
       <Heading className="title" level="3">
         {props.title}
