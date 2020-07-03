@@ -1,17 +1,11 @@
+import React from 'react';
 import { Button, Header, Heading, Nav, RoutedAnchor, RoutedButton } from 'grommet';
 import * as Icons from 'grommet-icons';
-import jwt_decode from 'jwt-decode';
-import React from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 export default function AppHeader() {
   const history = useHistory();
   const isLoggedIn = localStorage.getItem('token');
-  let user;
-  if (isLoggedIn) {
-    user = jwt_decode(isLoggedIn);
-  }
-  console.log(user);
   return (
     <Header
       pad={{ left: 'medium', right: 'medium', vertical: 'medium' }}
