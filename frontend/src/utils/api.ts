@@ -8,6 +8,8 @@ const api = () => {
     paginatedWorkshops: (skip: number, limit: number) => {
       return `${BASE_URL}/workshops/paginated/${skip}/${limit}`;
     },
+    REGISTER_INSTRUCTOR: `${BASE_URL}/instructors/register`,
+    LOGIN_INSTRUCTOR: `${BASE_URL}/instructors/login`,
   };
 };
 

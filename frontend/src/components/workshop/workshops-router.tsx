@@ -1,7 +1,8 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router-dom';
-import Workshop from './workshop';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { GuardedRoute } from 'react-router-guards';
 import WorkshopsList from './explore-workshops';
+import Workshop from './workshop';
 
 export default function WorkshopsRouter() {
   const match = useRouteMatch();
@@ -10,9 +11,9 @@ export default function WorkshopsRouter() {
       <Route path={`${match.path}/:id`}>
         <Workshop />
       </Route>
-      <Route path={match.path}>
+      <GuardedRoute path={match.path}>
         <WorkshopsList />
-      </Route>
+      </GuardedRoute>
     </Switch>
   );
 }

@@ -1,11 +1,9 @@
 import React from 'react';
-import { useSpring, animated } from 'react-spring';
-import AppHeader from '../common/header';
+import { animated, useSpring } from 'react-spring';
+import HomeCategories from './homeCategories';
 import HomeHero from './homeHero';
 import HomeSearch from './homeSearch';
-import HomeCategories from './homeCategories';
 import HomeWorkshops from './homeWorkshops';
-import AppFooter from '../common/footer';
 
 export default function Home() {
   const homeAnimation = useSpring({
