@@ -20,6 +20,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new ExceptionHandler());
   app.useGlobalInterceptors(new TransformInterceptor());
+  app.enableCors();
   await app.listen(3000);
 }
 bootstrap();

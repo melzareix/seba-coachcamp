@@ -25,6 +25,11 @@ export class WorkshopsController {
     return await this.workshopService.searchWorkshops(workshopSearchDto);
   }
 
+  @Get('/count')
+  async getWorkshopsCount(): Promise<number> {
+    return await this.workshopService.getWorkshopsCount();
+  }
+
   @Get('paginated/:skip/:limit')
   async getPaginatedWorkshops(
     @Param('skip') skip: string,
