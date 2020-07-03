@@ -3,12 +3,13 @@ import axios from 'axios';
 import { Box, Heading, Grid } from 'grommet';
 import CategoryCard from '../common/categoryCard';
 import { randomArrayElements } from '../../utils/utils';
+import api from '../../utils/api';
 
 export default function HomeCategories() {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get('http://localhost:3000/workshops/categories', {});
+      const result = await axios.get(api.CATEGORIES, {});
       setCategories(randomArrayElements(result.data.data, 3));
     };
     fetchData();
