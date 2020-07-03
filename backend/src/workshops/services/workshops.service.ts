@@ -26,12 +26,15 @@ export class WorkshopsService {
   async findAll(): Promise<Workshop[]> {
     return await this.workshopModel.find().exec();
   }
+  async findPaginated(skip:number,limit:number): Promise<Workshop[]> {
+    return await this.workshopModel.find().skip(skip).limit(limit).exec();
+  }
 
   async findById(id: string): Promise<Workshop | null> {
     return await this.workshopModel.findById(id).populate('_instructor');
   }
 
-  async findInstructorWorkshops(
+  async findInstructorWorkshops( 
     instructorId: string,
   ): Promise<Workshop[] | null> {
     return this.workshopModel.find({
