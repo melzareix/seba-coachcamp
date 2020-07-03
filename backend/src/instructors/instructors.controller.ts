@@ -7,6 +7,7 @@ import {
   InstructorLoginDto,
 } from './instructors.types';
 import { Workshop } from 'src/workshops/models/workshop.model';
+import { InstructorAuth } from './decorators/instructor.auth';
 
 @Controller('instructors')
 export class InstructorsController {
@@ -51,5 +52,11 @@ export class InstructorsController {
     @Param('id') id: string,
   ): Promise<Workshop[] | null> {
     return this.instructorsService.findInstructorWorkshops(id);
+  }
+
+  @Get(':workshop_id/secret')
+  @InstructorAuth()
+  getShit(): string {
+    return 'hello';
   }
 }

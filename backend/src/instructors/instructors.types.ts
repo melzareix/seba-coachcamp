@@ -1,3 +1,5 @@
+import { Workshop } from 'src/workshops/models/workshop.model';
+
 export class InstructorCreateDto {
   _id?: string;
   name: string;
@@ -14,4 +16,8 @@ export class InstructorLoginRespone {
 export class InstructorLoginDto {
   email: string;
   password: string;
+}
+
+export class InstructorUser {
+  workshops: string[];
 }

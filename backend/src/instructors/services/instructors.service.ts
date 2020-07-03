@@ -43,8 +43,7 @@ export class InstructorsService {
     if (!user || !password) {
       throw new HttpException('Incorrect email or password.', 401);
     }
-
-    const token = await this.jwtService.signAsync((user as any).toObject());
+    const token = await this.jwtService.signAsync((user as any).toJSON());
     return {
       token,
     };

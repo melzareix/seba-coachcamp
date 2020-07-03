@@ -2,6 +2,7 @@ import { prop, plugin, pre, ModelOptions } from '@typegoose/typegoose';
 import * as mhidden from 'mongoose-hidden';
 import * as bcrypt from 'bcryptjs';
 import { compareHash } from '../../common/utils';
+import { ObjectId } from 'mongodb';
 
 @plugin(mhidden())
 @pre<Instructor>('save', async function(next) {
@@ -10,7 +11,15 @@ import { compareHash } from '../../common/utils';
   }
   next();
 })
+@ModelOptions({
+  schemaOptions: {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
+})
 export class Instructor {
+  _id?: ObjectId;
+
   @prop({ required: true })
   name: string;
 
