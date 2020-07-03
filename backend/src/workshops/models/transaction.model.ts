@@ -19,14 +19,14 @@ export class Transaction {
   stripe_charge: string;
 
   @prop({ required: true })
-  amount: Double;
+  amount: number;
 
   @prop({ default: TransactionStatus.CLEARED, enum: TransactionStatus })
-  status: TransactionStatus;
+  status?: TransactionStatus;
 
   @prop()
   date: Date;
 
   @prop({ default: false })
-  _deleted: boolean;
+  _deleted?: boolean;
 }
