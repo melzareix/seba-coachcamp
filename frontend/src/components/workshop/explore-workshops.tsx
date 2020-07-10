@@ -1,9 +1,10 @@
+// @ts-ignore
 import axios from 'axios';
-import { Box, Grid, Heading } from 'grommet';
+import { Box, Grid, Heading, Form, FormField, TextInput, Button, Text, Select } from 'grommet';
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import WorkshopCard from '../common/workshopCard';
 import api from '../../utils/api';
+import WorkshopCard from '../common/workshopCard';
 
 export default function WorkshopsList() {
   const [workshops, setWorkshops] = useState([
@@ -13,28 +14,38 @@ export default function WorkshopsList() {
       description: '',
     },
   ]);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [maxPage, setMaxPage] = useState(1);
-  const pageLimit = 10;
+  const [maxPages, setMaxPages] = useState(1);
+  const [maxCount, setMaxCount] = useState(0);
+  const [categories, setCategories] = useState(['test']);
+  const pageLimit = 12;
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const allWorkshops = await axios.get(api.WORKSHOPS_COUNT);
+  //     setMaxCount(allWorkshops.data.data);
+  //     setMaxPages(Math.ceil(allWorkshops.data.data / pageLimit));
+  //   };
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const allWorkshops = await axios.get(api.WORKSHOPS_COUNT);
-      const skip = (pageNumber - 1) * pageLimit;
-      setMaxPage(Math.ceil(allWorkshops.data.data / pageLimit));
-      const paginatedWorkshops = await axios.get(api.paginatedWorkshops(skip, pageLimit));
-      setWorkshops(paginatedWorkshops.data.data);
+    const fetchCount = async () => {
+      const resultsCount = await axios.get(api.ALL_WORKSHOPS, {
+        params: {},
+      });
+      setMaxCount(resultsCount.data.data);
+      setMaxPages(Math.ceil(resultsCount.data.data / pageLimit));
     };
-    fetchData();
-  }, [pageNumber]);
+    fetchCount();
+  }, []);
 
   async function changePageNumber(newPageNum: number) {
-    if (newPageNum >= 1) {
-      const skip = (newPageNum - 1) * pageLimit;
-      const paginatedWorkshops = await axios.get(api.paginatedWorkshops(skip, pageLimit));
-      setWorkshops(paginatedWorkshops.data.data);
-      setPageNumber(newPageNum);
-    }
+    const skip = newPageNum * pageLimit;
+    const paginatedWorkshops = await axios.get(api.paginatedWorkshops(skip, pageLimit));
+    setWorkshops(paginatedWorkshops.data.data);
+    window.scrollTo({
+      top: 0,
+    });
   }
 
   return (
@@ -42,7 +53,25 @@ export default function WorkshopsList() {
       <Heading textAlign="center" style={{ maxWidth: '100%' }}>
         Workshops Catalog
       </Heading>
-      <Grid rows="small" columns="medium" gap="large" pad="large">
+
+      <Box width="full" margin={{ vertical: 'medium' }}>
+        <Form>
+          <Box direction="row" justify="center" gap="large">
+            <FormField width="medium">
+              <TextInput placeholder="Keyword (e.g Leadership)" />
+            </FormField>
+            <FormField>
+              <TextInput placeholder="Location" />
+            </FormField>
+            <FormField>
+              <Select options={categories} />
+            </FormField>
+            <Button label="Search" type="submit" primary />
+          </Box>
+        </Form>
+      </Box>
+
+      <Grid rows="small" columns="medium" gap="large" pad="medium">
         {workshops.map((workshop) => {
           return (
             <WorkshopCard
@@ -54,15 +83,11 @@ export default function WorkshopsList() {
           );
         })}
       </Grid>
-      {workshops.length === 0 && (
-        <Heading textAlign="center" style={{ maxWidth: '100%' }}>
-          Loading...
-        </Heading>
-      )}
       <ReactPaginate
         breakLabel="..."
         breakClassName="break-me"
-        pageCount={maxPage}
+        pageCount={maxPages}
+        initialPage={0}
         marginPagesDisplayed={5}
         pageRangeDisplayed={5}
         onPageChange={async ({ selected }) => changePageNumber(selected)}

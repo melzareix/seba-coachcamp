@@ -1,4 +1,10 @@
-import { prop, Ref, index, arrayProp } from '@typegoose/typegoose';
+import {
+  prop,
+  Ref,
+  index,
+  arrayProp,
+  ModelOptions,
+} from '@typegoose/typegoose';
 import { Instructor } from 'src/instructors/models/instructor.model';
 import { Review } from './review.model';
 import { Offering } from './offering.model';
@@ -17,6 +23,11 @@ export enum Categories {
 @index({
   name: 'text',
   description: 'text',
+})
+@ModelOptions({
+  schemaOptions: {
+    toObject: { virtuals: true },
+  },
 })
 export class Workshop {
   _id?: ObjectId;
