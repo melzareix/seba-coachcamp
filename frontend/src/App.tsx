@@ -3,7 +3,7 @@ import Skeleton from '@yisheng90/react-loading';
 import { Box, Grommet } from 'grommet';
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { GuardProvider, GuardFunction } from 'react-router-guards';
+import { GuardFunction, GuardProvider } from 'react-router-guards';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './app.css';
@@ -12,11 +12,9 @@ import AppFooter from './components/common/footer';
 import AppHeader from './components/common/header';
 import NotFound from './components/common/notfound';
 import Home from './components/home/home';
+import InstructorsRouter from './components/instructors/instructors-router';
 import WorkshopsRouter from './components/workshop/workshops-router';
 import theme from './utils/theme';
-import InstructorsRouter from './components/instructors/instructors-router';
-// @ts-ignore
-import LoadingBar from 'react-top-loading-bar';
 
 const requireLogin: GuardFunction = (to, from, next) => {
   const token = window.localStorage.getItem('token');
@@ -33,7 +31,7 @@ const requireLogin: GuardFunction = (to, from, next) => {
 const redirectIfLoggedIn: GuardFunction = (to, from, next) => {
   const token = window.localStorage.getItem('token');
   if (to.meta.redirect && token) {
-    next.redirect('/');
+    next.redirect('/instructors/dashboard');
   } else {
     next();
   }
@@ -43,13 +41,7 @@ function App() {
   return (
     <Grommet theme={theme}>
       <Router>
-        <Box height="high" width="full" overflow="hidden">
-          <LoadingBar
-            progress={20}
-            height={3}
-            color="#333"
-            // onLoaderFinished={() => this.onLoaderFinished()}
-          />
+        <Box width="full" overflow="hidden">
           <AppHeader />
           <GuardProvider
             guards={[requireLogin, redirectIfLoggedIn]}

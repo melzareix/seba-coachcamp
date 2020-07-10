@@ -26,8 +26,9 @@ export default function Register() {
       setApiError(null);
       const resp = await axios.post(api.REGISTER_INSTRUCTOR, data);
       window.localStorage.setItem('token', resp.data.data.token);
-      toast.success('Registration Successful');
-      history.push('/instructors/dashboard');
+      window.scrollTo({ top: 0 });
+      toast.success('Registration Successful! Redirecting to dashboard');
+      setTimeout(() => history.go(0), 1000);
     } catch (error) {
       setApiError(error.response.data?.message);
     }
@@ -42,7 +43,7 @@ export default function Register() {
         <RouterAnchor path="/auth/login" label="Already Registered? Login Now" />
       </Text>
 
-      {apiError && <ErrorBox text={apiError} />}
+      <Box margin="medium">{apiError && <ErrorBox text={apiError} />}</Box>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormField label="Name">

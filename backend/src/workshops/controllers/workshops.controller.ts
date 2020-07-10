@@ -43,17 +43,6 @@ export class WorkshopsController {
     return await this.workshopService.searchWorkshops(workshopSearchDto, true);
   }
 
-  @Get('paginated/:skip/:limit')
-  async getPaginatedWorkshops(
-    @Param('skip') skip: string,
-    @Param('limit') limit: string,
-  ): Promise<Workshop[]> {
-    return await this.workshopService.findPaginated(
-      parseInt(skip),
-      parseInt(limit),
-    );
-  }
-
   @Get('categories')
   getCategories(): Categories[] {
     return Object.values(Categories);

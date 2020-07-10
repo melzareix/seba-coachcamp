@@ -75,7 +75,12 @@ export class WorkshopsService {
     }
 
     if (isCount) return await this.workshopModel.count(query);
-    return await this.workshopModel.find(query);
+    const skip = parseInt(searchDto.skip, 0) || 0;
+    const limit = parseInt(searchDto.limit, 0) || 9;
+    return await this.workshopModel
+      .find(query)
+      .skip(skip)
+      .limit(limit);
   }
 
   async deleteWorkshop(workshopId: string): Promise<Workshop> {
