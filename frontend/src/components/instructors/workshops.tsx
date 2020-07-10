@@ -1,10 +1,8 @@
-import axios from 'axios';
 import { Box, Button, Table, TableBody, TableCell, TableHeader, TableRow } from 'grommet';
 import jwt_decode from 'jwt-decode';
 import React, { useEffect, useState } from 'react';
-import api from '../../utils/api';
-import Workshop from '../workshop/workshop';
 import { useHistory } from 'react-router-dom';
+import { api, axios } from '../../utils/api';
 
 export default function InstructorWorkshops() {
   const [workshops, setWorkshops] = useState([]);

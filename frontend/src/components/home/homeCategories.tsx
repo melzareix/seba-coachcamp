@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Box, Heading, Grid } from 'grommet';
 import CategoryCard from '../common/categoryCard';
 import { randomArrayElements } from '../../utils/utils';
-import api from '../../utils/api';
+import { api, axios } from '../../utils/api';
 
 export default function HomeCategories() {
   const [categories, setCategories] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('Loading...');
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get(api.CATEGORIES, {});
-      setCategories(randomArrayElements(result.data.data, 3));
+      try {
+        const result = await axios.get(api.CATEGORIES, {});
+        setCategories(randomArrayElements(result.data.data, 3));
+      } catch (error) {
+        setErrorMessage('Failed to load skills.');
+      }
     };
     fetchData();
   }, []);
@@ -36,7 +40,7 @@ export default function HomeCategories() {
 
       {categories.length === 0 && (
         <Heading textAlign="center" style={{ maxWidth: '100%' }}>
-          Loading...
+          {errorMessage}
         </Heading>
       )}
     </Box>

@@ -1,9 +1,8 @@
-import axios from 'axios';
 import { Box, Button, Form, FormField, Heading, Text, TextInput } from 'grommet';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
-import api from '../../utils/api';
+import { axios, api } from '../../utils/api';
 import ErrorBox from '../common/error';
 import { RouterAnchor } from '../common/routerLinks';
 

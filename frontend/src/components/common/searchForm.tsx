@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Form, FormField, TextInput, Select, Button } from 'grommet';
-import axios from 'axios';
-import api from '../../utils/api';
+import { axios, api } from '../../utils/api';
 
 export default function SearchForm(props: any) {
   const defaultState = props.defaultState || {
