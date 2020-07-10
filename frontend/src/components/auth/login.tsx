@@ -1,9 +1,8 @@
-import axios from 'axios';
 import { Box, Button, Form, FormField, Heading, Text, TextInput } from 'grommet';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
-import api from '../../utils/api';
+import { axios, api } from '../../utils/api';
 import ErrorBox from '../common/error';
 import { RouterAnchor } from '../common/routerLinks';
 
@@ -22,7 +21,7 @@ export default function Login() {
       setApiError(null);
       const resp = await axios.post(api.LOGIN_INSTRUCTOR, data);
       window.localStorage.setItem('token', resp.data.data.token);
-      history.go(-1);
+      history.go(0);
     } catch (error) {
       setApiError(error.response.data?.message);
     }
@@ -36,7 +35,7 @@ export default function Login() {
         <RouterAnchor path="/auth/register" label="No account? Register Now" />
       </Text>
 
-      {apiError && <ErrorBox text={apiError} />}
+      <Box margin="medium">{apiError && <ErrorBox text={apiError} />}</Box>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormField label="Email">

@@ -23,6 +23,7 @@ export enum Categories {
 @index({
   name: 'text',
   description: 'text',
+  lowercase: true,
 })
 @ModelOptions({
   schemaOptions: {

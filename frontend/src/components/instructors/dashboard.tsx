@@ -11,9 +11,6 @@ export default function InstructorDashboard() {
             <InstructorWorkshops />
           </Box>
         </Tab>
-        <Tab title="My Details">
-          <Box>Two</Box>
-        </Tab>
       </Tabs>
     </Box>
   );
