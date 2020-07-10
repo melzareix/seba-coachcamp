@@ -1,21 +1,12 @@
-import {
-  Box,
-  Button,
-  Form,
-  FormField,
-  Heading,
-  RoutedAnchor,
-  Text,
-  TextInput,
-  TextArea,
-} from 'grommet';
-import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
-import React, { useState } from 'react';
 import axios from 'axios';
+import { Box, Button, Form, FormField, Heading, Text, TextArea, TextInput } from 'grommet';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import api from '../../utils/api';
 import ErrorBox from '../common/error';
+import { RouterAnchor } from '../common/routerLinks';
 
 type Inputs = {
   name: string;
@@ -48,7 +39,7 @@ export default function Register() {
         Apply for an Instructor account
       </Heading>
       <Text textAlign="center">
-        <RoutedAnchor path="/auth/login" label="Already Registered? Login Now" />
+        <RouterAnchor path="/auth/login" label="Already Registered? Login Now" />
       </Text>
 
       {apiError && <ErrorBox text={apiError} />}
@@ -74,7 +65,7 @@ export default function Register() {
                 message: 'email is required.',
               },
               pattern: {
-                value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                 message: 'invalid email address.',
               },
             })}
@@ -103,7 +94,7 @@ export default function Register() {
             ref={register({
               required: { value: true, message: 'phone is required.' },
               pattern: {
-                value: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/,
+                value: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/,
                 message: 'invalid phone number.',
               },
             })}

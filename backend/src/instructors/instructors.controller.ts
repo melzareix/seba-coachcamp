@@ -1,4 +1,12 @@
-import { Controller, Query, Get, Param, Body, Post } from '@nestjs/common';
+import {
+  Controller,
+  Query,
+  Get,
+  Param,
+  Body,
+  Post,
+  Delete,
+} from '@nestjs/common';
 import { Instructor } from './models/instructor.model';
 import { InstructorsService } from './services/instructors.service';
 import {
@@ -52,11 +60,5 @@ export class InstructorsController {
     @Param('id') id: string,
   ): Promise<Workshop[] | null> {
     return this.instructorsService.findInstructorWorkshops(id);
-  }
-
-  @Get(':workshop_id/secret')
-  @InstructorAuth()
-  getShit(): string {
-    return 'hello';
   }
 }

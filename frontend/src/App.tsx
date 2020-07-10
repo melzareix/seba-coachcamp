@@ -14,6 +14,9 @@ import NotFound from './components/common/notfound';
 import Home from './components/home/home';
 import WorkshopsRouter from './components/workshop/workshops-router';
 import theme from './utils/theme';
+import InstructorsRouter from './components/instructors/instructors-router';
+// @ts-ignore
+import LoadingBar from 'react-top-loading-bar';
 
 const requireLogin: GuardFunction = (to, from, next) => {
   const token = window.localStorage.getItem('token');
@@ -41,6 +44,12 @@ function App() {
     <Grommet theme={theme}>
       <Router>
         <Box height="high" width="full" overflow="hidden">
+          <LoadingBar
+            progress={20}
+            height={3}
+            color="#333"
+            // onLoaderFinished={() => this.onLoaderFinished()}
+          />
           <AppHeader />
           <GuardProvider
             guards={[requireLogin, redirectIfLoggedIn]}
@@ -50,6 +59,9 @@ function App() {
             <Switch>
               <Route exact path="/">
                 <Home />
+              </Route>
+              <Route path="/instructors">
+                <InstructorsRouter />
               </Route>
               <Route path="/workshops">
                 <WorkshopsRouter />

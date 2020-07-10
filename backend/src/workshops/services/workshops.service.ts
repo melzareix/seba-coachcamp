@@ -50,7 +50,10 @@ export class WorkshopsService {
     });
   }
 
-  async searchWorkshops(searchDto: WorkshopSearchDto): Promise<Workshop[]> {
+  async searchWorkshops(
+    searchDto: WorkshopSearchDto,
+    isCount = false,
+  ): Promise<Workshop[] | number> {
     const query = {};
     if (searchDto.text) {
       query['$text'] = {
@@ -71,6 +74,11 @@ export class WorkshopsService {
       query['category'] = searchDto.category;
     }
 
+    if (isCount) return await this.workshopModel.count(query);
     return await this.workshopModel.find(query);
+  }
+
+  async deleteWorkshop(workshopId: string): Promise<Workshop> {
+    return await this.workshopModel.findOneAndDelete({ id: workshopId });
   }
 }
