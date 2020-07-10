@@ -107,6 +107,9 @@ export default function WorkshopsList() {
         {workshops.map((workshop) => {
           return (
             <WorkshopCard
+              onClick={() => {
+                history.push(`/workshops/${workshop._id}`);
+              }}
               key={`${workshop._id}`}
               image={`${workshop.gallery[0]}`}
               title={`${workshop.name}`}

@@ -40,7 +40,7 @@ export default function AppHeader() {
             label="Logout"
             onClick={() => {
               window.localStorage.removeItem('token');
-              history.go(0);
+              history.push('/');
             }}
             hoverIndicator
           />

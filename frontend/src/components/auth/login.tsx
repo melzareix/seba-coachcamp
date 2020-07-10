@@ -21,7 +21,7 @@ export default function Login() {
       setApiError(null);
       const resp = await axios.post(api.LOGIN_INSTRUCTOR, data);
       window.localStorage.setItem('token', resp.data.data.token);
-      history.go(0);
+      history.push('/instructors/dashboard');
     } catch (error) {
       setApiError(error.response.data?.message);
     }
