@@ -1,0 +1,28 @@
+.root {
+  margin: 30px 5%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.firstCol {
+  width: 60%;
+}
+
+.secondCol {
+  width: 30%;
+}
+
+.reviewCardIcon {
+  transform: scaleX(-1);
+  margin-right: 10px;
+}
+
+.starIcon {
+  height: 30px;
+  margin-left: 5px;
+}
+
+.starButton {
+  cursor: pointer;
+}
