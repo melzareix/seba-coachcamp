@@ -1,11 +1,10 @@
-import { Box, Button, Form, FormField, Heading, RoutedAnchor, Text, TextInput } from 'grommet';
+import { Box, Button, Form, FormField, Heading, Text, TextInput } from 'grommet';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import axios from 'axios';
-import api from '../../utils/api';
+import { axios, api } from '../../utils/api';
 import ErrorBox from '../common/error';
+import { RouterAnchor } from '../common/routerLinks';
 
 type Inputs = {
   email: string;
@@ -22,8 +21,6 @@ export default function Login() {
       setApiError(null);
       const resp = await axios.post(api.LOGIN_INSTRUCTOR, data);
       window.localStorage.setItem('token', resp.data.data.token);
-      toast.success('Registration Successful');
-      history.push('/workshops');
       history.go(0);
     } catch (error) {
       setApiError(error.response.data?.message);
@@ -35,10 +32,10 @@ export default function Login() {
         Login to your Instructor account
       </Heading>
       <Text textAlign="center">
-        <RoutedAnchor path="/auth/register" label="No account? Register Now" />
+        <RouterAnchor path="/auth/register" label="No account? Register Now" />
       </Text>
 
-      {apiError && <ErrorBox text={apiError} />}
+      <Box margin="medium">{apiError && <ErrorBox text={apiError} />}</Box>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormField label="Email">
@@ -51,7 +48,7 @@ export default function Login() {
                 message: 'email is required.',
               },
               pattern: {
-                value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                 message: 'invalid email address.',
               },
             })}

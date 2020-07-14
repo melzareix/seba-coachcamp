@@ -1,14 +1,29 @@
-import { Box, Heading, Image } from 'grommet';
+import { Heading } from 'grommet';
+import { Card } from 'grommet-controls';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import qs from 'query-string';
 
 export default function WorkshopCard(props: any) {
-  const opacity = props.opacity || '0.2';
+  const history = useHistory();
   return (
-    <Box fill className="card" background="dark-1" onClick={() => alert(1)}>
-      <Image fit="cover" opacity={opacity} src={props.image} />
-      <Heading textAlign="center" className="workshop-title" level="2">
-        {props.title}
-      </Heading>
-    </Box>
+    <Card
+      background={{ image: `url(${props.image})` }}
+      animation="fadeIn"
+      onClick={() => {
+        history.push({
+          pathname: '/workshops',
+          search: qs.stringify({
+            category: props.title,
+          }),
+        });
+      }}
+    >
+      <Card.CardContent background={{ color: 'rgba(51, 51, 51, 0.5)' }}>
+        <Heading textAlign="center" className="workshop-title" level="2">
+          {props.title}
+        </Heading>
+      </Card.CardContent>
+    </Card>
   );
 }

@@ -1,21 +1,11 @@
-import {
-  Box,
-  Button,
-  Form,
-  FormField,
-  Heading,
-  RoutedAnchor,
-  Text,
-  TextInput,
-  TextArea,
-} from 'grommet';
-import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
+import { Box, Button, Form, FormField, Heading, Text, TextArea, TextInput } from 'grommet';
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useForm } from 'react-hook-form';
-import api from '../../utils/api';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { axios, api } from '../../utils/api';
 import ErrorBox from '../common/error';
+import { RouterAnchor } from '../common/routerLinks';
 
 type Inputs = {
   name: string;
@@ -35,8 +25,9 @@ export default function Register() {
       setApiError(null);
       const resp = await axios.post(api.REGISTER_INSTRUCTOR, data);
       window.localStorage.setItem('token', resp.data.data.token);
-      toast.success('Registration Successful');
-      history.push('/instructors/dashboard');
+      window.scrollTo({ top: 0 });
+      toast.success('Registration Successful! Redirecting to dashboard');
+      setTimeout(() => history.go(0), 1000);
     } catch (error) {
       setApiError(error.response.data?.message);
     }
@@ -48,10 +39,10 @@ export default function Register() {
         Apply for an Instructor account
       </Heading>
       <Text textAlign="center">
-        <RoutedAnchor path="/auth/login" label="Already Registered? Login Now" />
+        <RouterAnchor path="/auth/login" label="Already Registered? Login Now" />
       </Text>
 
-      {apiError && <ErrorBox text={apiError} />}
+      <Box margin="medium">{apiError && <ErrorBox text={apiError} />}</Box>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormField label="Name">
@@ -74,7 +65,7 @@ export default function Register() {
                 message: 'email is required.',
               },
               pattern: {
-                value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
                 message: 'invalid email address.',
               },
             })}
@@ -103,7 +94,7 @@ export default function Register() {
             ref={register({
               required: { value: true, message: 'phone is required.' },
               pattern: {
-                value: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/,
+                value: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/,
                 message: 'invalid phone number.',
               },
             })}

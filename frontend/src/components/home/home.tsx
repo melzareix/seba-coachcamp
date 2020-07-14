@@ -1,24 +1,26 @@
+import qs from 'query-string';
 import React from 'react';
-import { animated, useSpring } from 'react-spring';
+import { useHistory } from 'react-router-dom';
+import SearchForm from '../common/searchForm';
 import HomeCategories from './homeCategories';
 import HomeHero from './homeHero';
-import HomeSearch from './homeSearch';
 import HomeWorkshops from './homeWorkshops';
 
 export default function Home() {
-  const homeAnimation = useSpring({
-    opacity: 1,
-    from: { opacity: 0 },
-    delay: 500,
-  });
+  const history = useHistory();
   return (
     <>
       <HomeHero />
-      <HomeSearch />
-      <animated.div style={homeAnimation}>
-        <HomeCategories />
-        <HomeWorkshops />
-      </animated.div>
+      <SearchForm
+        onSubmit={({ value: params }: any) => {
+          history.push({
+            pathname: '/workshops',
+            search: qs.stringify(params),
+          });
+        }}
+      />
+      <HomeCategories />
+      <HomeWorkshops />
     </>
   );
 }

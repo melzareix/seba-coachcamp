@@ -22,13 +22,9 @@ a {
   color: '#fff';
 }
 
-.card .workshop-title {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: 0;
-  transform: translate(-50%, -50%);
-  color: '#fff';
+.workshop-title {
+  margin: auto;
+  color: #ffffff;
 }
 .card .subtitle {
   position: absolute;

@@ -1,7 +1,8 @@
-import React from 'react';
-import { Button, Header, Heading, Nav, RoutedAnchor, RoutedButton } from 'grommet';
+import { Button, Header, Heading, Nav } from 'grommet';
 import * as Icons from 'grommet-icons';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { RouterAnchor, RouterButton } from './routerLinks';
 
 export default function AppHeader() {
   const history = useHistory();
@@ -12,24 +13,24 @@ export default function AppHeader() {
       border={{ side: 'bottom' }}
     >
       <Heading margin="none" level="3">
-        <RoutedAnchor path="/" label="COACHCAMP" />
+        <RouterAnchor path="/" label="COACHCAMP" />
       </Heading>
 
       <Nav direction="row" background="transparent">
         {!isLoggedIn && (
-          <RoutedButton
+          <RouterButton
             icon={<Icons.Login />}
             label="Instructor Login"
             path="/auth"
             hoverIndicator
           />
         )}
-        <RoutedButton icon={<Icons.Catalog />} label="Explore" path="/workshops" hoverIndicator />
+        <RouterButton icon={<Icons.Catalog />} label="Explore" path="/workshops" hoverIndicator />
         {isLoggedIn && (
-          <RoutedButton
+          <RouterButton
             icon={<Icons.Projects />}
             label="Dashboard"
-            path="/workshops"
+            path="/instructors/dashboard"
             hoverIndicator
           />
         )}
