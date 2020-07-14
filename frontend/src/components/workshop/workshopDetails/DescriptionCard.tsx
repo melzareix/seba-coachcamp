@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Text} from 'grommet';
+import {Box, Paragraph} from 'grommet';
 
 interface Props {
   description: string;
@@ -8,9 +8,9 @@ interface Props {
 const DescriptionCard = ({description}: Props) => {
   return (
     <Box pad="medium" border={{ color: 'lightgray', size: 'small' }}>
-      <Text>
+      <Paragraph fill>
         {description}
-      </Text>
+      </Paragraph>
   </Box>
   );
 }

@@ -4,7 +4,6 @@ import {Edit} from 'grommet-icons';
 import StarEmptyIcon from '../../../assets/icons/star-empty.svg';
 import StarFilledIcon from '../../../assets/icons/star-filled.svg';
 
-
 const ReviewCard = () => {
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>("");
@@ -46,11 +45,7 @@ const ReviewCard = () => {
 
       {/* Review Form */}
       <Box>
-        {/* Rating */}
-        <Box 
-          direction="row" 
-          margin={{bottom: "medium"}}
-        >
+        <Box direction="row" margin={{bottom: "medium"}}>
           {_generateRatingStars()}
         </Box>
 
