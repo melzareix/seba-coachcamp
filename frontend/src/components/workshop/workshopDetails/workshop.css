@@ -1,5 +1,24 @@
-.root {
-  margin: 30px 5%;
+.workshopDetailsHeader {
+  max-height: 100%;
+}
+
+.workshopDetailsHeaderTextContainer {
+  position: absolute;
+  left: 100px;
+  bottom: 100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.workshopDetailsScrollButton {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  cursor: pointer;
+}
+
+.workshopDetailsContent {
+  padding: 30px 5%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -25,4 +44,8 @@
 
 .starButton {
   cursor: pointer;
+}
+
+.carousel {
+  height: 100%;
 }
