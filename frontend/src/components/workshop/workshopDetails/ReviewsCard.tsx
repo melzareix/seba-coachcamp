@@ -1,70 +1,38 @@
-import React, {useState} from 'react';
-import {Box, Text, TextArea, Button} from 'grommet';
-import {Edit} from 'grommet-icons';
-import StarEmptyIcon from '../../../assets/icons/star-empty.svg';
-import StarFilledIcon from '../../../assets/icons/star-filled.svg';
+import React from 'react';
+import {Box, Paragraph} from 'grommet';
+import {Review} from './types';
+import { generateRatingStars } from './utils';
 
-const ReviewCard = () => {
-  const [rating, setRating] = useState<number>(0);
-  const [review, setReview] = useState<string>("");
+interface ReviewComponentProps {
+  review: Review;
+  last?: boolean;
+}
 
-  const _generateRatingStars = () => {
-    const stars = [];
-    for (let i = 1; i<=5; i++) {
-      stars.push(
-        <img 
-          src={rating >= i? StarFilledIcon: StarEmptyIcon} 
-          className="starIcon starButton"
-          onClick={() => {setRating(i)}}
-        />
-      )
-    }
-    return stars;
-  }
+const ReviewComponent = ({review, last}: ReviewComponentProps) => (
+  <Box 
+    border={!last? {color: 'lightgray', size: 'small', side: 'bottom'}: false}
+    margin={!last? {bottom: 'medium'}: undefined}
+  >
+    <Box direction="row">
+      {generateRatingStars(review.rating)}
+    </Box>
+    <Paragraph style={{marginLeft: 5}}>
+      {review.text}
+    </Paragraph>
+  </Box>
+)
 
+const ReviewsCard = () => {
   return (
     <Box 
-      pad="medium" 
+      pad={{horizontal: "medium", top: "medium"}} 
       border={{ color: 'lightgray', size: 'small' }}
-      margin={{top: "large"}}
+      margin={{top: "medium"}}
     >
-
-      {/* Header  */}
-      <Box 
-        pad={{bottom: "small"}}
-        margin={{bottom: "medium"}}
-        border={{ color: 'lightgray', size: 'small', side: 'bottom' }}
-        direction="row"
-        align="center"
-      >
-        <Edit size='16px' className="reviewCardIcon" />
-        <Text>
-          Rate & Write a Review about the instructor
-        </Text>
-      </Box>
-
-      {/* Review Form */}
-      <Box>
-        <Box direction="row" margin={{bottom: "medium"}}>
-          {_generateRatingStars()}
-        </Box>
-
-        <TextArea
-          placeholder="type here"
-          value={review}
-          onChange={(event: any) => setReview(event.target.value)}
-          style={{height: 200, fontWeight: 400}}
-        />
-
-        <Button 
-          label="Submit Review" 
-          alignSelf="end" 
-          margin={{top: "medium"}}
-          
-        />
-      </Box>
+      <ReviewComponent review={{rating: 3, text: "Lorem Ipsum"}}/>
+      <ReviewComponent review={{rating: 3, text: "Lorem Ipsum"}} last/>
   </Box>
   );
 }
 
-export default ReviewCard;
+export default ReviewsCard;

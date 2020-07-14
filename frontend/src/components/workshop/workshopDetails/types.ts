@@ -3,3 +3,8 @@ export interface Instructor {
   name: string;
   email: string;
 }
+
+export interface Review {
+  rating: number;
+  text: string;
+}
