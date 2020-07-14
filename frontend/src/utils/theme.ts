@@ -1,3 +1,5 @@
+import { NONAME } from "dns";
+
 export default {
   global: {
     colors: {
@@ -8,6 +10,11 @@ export default {
       family: 'Work Sans',
       size: '18px',
       height: '20px',
+    },
+    focus: {
+      border: {
+        color: 'none',
+      },
     },
   },
   anchor: {
