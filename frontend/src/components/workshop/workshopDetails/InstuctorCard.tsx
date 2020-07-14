@@ -4,7 +4,7 @@ import * as Icons from 'grommet-icons';
 import {Instructor} from './types';
 
 interface Props {
-  instructor: Instructor;
+  instructor?: Instructor;
 }
 
 const InstructorCard = ({instructor}: Props) => {
@@ -19,18 +19,18 @@ const InstructorCard = ({instructor}: Props) => {
       </Text>
 
       <Text margin="small" size="xlarge">
-        {instructor.name}
+        {instructor?.name}
       </Text>
 
       <Text margin={{bottom: "medium"}}>
-        {instructor.email}
+        {instructor?.email}
       </Text>
 
       <RoutedButton 
         primary 
         icon={<Icons.User />} 
         label="Profile" 
-        path={`/instructors/${instructor.id}`} 
+        path={`/instructors/${instructor?.id}`} 
       />
 
   </Box>

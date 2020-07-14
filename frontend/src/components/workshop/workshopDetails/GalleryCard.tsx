@@ -1,7 +1,11 @@
 import React from 'react';
 import {Box, Image, Carousel} from 'grommet';
 
-const GalleryCard = () => {
+interface Props {
+  gallery?: string[];
+}
+
+const GalleryCard = ({gallery}: Props) => {
   return (
     <Box 
       border={{ color: 'lightgray', size: 'small' }}
@@ -9,9 +13,10 @@ const GalleryCard = () => {
       style={{height: 400}}
     >
       <Carousel fill >
-        <Image fit="cover" src="//v2.grommet.io/assets/Wilderpeople_Ricky.jpg" />
-        <Image fit="cover" src="//v2.grommet.io/assets/IMG_4245.jpg" />
-        <Image fit="cover" src="//v2.grommet.io/assets/IMG_4210.jpg" />
+        {gallery?.map((image) => (
+            <Image fit="cover" src={image} />
+          ))
+        }
       </Carousel>
     </Box>
   );

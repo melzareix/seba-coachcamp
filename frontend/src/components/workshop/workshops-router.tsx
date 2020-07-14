@@ -4,8 +4,12 @@ import { GuardedRoute } from 'react-router-guards';
 import WorkshopsList from './explore-workshops';
 import Workshop from './workshopDetails/workshop';
 
+interface MatchParams {
+  id: string
+}
+
 export default function WorkshopsRouter() {
-  const match = useRouteMatch();
+  const match = useRouteMatch<MatchParams>();
   return (
     <Switch>
       <Route path={`${match.path}/:id`}>

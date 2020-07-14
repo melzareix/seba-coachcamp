@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Paragraph} from 'grommet';
+import {Box, Paragraph, Text} from 'grommet';
 import {Review} from './types';
 import { generateRatingStars } from './utils';
 
@@ -22,16 +22,26 @@ const ReviewComponent = ({review, last}: ReviewComponentProps) => (
   </Box>
 )
 
-const ReviewsCard = () => {
+interface Props {
+  reviews?: Review[];
+}
+
+const ReviewsCard = ({reviews}: Props) => {
   return (
     <Box 
       pad={{horizontal: "medium", top: "medium"}} 
       border={{ color: 'lightgray', size: 'small' }}
       margin={{top: "medium"}}
     >
-      <ReviewComponent review={{rating: 3, text: "Lorem Ipsum"}}/>
-      <ReviewComponent review={{rating: 3, text: "Lorem Ipsum"}} last/>
-  </Box>
+      {
+        reviews?.length === 0? (
+          <Text style={{marginBottom: 20}}>No Reviews for this workshop yet</Text>
+        ) : (
+          reviews?.map((review, index) => (
+            <ReviewComponent review={review} last={index === reviews.length-1}/>
+          ))
+      )}
+    </Box>
   );
 }
 

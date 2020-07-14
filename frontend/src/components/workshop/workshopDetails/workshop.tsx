@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Heading, Text, Box, Image, Stack} from 'grommet';
+import { useParams } from 'react-router-dom'
 import './workshop.css';
 import DescriptionCard from './DescriptionCard';
 import InstructorCard from './InstuctorCard';
@@ -8,31 +9,46 @@ import ReviewsForm from './ReviewsForm';
 import ReviewsCard from './ReviewsCard';
 import GalleryCard from './GalleryCard';
 import {generateRatingStars} from './utils';
+import { api, axios } from '../../../utils/api';
+import {Workshop} from './types';
 
-const description = '    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' + '\n' + 
-'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum';
+const fetchWorkshopDetails = async (id: string) => {
+  const result = await axios.get(api.singleWorkshop(id))
+  return result.data.data;
+}
 
+export default function WorkshopComponent() {
+  const [workshop, setWorkshop] = useState<Workshop>();
+  const { id } = useParams<{id: string}>();
 
-export default function Workshop() {
+  useEffect(() => {
+    const getWorkshop = async () => {
+      const data = await fetchWorkshopDetails(id);
+      console.log("heere", data)
+      setWorkshop(data);
+    }
+    getWorkshop();
+  }, [id])
+
   return (
     <>
       <Stack>
         <div className="workshopDetailsHeader">
           <Image 
-            src="//v2.grommet.io/assets/IMG_4245.jpg"
+            src={workshop?.gallery[0]}
             fit="cover"
             fill="horizontal"
             style={{height: 400}}
           />
 
           <div className="workshopDetailsHeaderTextContainer">
-            <Heading color="white">Decision making</Heading>
+            <Heading color="white">{workshop?.name}</Heading>
 
-            <Text color="white" size="25px" >Decision making</Text>
+            <Text color="white" size="25px" >{workshop?.category}</Text>
 
             <Box direction="row" margin={{top: "medium"}} align="center">
               {generateRatingStars(3)}
-              <Text style={{marginTop: 3, marginLeft: 20}}>0 Reviews</Text>
+              <Text style={{marginTop: 3, marginLeft: 20}}>{`${workshop?.reviews.length} Reviews`}</Text>
             </Box>
           </div>
         </div>
@@ -41,15 +57,15 @@ export default function Workshop() {
       
       <div className="workshopDetailsContent" id="middle">
         <div className="firstCol">
-          <DescriptionCard description={description}/>
+          <DescriptionCard description={workshop?.description}/>
           <ReviewsForm />
-          <ReviewsCard />
+          <ReviewsCard reviews={workshop?.reviews}/>
         </div>
 
         <div className="secondCol">
-          <InstructorCard instructor={{name: 'root', id: '1', email: "root@gmail.com"}}/>
+          <InstructorCard instructor={workshop?._instructor}/>
           <ReservationCard />
-          <GalleryCard />
+          <GalleryCard gallery={workshop?.gallery} />
         </div>
       </div>
     </>
