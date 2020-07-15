@@ -23,7 +23,7 @@ const ReviewComponent = ({review, last}: ReviewComponentProps) => (
 )
 
 interface Props {
-  reviews?: Review[];
+  reviews: Review[];
 }
 
 const ReviewsCard = ({reviews}: Props) => {

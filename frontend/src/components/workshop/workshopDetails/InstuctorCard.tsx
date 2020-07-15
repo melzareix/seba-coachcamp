@@ -4,7 +4,7 @@ import * as Icons from 'grommet-icons';
 import {Instructor} from './types';
 
 interface Props {
-  instructor?: Instructor;
+  instructor: Instructor;
 }
 
 const InstructorCard = ({instructor}: Props) => {

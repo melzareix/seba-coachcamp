@@ -2,7 +2,7 @@ import React from 'react';
 import {Box, Image, Carousel} from 'grommet';
 
 interface Props {
-  gallery?: string[];
+  gallery: string[];
 }
 
 const GalleryCard = ({gallery}: Props) => {

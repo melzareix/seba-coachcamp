@@ -2,7 +2,7 @@ import React from 'react';
 import {Box, Paragraph} from 'grommet';
 
 interface Props {
-  description?: string;
+  description: string;
 }
 
 const DescriptionCard = ({description}: Props) => {

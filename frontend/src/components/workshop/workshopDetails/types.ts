@@ -3,7 +3,7 @@ export interface Workshop {
   description: string;
   category: string;
   gallery: string[];
-  offerings: [];
+  offerings: Offering[];
   reviews: Review[];
   _instructor: Instructor;
 }
@@ -18,4 +18,14 @@ export interface Instructor {
 export interface Review {
   rating: number;
   text: string;
+}
+
+export interface Offering {
+  price: number;
+  startDate: Date;
+  endDate: Date;
+  location: string;
+  capacity: number;
+  occupied: number;
+  _id: string;
 }
