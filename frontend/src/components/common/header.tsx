@@ -1,21 +1,50 @@
-import { Avatar, Header, Heading, Nav, RoutedAnchor, RoutedButton } from 'grommet';
+import { Button, Header, Heading, Nav } from 'grommet';
 import * as Icons from 'grommet-icons';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { RouterAnchor, RouterButton } from './routerLinks';
 
 export default function AppHeader() {
+  const history = useHistory();
+  const isLoggedIn = localStorage.getItem('token');
   return (
     <Header
       pad={{ left: 'medium', right: 'medium', vertical: 'medium' }}
       border={{ side: 'bottom' }}
     >
       <Heading margin="none" level="3">
-        <RoutedAnchor path="/" label="COACHCAMP" />
+        <RouterAnchor path="/" label="COACHCAMP" />
       </Heading>
 
       <Nav direction="row" background="transparent">
-        <RoutedButton icon={<Icons.User />} label="Signup/Login" path="/auth" hoverIndicator />
-        <RoutedButton icon={<Icons.Catalog />} label="Explore" path="/workshops" hoverIndicator />
-        <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
+        {!isLoggedIn && (
+          <RouterButton
+            icon={<Icons.Login />}
+            label="Instructor Login"
+            path="/auth"
+            hoverIndicator
+          />
+        )}
+        <RouterButton icon={<Icons.Catalog />} label="Explore" path="/workshops" hoverIndicator />
+        {isLoggedIn && (
+          <RouterButton
+            icon={<Icons.Projects />}
+            label="Dashboard"
+            path="/instructors/dashboard"
+            hoverIndicator
+          />
+        )}
+        {isLoggedIn && (
+          <Button
+            icon={<Icons.Logout />}
+            label="Logout"
+            onClick={() => {
+              window.localStorage.removeItem('token');
+              history.go(0);
+            }}
+            hoverIndicator
+          />
+        )}
       </Nav>
     </Header>
   );

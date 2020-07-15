@@ -1,4 +1,14 @@
-import { Controller, Get, Param, Query, Put, Body, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  Put,
+  Body,
+  Post,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { WorkshopsService } from '../services/workshops.service';
 import { Workshop, Categories } from '../models/workshop.model';
 import { ApiTags } from '@nestjs/swagger';
@@ -8,6 +18,7 @@ import { OfferingsService } from '../services/offerings.service';
 import { OfferingCreateDto } from '../offerings.types';
 import { CouponsService } from '../services/coupons.service';
 import { InstructorAuth } from 'src/instructors/decorators/instructor.auth';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Workshops')
 @Controller('workshops')
@@ -21,19 +32,15 @@ export class WorkshopsController {
   @Get()
   async getWorkshops(
     @Query() workshopSearchDto: WorkshopSearchDto,
-  ): Promise<Workshop[]> {
+  ): Promise<Workshop[] | number> {
     return await this.workshopService.searchWorkshops(workshopSearchDto);
   }
 
-  @Get('paginated/:skip/:limit')
-  async getPaginatedWorkshops(
-    @Param('skip') skip: string,
-    @Param('limit') limit: string,
-  ): Promise<Workshop[]> {
-    return await this.workshopService.findPaginated(
-      parseInt(skip),
-      parseInt(limit),
-    );
+  @Get('/count')
+  async getWorkshopsCount(
+    @Query() workshopSearchDto: WorkshopSearchDto,
+  ): Promise<Workshop[] | number> {
+    return await this.workshopService.searchWorkshops(workshopSearchDto, true);
   }
 
   @Get('categories')
@@ -78,9 +85,18 @@ export class WorkshopsController {
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   async createWorkshop(
     @Body() updatedWorkShop: WorkshopCreateDto,
   ): Promise<Workshop | null> {
     return await this.workshopService.create(updatedWorkShop);
+  }
+
+  @Delete(':workshop_id')
+  @InstructorAuth()
+  async deleteWorkshop(
+    @Param(':workshop_id') workshopId: string,
+  ): Promise<Workshop | null> {
+    return await this.workshopService.deleteWorkshop(workshopId);
   }
 }

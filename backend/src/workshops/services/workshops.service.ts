@@ -26,15 +26,23 @@ export class WorkshopsService {
   async findAll(): Promise<Workshop[]> {
     return await this.workshopModel.find().exec();
   }
-  async findPaginated(skip:number,limit:number): Promise<Workshop[]> {
-    return await this.workshopModel.find().skip(skip).limit(limit).exec();
+
+  async getWorkshopsCount(): Promise<number> {
+    return await this.workshopModel.count({});
+  }
+  async findPaginated(skip: number, limit: number): Promise<Workshop[]> {
+    return await this.workshopModel
+      .find()
+      .skip(skip)
+      .limit(limit)
+      .exec();
   }
 
   async findById(id: string): Promise<Workshop | null> {
     return await this.workshopModel.findById(id).populate('_instructor');
   }
 
-  async findInstructorWorkshops( 
+  async findInstructorWorkshops(
     instructorId: string,
   ): Promise<Workshop[] | null> {
     return this.workshopModel.find({
@@ -42,7 +50,10 @@ export class WorkshopsService {
     });
   }
 
-  async searchWorkshops(searchDto: WorkshopSearchDto): Promise<Workshop[]> {
+  async searchWorkshops(
+    searchDto: WorkshopSearchDto,
+    isCount = false,
+  ): Promise<Workshop[] | number> {
     const query = {};
     if (searchDto.text) {
       query['$text'] = {
@@ -63,6 +74,16 @@ export class WorkshopsService {
       query['category'] = searchDto.category;
     }
 
-    return await this.workshopModel.find(query);
+    if (isCount) return await this.workshopModel.count(query);
+    const skip = parseInt(searchDto.skip, 0) || 0;
+    const limit = parseInt(searchDto.limit, 0) || 9;
+    return await this.workshopModel
+      .find(query)
+      .skip(skip)
+      .limit(limit);
+  }
+
+  async deleteWorkshop(workshopId: string): Promise<Workshop> {
+    return await this.workshopModel.findOneAndDelete({ id: workshopId });
   }
 }
