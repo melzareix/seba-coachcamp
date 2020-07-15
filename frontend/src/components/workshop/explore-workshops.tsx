@@ -1,70 +1,139 @@
-import React from 'react';
-import  { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Box,Nav, Heading, Grid ,Button} from 'grommet';
+// @ts-ignore
+import { Box, Grid, Heading } from 'grommet';
+import qs from 'query-string';
+import React, { useCallback, useEffect, useState } from 'react';
+import ReactPaginate from 'react-paginate';
+import { useHistory, useLocation } from 'react-router-dom';
+import { api, axios } from '../../utils/api';
+import SearchForm from '../common/searchForm';
 import WorkshopCard from '../common/workshopCard';
-import * as Icons from 'grommet-icons';
 
+type SearchFilters = {
+  text: string;
+  location: string;
+  category: string;
+};
+
+type Workshop = {
+  _id: string;
+  gallery: string[];
+  name: string;
+  description: string;
+};
+
+const defaultSearchFilters = {
+  name: '',
+  location: '',
+  category: '',
+};
+
+const fetchWorkshopsCount = async (params: SearchFilters) => {
+  const resultsCount = await axios.get(api.WORKSHOPS_COUNT, {
+    params,
+  });
+  return resultsCount.data.data;
+};
 
 export default function WorkshopsList() {
-  const [workshops, setWorkshops] = useState([{
-    gallery:"",
-    name:"",
-    description:""
-  }]);
-  const[pageNumber,setPageNumber]=useState(1);
-  const[maxPage,setMaxPage]=useState(1);
-  const pageLimit = 2;
+  const [workshops, setWorkshops] = useState<Workshop[]>([]);
+  const [errorMessage, setErrorMessage] = useState('Loading...');
+
+  const [maxPages, setMaxPages] = useState(-1);
+
+  const pageLimit = 9;
+  const loc = useLocation();
+  const history = useHistory();
+
+  const changePageNumber = useCallback(
+    async (newPageNum: number) => {
+      try {
+        const skip = newPageNum * pageLimit;
+        const queryParams = qs.parse(loc.search);
+        const paginatedWorkshops = await axios.get(api.ALL_WORKSHOPS, {
+          params: {
+            ...queryParams,
+            skip,
+            limit: pageLimit,
+          },
+        });
+        setWorkshops(paginatedWorkshops.data.data);
+        window.scrollTo({
+          top: 0,
+        });
+      } catch (error) {
+        setErrorMessage('Failed to load workshops.');
+      }
+    },
+    [loc.search]
+  );
 
   useEffect(() => {
-    const fetchData = async () => {
-      const allWorkshops = await axios.get('http://localhost:3000/workshops');
-      const skip = (pageNumber-1)*pageLimit;
-      setMaxPage(Math.ceil(allWorkshops.data.data.length/pageLimit));
-      const paginatedWorkshops = await axios.get('http://localhost:3000/workshops/paginated/'+skip+'/'+pageLimit);
-      setWorkshops(paginatedWorkshops.data.data);
+    const getInitialCount = async () => {
+      try {
+        const queryParams = qs.parse(loc.search) as SearchFilters;
+        const count = await fetchWorkshopsCount(queryParams);
+        setMaxPages(Math.ceil(count / pageLimit));
+        if (count === 0) {
+          setErrorMessage('No Workshops found :(');
+        }
+        changePageNumber(0);
+      } catch (error) {
+        setErrorMessage('Failed to load workshops.');
+      }
     };
-    fetchData();
-  }, []);
+    getInitialCount();
+  }, [loc.search, changePageNumber]);
 
- async function  changePageNumber(newPageNum: number){
-    if(newPageNum>=1){
-    const skip = (newPageNum-1)*pageLimit;
-    const result = await axios.get('http://localhost:3000/workshops/paginated/'+skip+'/'+pageLimit);
-    setWorkshops(result.data.data);
-    setPageNumber(newPageNum);
-    }
-   return;
+  async function search({ value: params }: any) {
+    history.push({
+      pathname: '/workshops',
+      search: qs.stringify(params),
+    });
   }
 
   return (
-
-    <Box justify="center" width="full">
-      <Nav direction="row"  margin="1" justify="center"  background="transparent">
-        <Button icon={<Icons.CaretPrevious />}disabled={pageNumber==1} label="Previous" size="small" margin="large" hoverIndicator onClick={()=>changePageNumber(pageNumber-1)}/>
+    <Box justify="center" fill>
       <Heading textAlign="center" style={{ maxWidth: '100%' }}>
-        Workshops
+        Workshops Catalog
       </Heading>
-      <Button label="Next"icon={<Icons.CaretNext />}disabled={pageNumber>=maxPage}size="small" margin="large" onClick={()=>changePageNumber(pageNumber+1)} hoverIndicator />
-      </Nav>
-      <Grid rows="small" columns="medium" gap="large" pad="large">
 
-      {workshops.map((workshop) => {
+      <SearchForm
+        onSubmit={search}
+        defaultState={{ ...defaultSearchFilters, ...qs.parse(loc.search) }}
+        workshops
+      />
+
+      <Grid rows="small" columns="medium" gap="large" pad="medium">
+        {workshops.map((workshop) => {
           return (
             <WorkshopCard
+              key={`${workshop._id}`}
               image={`${workshop.gallery[0]}`}
               title={`${workshop.name}`}
               subtitle={`${workshop.description}`}
-            rating={5} //J-TODO : Get rating reviews later on 
+              rating={5}
             />
           );
         })}
       </Grid>
+
       {workshops.length === 0 && (
         <Heading textAlign="center" style={{ maxWidth: '100%' }}>
-          Loading...
+          {errorMessage}
         </Heading>
       )}
-      </Box>
+
+      <ReactPaginate
+        breakLabel="..."
+        breakClassName="break-me"
+        pageCount={maxPages}
+        initialPage={0}
+        marginPagesDisplayed={5}
+        pageRangeDisplayed={5}
+        onPageChange={async ({ selected }) => changePageNumber(selected)}
+        containerClassName="pagination"
+        activeClassName="active"
+      />
+    </Box>
   );
 }

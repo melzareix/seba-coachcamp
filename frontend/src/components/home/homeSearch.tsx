@@ -6,7 +6,6 @@ export default function HomeSearch() {
   const searchFormAnimatedProps = useSpring({
     opacity: 1,
     from: { opacity: 0 },
-    delay: 500,
   });
   return (
     <animated.div style={searchFormAnimatedProps}>

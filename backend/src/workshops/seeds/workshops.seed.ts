@@ -9,7 +9,10 @@ import { instructorIds, workshopLocs } from 'src/seeds/constants';
 
 @Injectable()
 export class WorkshopsSeed {
-  constructor(private readonly workshopsService: WorkshopsService,private readonly reviewsService: ReviewsService) {}
+  constructor(
+    private readonly workshopsService: WorkshopsService,
+    private readonly reviewsService: ReviewsService,
+  ) {}
 
   @Command({
     command: 'seed:workshops',
@@ -20,9 +23,9 @@ export class WorkshopsSeed {
     const categories = Object.values(Categories);
 
     for (const [idx, id] of instructorIds.entries()) {
-      const category = categories[idx];
+      const category = categories[idx % 3];
       await this.workshopsService.create({
-        name: `${categories[idx]} Workshop`,
+        name: `${category} Workshop`,
         description: `Learn ${category} skills`,
         category,
         gallery: [
@@ -36,7 +39,7 @@ export class WorkshopsSeed {
             capacity: faker.random.number(50),
             startDate: faker.date.future(),
             endDate: faker.date.future(),
-            location: workshopLocs[idx],
+            location: workshopLocs[idx % 3],
             occupied: 0,
             price: faker.random.number({ min: 50, max: 200 }),
           },
@@ -63,9 +66,9 @@ export class WorkshopsSeed {
   async seedReviews(): Promise<void> {
     for (const [idx, id] of instructorIds.entries()) {
       await this.reviewsService.create({
-        rating:faker.random.number(10),
-        description:faker.random.words(7),
-        reports:faker.random.number(10),
+        rating: faker.random.number(10),
+        description: faker.random.words(7),
+        reports: faker.random.number(10),
         _instructor: new ObjectId(id),
       });
     }

@@ -7,20 +7,20 @@ export class ReviewsController {
   constructor(public reviewsService: ReviewsService) {}
 
 
-  @Get('/')
-  async getPaginatedWorkshops(@Param('skip') skip: string,@Param('limit') limit: string): Promise<Workshop[]> {
-    return await this.workshopService.findPaginated(parseInt(skip),parseInt(limit));
-  }
+  // @Get('/')
+  // async getPaginatedWorkshops(@Param('skip') skip: string,@Param('limit') limit: string): Promise<Workshop[]> {
+  //   return await this.workshopService.findPaginated(parseInt(skip),parseInt(limit));
+  // }
  
   @Get(':id')
   async getReview(@Param('id') id: string): Promise<Review | null> {
     return await this.reviewsService.findById(id);
   }
 
-  @Put(':instructorId')
-  async updateWorkshop(@Param('id') id: string, @Body() updatedWorkShop: WorkshopCreateDto): Promise< Workshop | null> {
-    return await this.workshopService.update(id, updatedWorkShop)
-  }
+  // @Put(':instructorId')
+  // async updateWorkshop(@Param('id') id: string, @Body() updatedWorkShop: WorkshopCreateDto): Promise< Workshop | null> {
+  //   return await this.workshopService.update(id, updatedWorkShop)
+  // }
 
   @Put(':id')
   async updateReview(@Param('id') id: string, @Body() updatedReview: ReviewCreateDto): Promise< Review | null> {
