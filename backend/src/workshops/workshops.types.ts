@@ -12,7 +12,7 @@ export class WorkshopCreateDto {
   name: string;
   description: string;
   category: Categories;
-  _instructor: ObjectId;
+  _instructor?: ObjectId;
   offerings: Offering[];
   gallery: string[];
 }
