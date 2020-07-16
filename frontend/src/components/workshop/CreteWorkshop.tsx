@@ -2,9 +2,9 @@ import { Box, Button, Form, FormField, Heading, Text, TextInput, TextArea } from
 import { toast } from 'react-toastify';
 import { useHistory, useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { useForm, useFieldArray } from 'react-hook-form';
-import api from '../../utils/api';
+import { api, axios } from '../../utils/api';
 import ErrorBox from '../common/error';
 // eslint-disable-next-line import/no-cycle
 import Offering from './offering/Offering';
@@ -135,8 +135,7 @@ export default function CreateWorkshop() {
           }
         );
         toast.success('Create Successful');
-
-        history.push(`/workshops/${resp.data}`);
+        history.push(`/workshops/${resp.data.data._id}`);
       } catch (error) {
         setApiError(error.response.data?.message);
       }

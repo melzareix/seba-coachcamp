@@ -1,16 +1,56 @@
-const api = () => {
+import ax from 'axios';
+import { emit } from 'react-gbus';
+
+export const IS_AXIOS_LOADING = 'IS_AXIOS_LOADING';
+
+const apiUrl = () => {
   const BASE_URL = 'http://localhost:3000';
   return {
     BASE_URL,
-    ALL_WORKSHOPS: `${BASE_URL}/workshops`,
-    WORKSHOPS_COUNT: `${BASE_URL}/workshops/count`,
-    CATEGORIES: `${BASE_URL}/workshops/categories`,
-    paginatedWorkshops: (skip: number, limit: number) => {
-      return `${BASE_URL}/workshops/paginated/${skip}/${limit}`;
+    ALL_WORKSHOPS: '/workshops',
+    WORKSHOPS_COUNT: '/workshops/count',
+    singleWorkshop: (id: string) => {
+      return `/workshops/${id}`;
     },
-    REGISTER_INSTRUCTOR: `${BASE_URL}/instructors/register`,
-    LOGIN_INSTRUCTOR: `${BASE_URL}/instructors/login`,
+    CATEGORIES: `/workshops/categories`,
+    paginatedWorkshops: (skip: number, limit: number) => {
+      return `/workshops/paginated/${skip}/${limit}`;
+    },
+    REGISTER_INSTRUCTOR: `/instructors/register`,
+    LOGIN_INSTRUCTOR: `/instructors/login`,
+    instructorWorkshops: (id: string) => {
+      return `/instructors/${id}/workshops`;
+    },
   };
 };
 
-export default api();
+export const api = apiUrl();
+export const axios = ax.create({
+  baseURL: api.BASE_URL,
+  headers: {
+    'content-type': 'application/json',
+  },
+  responseType: 'json',
+});
+
+axios.interceptors.request.use(
+  (config) => {
+    emit(IS_AXIOS_LOADING, true);
+    return config;
+  },
+  (error) => {
+    emit(IS_AXIOS_LOADING, false);
+    Promise.reject(error);
+  }
+);
+
+axios.interceptors.response.use(
+  (response) => {
+    emit(IS_AXIOS_LOADING, false);
+    return response;
+  },
+  (error) => {
+    emit(IS_AXIOS_LOADING, false);
+    Promise.reject(error);
+  }
+);

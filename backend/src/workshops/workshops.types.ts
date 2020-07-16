@@ -6,6 +6,8 @@ export class WorkshopSearchDto {
   text?: string;
   location?: Locations;
   category?: Categories;
+  skip?: string;
+  limit?: string;
 }
 
 export class WorkshopCreateDto {

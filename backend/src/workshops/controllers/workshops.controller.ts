@@ -1,4 +1,14 @@
-import { Controller, Get, Param, Query, Put, Body, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  Put,
+  Body,
+  Post,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { WorkshopsService } from '../services/workshops.service';
 import { Workshop, Categories } from '../models/workshop.model';
 import { ApiTags } from '@nestjs/swagger';
@@ -9,6 +19,8 @@ import { OfferingCreateDto } from '../offerings.types';
 import { CouponsService } from '../services/coupons.service';
 import { InstructorLoggedIn, User } from 'src/instructors/decorators/instructor.auth';
 import { Instructor } from 'src/instructors/models/instructor.model';
+import { InstructorAuth } from 'src/instructors/decorators/instructor.auth';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Workshops')
 @Controller('workshops')
@@ -22,24 +34,15 @@ export class WorkshopsController {
   @Get()
   async getWorkshops(
     @Query() workshopSearchDto: WorkshopSearchDto,
-  ): Promise<Workshop[]> {
+  ): Promise<Workshop[] | number> {
     return await this.workshopService.searchWorkshops(workshopSearchDto);
   }
 
   @Get('/count')
-  async getWorkshopsCount(): Promise<number> {
-    return await this.workshopService.getWorkshopsCount();
-  }
-
-  @Get('paginated/:skip/:limit')
-  async getPaginatedWorkshops(
-    @Param('skip') skip: string,
-    @Param('limit') limit: string,
-  ): Promise<Workshop[]> {
-    return await this.workshopService.findPaginated(
-      parseInt(skip),
-      parseInt(limit),
-    );
+  async getWorkshopsCount(
+    @Query() workshopSearchDto: WorkshopSearchDto,
+  ): Promise<Workshop[] | number> {
+    return await this.workshopService.searchWorkshops(workshopSearchDto, true);
   }
 
   @Get('categories')
@@ -100,6 +103,7 @@ export class WorkshopsController {
 
   @InstructorLoggedIn()
   @Post()
+  @UseGuards(AuthGuard('jwt'))
   async createWorkshop(
     @User() user: Instructor,
     @Body() updatedWorkShop: WorkshopCreateDto,
@@ -119,5 +123,13 @@ export class WorkshopsController {
     const returnWorkshop = await this.workshopService.update(newWorkshop._id, {offerings: createdOfferings});
 
     return returnWorkshop;
+  }
+
+  @Delete(':workshop_id')
+  @InstructorAuth()
+  async deleteWorkshop(
+    @Param(':workshop_id') workshopId: string,
+  ): Promise<Workshop | null> {
+    return await this.workshopService.deleteWorkshop(workshopId);
   }
 }
