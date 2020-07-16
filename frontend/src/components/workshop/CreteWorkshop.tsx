@@ -41,9 +41,12 @@ const Categories = [
 
 export default function CreateWorkshop() {
   const history = useHistory();
-  const { register, control, handleSubmit, errors } = useForm();
 
-  useFieldArray({
+  const { register, control, handleSubmit, errors, reset } = useForm({
+    defaultValues: {},
+  });
+
+  const { remove } = useFieldArray({
     control,
     name: 'offerings',
   });
@@ -51,14 +54,11 @@ export default function CreateWorkshop() {
   const [apiError, setApiError] = useState(null);
   const location = useLocation();
   const [offerings, setData] = useState<Offering[]>([]); // pass initilized offerings
-  const [workshopData, setWorkshopData] = useState<Inputs>(); // pass initilized offerings
+  const [value, setValue] = React.useState(Categories[0]);
 
   useEffect(() => {
-    console.log(location.pathname.split('/'));
     const url_toks = location.pathname.split('/');
     if (!location.pathname.includes('edit')) {
-      console.log('woooooooooo');
-
       return;
     }
     // @ts-ignore
@@ -73,61 +73,87 @@ export default function CreateWorkshop() {
             Authorization: `Bearer ${token}`,
           },
         });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        // if
-        setData(resp.data.data.offerings);
-        setWorkshopData(resp.data.data);
-        console.log(resp.data.data.name);
 
-        console.log('----------------');
+        for (let i = 0; i < resp.data.data.offerings.length; i += 1) {
+          const offering = resp.data.data.offerings[i];
+
+          const { startDate } = offering;
+          let curDate = new Date(startDate);
+
+          let dd = String(curDate.getDate());
+          let mm = String(curDate.getMonth() + 1); // January is 0!
+          let yyyy = curDate.getFullYear();
+          resp.data.data.offerings[i].startDate = `${dd}-${mm}-${yyyy}`;
+
+          const { endDate } = offering;
+          curDate = new Date(endDate);
+
+          dd = String(curDate.getDate());
+          mm = String(curDate.getMonth() + 1).padStart(2, '0'); // January is 0!
+          yyyy = curDate.getFullYear();
+          resp.data.data.offerings[i].endDate = `${dd}-${mm}-${yyyy}`;
+        }
+
+        reset(resp.data.data);
+        setData(resp.data.data.offerings);
+        setValue(resp.data.data.category);
       } catch (error) {
         setApiError(error.response.data?.message);
       }
     };
     fetchData();
-  }, [location.pathname]);
-
-  const [value, setValue] = React.useState(workshopData?.category || Categories[0]);
-  //   const [offerings, updateOffering] = React.useState([{} as Offering]);
+  }, [location.pathname, reset]);
 
   const onSubmit = async (data: any) => {
-    try {
-      setApiError(null);
-      const token = window.localStorage.getItem('token');
-      // eslint-disable-next-line
-      const resp = await axios.post(api.ALL_WORKSHOPS, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      toast.success('Create Successful');
-      console.log(resp.data);
+    const url_toks = location.pathname.split('/');
+    if (location.pathname.includes('edit')) {
+      try {
+        // @ts-ignore
+        const id = url_toks[url_toks.length - 1];
+        setApiError(null);
+        const token = window.localStorage.getItem('token');
+        // eslint-disable-next-line
+            const resp = await axios.put(api.ALL_WORKSHOPS + '/' + id, {...data, category: value}, {
+                headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        toast.success('Update Successful');
 
-      history.push(`/workshops/${resp.data}`);
-    } catch (error) {
-      setApiError(error.response.data?.message);
+        history.push(`/workshops/${id}`);
+      } catch (error) {
+        setApiError(error.response.data?.message);
+      }
+    } else {
+      try {
+        setApiError(null);
+        const token = window.localStorage.getItem('token');
+        // eslint-disable-next-line
+            const resp = await axios.post(api.ALL_WORKSHOPS, {...data, category: value}, {
+                headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        toast.success('Create Successful');
+        console.log(resp.data);
+        console.log(value);
+
+        history.push(`/workshops/${resp.data}`);
+      } catch (error) {
+        setApiError(error.response.data?.message);
+      }
     }
   };
   const append = () => {
     setData([...offerings, {} as Offering]);
   };
 
-  const remove = (removedIndex: number) => {
+  const removeOffering = (removedIndex: number) => {
     const updatedOfferings = offerings.filter((offering, index) => removedIndex !== index);
     setData(updatedOfferings);
-  };
-
-  // eslint-disable-next-line no-shadow
-  const updateStartDate = (modifiedIndex: number, value: Date) => {
-    const updatedOfferings = offerings.map((offering, index) => {
-      if (index === modifiedIndex) {
-        // eslint-disable-next-line no-param-reassign
-        offering.startDate = value;
-        return offering;
-      }
-      return offering;
-    });
-    setData(updatedOfferings);
+    remove(removedIndex);
   };
 
   return (
@@ -141,17 +167,9 @@ export default function CreateWorkshop() {
       {apiError && <ErrorBox text={apiError} />}
 
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormField label="Address">
-          <input
-            defaultValue={workshopData?.name}
-            name={`offerings[${0}].address`}
-            placeholder="22 example st."
-          />
-        </FormField>
         <FormField label="Name">
           <TextInput
-            defaultValue={workshopData?.name}
-            name="startDate"
+            name="name"
             // placeholder="public speaking with hady"
             ref={register({ required: { value: true, message: 'name is required.' } })}
           />
@@ -170,7 +188,6 @@ export default function CreateWorkshop() {
         <div className="errors">{errors.category && errors.category.message}</div>
         <FormField label="Description">
           <TextArea
-            defaultValue={workshopData?.description}
             name="description"
             placeholder="Description of the workshop ex: This workshop is going to teach to publicly speak with confidence."
             rows={5}
@@ -182,20 +199,24 @@ export default function CreateWorkshop() {
         {offerings ? (
           offerings.map((offering, idx) => {
             return (
-              <div>
+              <div
+                key={
+                  Math.random().toString(36).substring(2, 15) +
+                  Math.random().toString(36).substring(2, 15)
+                }
+              >
                 <br />
                 <div>offering {idx + 1}</div>
                 <br />
                 <Offering
                   offering={offering}
-                  updateStartDate={updateStartDate}
                   control={control}
                   key={idx || offering.id}
                   offeringIndex={idx}
                   register={register}
                   errors={errors}
                 />
-                <Button color="red" label="Delete" onClick={() => remove(idx)} />
+                <Button color="red" label="Delete" onClick={() => removeOffering(idx)} />
               </div>
             );
           })

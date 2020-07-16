@@ -13,7 +13,6 @@ interface IProps {
   errors: any;
   control: any;
   offering: Offering;
-  updateStartDate: (idx: number, value: Date) => void;
 }
 
 type Inputs = {
