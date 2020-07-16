@@ -1,4 +1,4 @@
-import { Box, Button, Form, FormField, Heading, Text, TextInput, TextArea, Select } from 'grommet';
+import { Box, Button, Form, FormField, Heading, Text, TextInput, TextArea } from 'grommet';
 import { toast } from 'react-toastify';
 import { useHistory, useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
@@ -45,7 +45,6 @@ export default function CreateWorkshop() {
   const { register, control, handleSubmit, errors, reset } = useForm({
     defaultValues: {},
   });
-
   const { remove } = useFieldArray({
     control,
     name: 'offerings',
@@ -114,7 +113,7 @@ export default function CreateWorkshop() {
         const token = window.localStorage.getItem('token');
         // eslint-disable-next-line
             const resp = await axios.put(api.ALL_WORKSHOPS + '/' + id, {...data, category: value}, {
-                headers: {
+            headers: {
               Authorization: `Bearer ${token}`,
             },
           }
@@ -130,15 +129,12 @@ export default function CreateWorkshop() {
         setApiError(null);
         const token = window.localStorage.getItem('token');
         // eslint-disable-next-line
-            const resp = await axios.post(api.ALL_WORKSHOPS, {...data, category: value}, {
-                headers: {
+            const resp = await axios.post(api.ALL_WORKSHOPS, {...data}, { headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
         toast.success('Create Successful');
-        console.log(resp.data);
-        console.log(value);
 
         history.push(`/workshops/${resp.data}`);
       } catch (error) {
@@ -177,13 +173,16 @@ export default function CreateWorkshop() {
         <div className="errors">{errors.name && errors.name.message}</div>
 
         <FormField label="Category">
-          <Select
+          <select
             name="category"
-            options={Categories}
-            value={value}
-            onChange={({ option }) => setValue(option)}
-            // ref={register()}
-          />
+            ref={register({ required: { value: true, message: 'Categry is required.' } })}
+          >
+            {Categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
         </FormField>
         <div className="errors">{errors.category && errors.category.message}</div>
         <FormField label="Description">
@@ -216,7 +215,7 @@ export default function CreateWorkshop() {
                   register={register}
                   errors={errors}
                 />
-                <Button color="red" label="Delete" onClick={() => removeOffering(idx)} />
+                <Button color="red" label="Delete Offering" onClick={() => removeOffering(idx)} />
               </div>
             );
           })
@@ -225,7 +224,7 @@ export default function CreateWorkshop() {
         )}
         <br />
         <Box direction="row" gap="medium">
-          <Button color="green" label="Add" onClick={() => append()} />
+          <Button color="green" label="Add Offering" onClick={() => append()} />
           <Button type="submit" primary label="Submit" />
           <Button type="reset" label="Reset" />
         </Box>

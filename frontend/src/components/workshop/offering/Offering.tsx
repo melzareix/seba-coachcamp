@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormField, TextInput } from 'grommet';
-import { DropInput } from 'grommet-controls';
 import 'react-datepicker/dist/react-datepicker.css';
 // eslint-disable-next-line import/no-cycle
 import { Offering } from '../CreteWorkshop';
@@ -22,6 +21,7 @@ type Inputs = {
   location: string;
   address: string;
 };
+const Locations = ['Munich', 'Stuttgart', 'Toronto', 'New York', 'Cairo'];
 
 export default function OfferingItem({ key, register, errors, offeringIndex, offering }: IProps) {
   return (
@@ -30,6 +30,7 @@ export default function OfferingItem({ key, register, errors, offeringIndex, off
         <TextInput
           defaultValue={offering.startDate}
           name={`offerings[${offeringIndex}].startDate`}
+          placeholder="dd/mm/yyyy"
           // @ts-ignore
           ref={register({
             required: {
@@ -53,6 +54,7 @@ export default function OfferingItem({ key, register, errors, offeringIndex, off
         <TextInput
           defaultValue={offering.endDate}
           name={`offerings[${offeringIndex}].endDate`}
+          placeholder="dd/mm/yyyy"
           // @ts-ignore
           ref={register({
             required: {
@@ -73,12 +75,17 @@ export default function OfferingItem({ key, register, errors, offeringIndex, off
       </div>
 
       <FormField label="Location">
-        <DropInput
-          defaultValue={offering.location}
+        <select
           name={`offerings[${offeringIndex}].location`}
           // @ts-ignore
           ref={register({ required: { value: true, message: 'location is required.' } })}
-        />
+        >
+          {Locations.map((location) => (
+            <option key={location} value={location}>
+              {location}
+            </option>
+          ))}
+        </select>
       </FormField>
       <div className="errors">
         {errors.offerings &&
