@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Grid,Heading,Button,FormField,TextInput ,Form,Table,TableHeader,TableRow,TableCell,TableBody} from 'grommet';
 import { api, axios } from '../../utils/api';
+import { useForm } from 'react-hook-form';
 import ErrorBox from '../common/error';
+import { toast } from 'react-toastify';
 
 type Offering = {
     _id: string;
@@ -18,11 +20,34 @@ type Offering = {
     name: string;
     description: string;
   };
-
+  type Inputs = {
+    firstName: string;
+    lastName: string;
+    address: string;
+    postCode: string;
+    city:string;
+    phoneNumber: string;
+    emailAddress: string;
+    _coupon:string;
+    
+  };
 export default function Workshop(props:any) {
     const [offering, setOffering] = useState<Offering>();
-    const [Workshop,setWorkshop]= useState<Workshop>();
+    const [workshop,setWorkshop]= useState<Workshop>();
     const [apiError, setApiError] = useState(null);
+    const { register, handleSubmit, errors } = useForm<Inputs>();
+    const onSubmit = async (data: any) => {
+      try {
+        setApiError(null);
+        data._workshop=workshop?._id
+        data._offering=offering?._id;
+        console.log(data);
+        const resp = await axios.post(api.BOOK_WORKSHOP, data);
+        toast.success('Booking Successful!');
+      } catch (error) {
+        setApiError(error.response.data?.message);
+      }
+    };
     const fetchWorkshop = async (_id: string) => {
         try{
         const result = await (await axios.get(api.singleWorkshop(_id))).data.data;
@@ -41,32 +66,13 @@ export default function Workshop(props:any) {
       };
       
     useEffect(() => {
-        // const setVars = async () => {
-        //     let temp_offering={
-        //     _id:"sdasd",
-        //     price:"213123",
-        //     startDate:"11/11/11",
-        //     endDate:"11/11/11",
-        //     location:"somewhere",
-        //     address:"somewhere",
-        //     capacity:50,
-        //     occupied:60
-        //     }
-        //     let temp_workshop={
-        //         _id:"asd",
-        //         name:'sdasda',
-        //         description:"Sdsd"
-        //     }
-        //     setOffering(temp_offering);
-        //     setWorkshop(temp_workshop);
-        // };
          fetchWorkshop(props.workshop_id);
     
       },[]);
 
 
   return (
-    <Form>
+    <Box>
 
 <Box>
 <Heading size="small" textAlign="center" style={{ maxWidth: '100%' }}>
@@ -97,7 +103,7 @@ export default function Workshop(props:any) {
   </TableHeader>
   <TableBody>
     <TableRow>
-  <TableCell>{Workshop?.name}</TableCell>
+  <TableCell>{workshop?.name}</TableCell>
   <TableCell>{offering?.startDate}</TableCell>
       <TableCell>{offering?.endDate}</TableCell>
       <TableCell>{offering?.location}</TableCell>
@@ -108,6 +114,8 @@ export default function Workshop(props:any) {
 </Table>
 </Box>
 
+
+<Form onSubmit={handleSubmit(onSubmit)}>
     <Box
     direction="row"
     border={{ color: 'brand', size: 'large' }}
@@ -117,36 +125,57 @@ export default function Workshop(props:any) {
           <Grid rows="xsmall" columns="small" gap="small" pad="small">
           <Heading margin="none" level="2"> Billing Details </Heading>
           <FormField label="First name *">
-    <TextInput placeholder="" />
+    <TextInput name = "firstName" placeholder="" ref={register({ required: { value: true, message: 'first name is required.' } })} />
           </FormField>    
+          <div className="errors">{errors.firstName && errors.firstName.message}</div>
            <FormField label="Last name*">
-    <TextInput placeholder="" />
+    <TextInput name="lastName" placeholder="" ref={register({ required: { value: true, message: 'last name is required.' } })}/>
           </FormField>
+          <div className="errors">{errors.lastName && errors.lastName.message}</div>
           <FormField label="Address*">
-    <TextInput placeholder="" />
+    <TextInput name="address" placeholder="" ref={register({ required: { value: true, message: 'Address is required.' } })}/>
           </FormField>
+          <div className="errors">{errors.address && errors.address.message}</div>
           <FormField label="Postcode/ZIP*">
-    <TextInput placeholder="" />
+    <TextInput name="postCode" placeholder=""ref={register({ required: { value: true, message: 'Postcode is required.' } })} />
           </FormField>
+          <div className="errors">{errors.postCode && errors.postCode.message}</div>
           <FormField label="City*">
-    <TextInput placeholder="" />
+    <TextInput name="city" placeholder="" ref={register({ required: { value: true, message: 'City is required.' } })} />
           </FormField>
+          <div className="errors">{errors.city && errors.city.message}</div>
           <FormField label="Phone Number*">
-    <TextInput placeholder="" />
+    <TextInput name="phoneNumber" placeholder="" ref={register({ required: { value: true, message: 'Phone Number is required.' },              pattern: {
+                value: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s./0-9]*$/,
+                message: 'invalid phone number.',
+              }, })}/>
           </FormField>
+          <div className="errors">{errors.phoneNumber && errors.phoneNumber.message}</div>
           <FormField label="Email address*">
-    <TextInput placeholder="" />
+    <TextInput name="emailAddress" placeholder="" ref={register({ required: { value: true, message: 'Email is required.' },
+   pattern: {
+    value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    message: 'invalid email address.',
+  }, })}/>
           </FormField>
+          <div className="errors">{errors.emailAddress && errors.emailAddress.message}</div>
+
+          <FormField label="Coupon">
+    <TextInput name="_coupon" placeholder="Enter Coupon if available" ref={register()}/>
+          </FormField>
+
+
 <div>   <p>Total :</p>
   <p>{offering?.price}</p>
   </div>
 
       
-          <Button primary label="Book Now" margin="small" size="small" />
+          <Button primary label="Book Now" type="submit" margin="small" size="small" />
       </Grid>
         </Box>
         <Box margin="medium">{apiError && <ErrorBox text={apiError} />}</Box>
         </Form>
+        </Box>
         
   );
 }

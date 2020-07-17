@@ -17,6 +17,7 @@ const apiUrl = () => {
       return `/workshops/paginated/${skip}/${limit}`;
     },
     REGISTER_INSTRUCTOR: `/instructors/register`,
+    BOOK_WORKSHOP:`/bookings`,
     LOGIN_INSTRUCTOR: `/instructors/login`,
     instructorWorkshops: (id: string) => {
       return `/instructors/${id}/workshops`;
