@@ -1,35 +1,30 @@
-import { Box, Button, Table, TableBody, TableCell, TableHeader, TableRow } from 'grommet';
+import {Box, Button, Table, TableBody, TableCell, TableHeader, TableRow} from 'grommet';
 import jwt_decode from 'jwt-decode';
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { api, axios } from '../../utils/api';
+import React, {useEffect, useState} from 'react';
+import {api, axios} from '../../utils/api';
 
 export default function InstructorWorkshops() {
   const [workshops, setWorkshops] = useState([]);
   const [workshopsUpdateDate, setWorkshopsUpdateDate] = useState(new Date());
-  const history = useHistory();
 
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem('token') || '';
       const instructor = jwt_decode(token) as Record<string, string>;
       const instructorWorkshops = await axios.get(api.instructorWorkshops(instructor.id));
-      setWorkshops(instructorWorkshops.data.data);
+      const workshops = instructorWorkshops?.data?.data || [];
+      setWorkshops(workshops);
     };
     fetchData();
   }, [workshopsUpdateDate]);
 
   const deleteWorkshop = async (id: string) => {
-    const token = localStorage.getItem('token') || '';
-    const resp = await axios.delete(api.singleWorkshop(id), {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    console.log(api.singleWorkshop(id));
+    await axios.delete(api.singleWorkshop(id));
     setWorkshopsUpdateDate(new Date());
   };
   return (
-    <Table>
+    <Table style={{width: '100%'}}>
       <TableHeader>
         <TableRow>
           <TableCell scope="col" border="bottom">
@@ -60,6 +55,7 @@ export default function InstructorWorkshops() {
                     primary
                     label="Delete"
                     onClick={async () => {
+                      console.log(workshop);
                       await deleteWorkshop(workshop._id);
                     }}
                   />

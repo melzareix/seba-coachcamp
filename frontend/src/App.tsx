@@ -1,13 +1,11 @@
-// @ts-ignore
 import Skeleton from '@yisheng90/react-loading';
-import { Box, Grommet } from 'grommet';
-import React, { useState } from 'react';
-import BusProvider, { useListener } from 'react-gbus';
-// @ts-ignore
+import {Box, Grommet} from 'grommet';
+import React, {useState} from 'react';
+import BusProvider, {useListener} from 'react-gbus';
 import LoadingOverlay from 'react-loading-overlay';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { GuardFunction, GuardProvider } from 'react-router-guards';
-import { ToastContainer } from 'react-toastify';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {GuardFunction, GuardProvider} from 'react-router-guards';
+import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './app.css';
 import AuthRouter from './components/auth/auth-router';
@@ -17,7 +15,7 @@ import NotFound from './components/common/notfound';
 import Home from './components/home/home';
 import InstructorsRouter from './components/instructors/instructors-router';
 import WorkshopsRouter from './components/workshop/workshops-router';
-import { IS_AXIOS_LOADING } from './utils/api';
+import {IS_AXIOS_LOADING} from './utils/api';
 import theme from './utils/theme';
 
 const requireLogin: GuardFunction = (to, from, next) => {

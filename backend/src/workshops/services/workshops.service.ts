@@ -1,45 +1,29 @@
-import { Injectable } from '@nestjs/common';
-import { Workshop } from '../models/workshop.model';
-import { InjectModel } from 'nestjs-typegoose';
-import { ReturnModelType } from '@typegoose/typegoose';
-import {
-  WorkshopSearchDto,
-  WorkshopCreateDto,
-  WorkshopUpdateDto,
-} from '../workshops.types';
+import {Injectable} from '@nestjs/common';
+import {Workshop} from '../models/workshop.model';
+import {InjectModel} from 'nestjs-typegoose';
+import {ReturnModelType} from '@typegoose/typegoose';
+import {WorkshopCreateDto, WorkshopSearchDto, WorkshopUpdateDto,} from '../workshops.types';
 
 @Injectable()
 export class WorkshopsService {
   constructor(
     @InjectModel(Workshop)
     private readonly workshopModel: ReturnModelType<typeof Workshop>,
-  ) {}
+  ) {
+  }
 
   async create(workshop: WorkshopCreateDto): Promise<Workshop> {
     return await this.workshopModel.create(workshop);
   }
 
   async update(id: string, workshop: WorkshopUpdateDto): Promise<Workshop> {
-    return await this.workshopModel.findByIdAndUpdate(id, workshop);
-  }
-
-  async findAll(): Promise<Workshop[]> {
-    return await this.workshopModel.find().exec();
-  }
-
-  async getWorkshopsCount(): Promise<number> {
-    return await this.workshopModel.count({});
-  }
-  async findPaginated(skip: number, limit: number): Promise<Workshop[]> {
-    return await this.workshopModel
-      .find()
-      .skip(skip)
-      .limit(limit)
-      .exec();
+    return this.workshopModel.findByIdAndUpdate(id, workshop);
   }
 
   async findById(id: string): Promise<Workshop | null> {
-    return await this.workshopModel.findById(id).populate('_instructor');
+    return this.workshopModel
+      .findOne({id: id, _deleted: false})
+      .populate('_instructor');
   }
 
   async findInstructorWorkshops(
@@ -47,6 +31,7 @@ export class WorkshopsService {
   ): Promise<Workshop[] | null> {
     return this.workshopModel.find({
       _instructor: instructorId,
+      _deleted: false,
     });
   }
 
@@ -74,16 +59,20 @@ export class WorkshopsService {
       query['category'] = searchDto.category;
     }
 
-    if (isCount) return await this.workshopModel.count(query);
+    if (isCount) return this.workshopModel.count(query);
     const skip = parseInt(searchDto.skip, 0) || 0;
     const limit = parseInt(searchDto.limit, 0) || 9;
-    return await this.workshopModel
-      .find(query)
-      .skip(skip)
-      .limit(limit);
+    return this.workshopModel.find(query).skip(skip).limit(limit);
   }
 
   async deleteWorkshop(workshopId: string): Promise<Workshop> {
-    return await this.workshopModel.findOneAndDelete({ id: workshopId });
+    console.log(workshopId);
+    const o = await this.workshopModel.findByIdAndUpdate(
+      workshopId,
+      {_deleted: true},
+      {new: true},
+    );
+    console.log('objs', o);
+    return o;
   }
 }
