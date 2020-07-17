@@ -25,7 +25,7 @@ export class WorkshopsService {
 
   async findById(id: string): Promise<Workshop | null> {
     return this.workshopModel
-      .findOne({ id: id, _deleted: false })
+      .findOne({ _id: id, _deleted: false })
       .populate('_instructor');
   }
 
@@ -62,20 +62,20 @@ export class WorkshopsService {
       query['category'] = searchDto.category;
     }
 
-    if (isCount) return this.workshopModel.count(query);
+    if (isCount) return this.workshopModel.count({ ...query, _deleted: false });
     const skip = parseInt(searchDto.skip, 0) || 0;
     const limit = parseInt(searchDto.limit, 0) || 9;
-    return this.workshopModel.find(query).skip(skip).limit(limit);
+    return this.workshopModel
+      .find({ ...query, _deleted: false })
+      .skip(skip)
+      .limit(limit);
   }
 
   async deleteWorkshop(workshopId: string): Promise<Workshop> {
-    console.log(workshopId);
-    const o = await this.workshopModel.findByIdAndUpdate(
+    return this.workshopModel.findByIdAndUpdate(
       workshopId,
       { _deleted: true },
       { new: true },
     );
-    console.log('objs', o);
-    return o;
   }
 }

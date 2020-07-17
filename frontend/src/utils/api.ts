@@ -1,5 +1,5 @@
 import ax from 'axios';
-import {emit} from 'react-gbus';
+import { emit } from 'react-gbus';
 
 export const IS_AXIOS_LOADING = 'IS_AXIOS_LOADING';
 
