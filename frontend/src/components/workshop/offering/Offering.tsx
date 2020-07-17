@@ -95,6 +95,47 @@ export default function OfferingItem({ register, errors, offeringIndex, offering
           errors.offerings[offeringIndex].location.message}
       </div>
 
+      <FormField label="Price">
+        <TextInput
+          defaultValue={offering.address}
+          name={`offerings[${offeringIndex}].price`}
+          placeholder="Amount in USD"
+          // @ts-ignore
+          ref={register({
+            required: { value: true, message: 'price is required.' },
+            pattern: {
+              value: /^[0-9]+$/,
+              message: 'invalid format. Only number allowes',
+            },
+          })}
+        />
+      </FormField>
+      <div className="errors">
+        {errors.offerings &&
+          errors.offerings[offeringIndex].price &&
+          errors.offerings[offeringIndex].price.message}
+      </div>
+
+      <FormField label="Capacity">
+        <TextInput
+          defaultValue={offering.address}
+          name={`offerings[${offeringIndex}].capacity`}
+          placeholder="e.g. 5"
+          // @ts-ignore
+          ref={register({
+            required: { value: true, message: 'capacity is required.' },
+            pattern: {
+              value: /^[0-9]+$/,
+              message: 'invalid format. Only number allowes',
+            },
+          })}
+        />
+      </FormField>
+      <div className="errors">
+        {errors.offerings &&
+          errors.offerings[offeringIndex].capacity &&
+          errors.offerings[offeringIndex].capacity.message}
+      </div>
       <FormField label="Address">
         <TextInput
           defaultValue={offering.address}

@@ -77,15 +77,15 @@ export default function CreateWorkshop() {
           let dd = String(curDate.getDate());
           let mm = String(curDate.getMonth() + 1); // January is 0!
           let yyyy = curDate.getFullYear();
-          resp.data.data.offerings[i].startDate = `${mm}-${dd}-${yyyy}`;
+          resp.data.data.offerings[i].startDate = `${dd}-${mm}-${yyyy}`;
 
           const { endDate } = offering;
           curDate = new Date(endDate);
 
           dd = String(curDate.getDate());
-          mm = String(curDate.getMonth() + 1) // January is 0!
+          mm = String(curDate.getMonth() + 1); // January is 0!
           yyyy = curDate.getFullYear();
-          resp.data.data.offerings[i].endDate = `${mm}-${dd}-${yyyy}`;
+          resp.data.data.offerings[i].endDate = `${dd}-${mm}-${yyyy}`;
         }
 
         reset(resp.data.data);
@@ -185,6 +185,16 @@ export default function CreateWorkshop() {
           />
         </FormField>
         <div className="errors">{errors.description && errors.description.message}</div>
+
+        <FormField label="Gallery">
+          <TextArea
+            name="gallery"
+            placeholder="URLs to images for the gallery. Please provide each URL on a new line."
+            rows={5}
+            ref={register({ required: { value: false, message: 'description is required.' } })}
+          />
+        </FormField>
+        <div className="errors">{errors.gallery && errors.description.gallery}</div>
 
         {offerings ? (
           offerings.map((offering, idx) => {
