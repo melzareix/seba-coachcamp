@@ -18,4 +18,7 @@ export class OfferingsService {
   async create(createoffering: OfferingCreateDto): Promise<Offering> {
     return await this.offeringModel.create(createoffering);
   }
+  async update(id: string, createoffering: OfferingCreateDto): Promise<Offering> {
+    return await this.offeringModel.findByIdAndUpdate(id, createoffering);
+  }
 }

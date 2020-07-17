@@ -42,8 +42,8 @@ export class Workshop {
   @prop({ enum: Categories })
   category: Categories;
 
-  @prop({ required: true, ref: Instructor })
-  _instructor: Ref<Instructor>;
+  @prop({ required: false, ref: Instructor })
+  _instructor?: Ref<Instructor>;
 
   @arrayProp({ items: Offering })
   offerings: Offering[];
