@@ -72,13 +72,23 @@ export class WorkshopsController {
     const offerings = updatedWorkShop.offerings;
     const updatedOfferings: Offering[] = [];
 
+    //@ts-ignore
+    updatedWorkShop.gallery = updatedWorkShop.gallery.trim().split('\n');
+
     if (offerings) {
       for (const offering of offerings) {
         // @ts-ignore
         const id = offering._id;
+        const startDate = moment(offering.startDate, 'DD-MM-YYYY');
+        offering.startDate = startDate.toDate();
+
+        const endDate = moment(offering.endDate, 'DD-MM-YYYY');
+        offering.endDate = endDate.toDate();
+
         if (id) {
           this.offeringsService.update(id, offering);
         } else {
+          offering.occupied = 0;
           updatedOfferings.push(await this.offeringsService.create(offering));
         }
       }
@@ -118,28 +128,28 @@ export class WorkshopsController {
     updatedWorkShop._instructor = user.id;
     const newWorkshop = await this.workshopService.create(updatedWorkShop);
     const createdOfferings = [];
+
+    //@ts-ignore
+    const gallery = updatedWorkShop.gallery.trim().split('\n');
+
     if (offerings) {
       for (const offering of offerings) {
-
-        const startDate =  moment(offering.startDate, "DD-MM-YYYY");
+        const startDate = moment(offering.startDate, 'DD-MM-YYYY');
         offering.startDate = startDate.toDate();
+        offering.occupied = 0;
 
-        const endDate =  moment(offering.endDate, "DD-MM-YYYY");
+        const endDate = moment(offering.endDate, 'DD-MM-YYYY');
         offering.endDate = endDate.toDate();
-
-        //@ts-ignore
-        updatedWorkShop.gallery = updatedWorkShop.gallery.split('\n');
         updatedWorkShop.offerings = createdOfferings;
 
         createdOfferings.push(await this.offeringsService.create(offering));
       }
     }
     // @ts-ignore
-    const returnWorkshop = await this.workshopService.update(newWorkshop._id, {
+    return await this.workshopService.update(newWorkshop._id, {
       offerings: createdOfferings,
+      gallery,
     });
-
-    return returnWorkshop;
   }
 
   @Delete(':workshop_id')

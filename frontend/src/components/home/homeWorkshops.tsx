@@ -31,8 +31,8 @@ export default function HomeWorkshops() {
         {workshops.map((workshop: any) => {
           return (
             <WorkshopCard
+              image={workshop.gallery.length > 0 ? workshop.gallery[0] : '#000'}
               id={workshop._id}
-              image="https://media.istockphoto.com/photos/hourglass-and-calendar-picture-id886661830"
               title={workshop.name}
               subtitle={workshop.offerings.map((o: Offering) => o.location).join('/')}
               rating={5}
@@ -48,27 +48,4 @@ export default function HomeWorkshops() {
       )}
     </Box>
   );
-  // return (
-  //   <Box justify="center" width="full">
-  //     <Heading textAlign="center" style={{ maxWidth: '100%' }}>
-  //       Explore Workshops
-  //     </Heading>
-  //     <hr style={{ width: '50%', color: 'rgba(0, 0, 0, 0.33)' }} />
-  //
-  //     <Grid rows="small" columns="medium" gap="medium" pad="large">
-  //       <WorkshopCard
-  //         image="https://media.istockphoto.com/photos/happy-female-leader-talking-to-her-colleagues-on-a-business-meeting-picture-id1038296672"
-  //         title="Leadship"
-  //         subtitle="Munich"
-  //         rating={5}
-  //       />
-  //       <WorkshopCard
-  //         image="https://media.istockphoto.com/photos/hourglass-and-calendar-picture-id886661830"
-  //         title="Time Management"
-  //         subtitle="Munich/Stuttgart"
-  //         rating={5}
-  //       />
-  //     </Grid>
-  //   </Box>
-  // );
 }
