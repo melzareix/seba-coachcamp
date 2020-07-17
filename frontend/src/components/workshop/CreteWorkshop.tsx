@@ -49,12 +49,14 @@ export default function CreateWorkshop() {
   const [apiError, setApiError] = useState(null);
   const location = useLocation();
   const [offerings, setData] = useState<Offering[]>([]); // pass initilized offerings
+  const [title, setTitle] = useState('Create'); // pass initilized offerings
 
   useEffect(() => {
     const url_toks = location.pathname.split('/');
     if (!location.pathname.includes('edit')) {
       return;
     }
+    setTitle('Edit');
     // @ts-ignore
     const id = url_toks[url_toks.length - 1];
     const fetchData = async () => {
@@ -86,11 +88,11 @@ export default function CreateWorkshop() {
         reset(resp.data.data);
         setData(resp.data.data.offerings);
       } catch (error) {
-        setApiError(error.response?.data?.message || error.message);
+        history.push(`/lost`);
       }
     };
     fetchData();
-  }, [location.pathname, reset]);
+  }, [location.pathname, reset, history]);
 
   const onSubmit = async (data: any) => {
     const url_toks = location.pathname.split('/');
@@ -145,7 +147,7 @@ export default function CreateWorkshop() {
   return (
     <Box width="full" pad={{ horizontal: '15%', vertical: 'medium' }} fill>
       <Heading size="medium" textAlign="center" style={{ maxWidth: '100%' }}>
-        Create a workshop.
+        {title} your workshop.
       </Heading>
       <Text textAlign="center">
         <div> Add a workshop that you would like to offer </div>
