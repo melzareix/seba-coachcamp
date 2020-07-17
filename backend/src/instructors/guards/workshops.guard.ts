@@ -11,3 +11,12 @@ export class WorkshopsGuard implements CanActivate {
     return user.workshops.includes(workshopId);
   }
 }
+
+@Injectable()
+export class CreateWorkshopsGaurd implements CanActivate {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request: Request = context.switchToHttp().getRequest();
+    const user = request.user as InstructorUser;
+    return user ? true : false;
+  }
+}
