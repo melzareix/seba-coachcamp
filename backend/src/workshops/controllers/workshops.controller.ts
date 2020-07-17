@@ -21,6 +21,7 @@ import { InstructorLoggedIn, User } from 'src/instructors/decorators/instructor.
 import { Instructor } from 'src/instructors/models/instructor.model';
 import { InstructorAuth } from 'src/instructors/decorators/instructor.auth';
 import { AuthGuard } from '@nestjs/passport';
+import * as moment from 'moment';
 
 @ApiTags('Workshops')
 @Controller('workshops')
@@ -115,10 +116,21 @@ export class WorkshopsController {
     const createdOfferings = [];
     if(offerings){
       for (const offering of offerings) {
+
+        const startDate =  moment(offering.startDate, "DD-MM-YYYY");
+        offering.startDate = startDate.toDate();
+
+        const endDate =  moment(offering.endDate, "DD-MM-YYYY");
+        offering.endDate = endDate.toDate();
+
         createdOfferings.push(await this.offeringsService.create(offering))
       }
     }
+
+    //@ts-ignore
+    updatedWorkShop.gallery = updatedWorkShop.gallery.split('\n');
     updatedWorkShop.offerings = createdOfferings;
+
     // @ts-ignore
     const newWorkshop = await this.workshopService.create(updatedWorkShop);
 
