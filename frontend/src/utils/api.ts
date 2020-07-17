@@ -2,7 +2,7 @@ import ax from 'axios';
 import { emit } from 'react-gbus';
 
 export const IS_AXIOS_LOADING = 'IS_AXIOS_LOADING';
-
+export const STRIPE_KEY = 'pk_test_Aa5qI8FtYYlEKwkWjwQ2pzTI';
 const apiUrl = () => {
   const BASE_URL = 'http://localhost:3000';
   return {

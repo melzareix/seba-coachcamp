@@ -18,7 +18,11 @@ import Home from './components/home/home';
 import InstructorsRouter from './components/instructors/instructors-router';
 import WorkshopsRouter from './components/workshop/workshops-router';
 import { IS_AXIOS_LOADING } from './utils/api';
+import{ STRIPE_KEY } from './utils/api'
 import theme from './utils/theme';
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+const stripePromise = loadStripe(STRIPE_KEY);
 
 const requireLogin: GuardFunction = (to, from, next) => {
   const token = window.localStorage.getItem('token');
@@ -57,7 +61,8 @@ function App() {
                 loading={Skeleton}
                 error={NotFound}
               >
-                <Switch>
+                <Switch>   
+                   <Elements stripe={stripePromise}>
                   <Route exact path="/">
                     <Home />
                   </Route>
@@ -74,6 +79,7 @@ function App() {
                     <NotFound />
                   </Route>
                   <Route component={NotFound} />
+                  </Elements>
                 </Switch>
               </GuardProvider>
               <ToastContainer closeOnClick draggable autoClose={1000} position="bottom-right" />
