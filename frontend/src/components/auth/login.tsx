@@ -1,10 +1,10 @@
-import {Box, Button, Form, FormField, Heading, Text, TextInput} from 'grommet';
-import React, {useState} from 'react';
-import {useForm} from 'react-hook-form';
-import {useHistory} from 'react-router-dom';
-import {api, axios} from '../../utils/api';
+import { Box, Button, Form, FormField, Heading, Text, TextInput } from 'grommet';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+import { api, axios } from '../../utils/api';
 import ErrorBox from '../common/error';
-import {RouterAnchor} from '../common/routerLinks';
+import { RouterAnchor } from '../common/routerLinks';
 
 type Inputs = {
   email: string;

@@ -1,16 +1,19 @@
-import {Injectable} from '@nestjs/common';
-import {Workshop} from '../models/workshop.model';
-import {InjectModel} from 'nestjs-typegoose';
-import {ReturnModelType} from '@typegoose/typegoose';
-import {WorkshopCreateDto, WorkshopSearchDto, WorkshopUpdateDto,} from '../workshops.types';
+import { Injectable } from '@nestjs/common';
+import { Workshop } from '../models/workshop.model';
+import { InjectModel } from 'nestjs-typegoose';
+import { ReturnModelType } from '@typegoose/typegoose';
+import {
+  WorkshopCreateDto,
+  WorkshopSearchDto,
+  WorkshopUpdateDto,
+} from '../workshops.types';
 
 @Injectable()
 export class WorkshopsService {
   constructor(
     @InjectModel(Workshop)
     private readonly workshopModel: ReturnModelType<typeof Workshop>,
-  ) {
-  }
+  ) {}
 
   async create(workshop: WorkshopCreateDto): Promise<Workshop> {
     return await this.workshopModel.create(workshop);
@@ -22,7 +25,7 @@ export class WorkshopsService {
 
   async findById(id: string): Promise<Workshop | null> {
     return this.workshopModel
-      .findOne({id: id, _deleted: false})
+      .findOne({ id: id, _deleted: false })
       .populate('_instructor');
   }
 
@@ -69,8 +72,8 @@ export class WorkshopsService {
     console.log(workshopId);
     const o = await this.workshopModel.findByIdAndUpdate(
       workshopId,
-      {_deleted: true},
-      {new: true},
+      { _deleted: true },
+      { new: true },
     );
     console.log('objs', o);
     return o;

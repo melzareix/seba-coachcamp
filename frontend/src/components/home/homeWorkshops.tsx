@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {Box, Grid, Heading} from 'grommet';
+import React, { useEffect, useState } from 'react';
+import { Box, Grid, Heading } from 'grommet';
 import WorkshopCard from '../common/workshopCard';
-import {api, axios} from '../../utils/api';
-import {randomArrayElements} from '../../utils/utils';
-import {Offering} from '../workshop/CreteWorkshop';
+import { api, axios } from '../../utils/api';
+import { randomArrayElements } from '../../utils/utils';
+import { Offering } from '../workshop/CreteWorkshop';
 
 export default function HomeWorkshops() {
   const [workshops, setWorkshops] = useState([]);
@@ -22,10 +22,10 @@ export default function HomeWorkshops() {
   }, []);
   return (
     <Box justify="center" width="full">
-      <Heading textAlign="center" style={{maxWidth: '100%'}}>
+      <Heading textAlign="center" style={{ maxWidth: '100%' }}>
         Explore Workshops
       </Heading>
-      <hr style={{width: '50%', color: 'rgba(0, 0, 0, 0.33)'}}/>
+      <hr style={{ width: '50%', color: 'rgba(0, 0, 0, 0.33)' }} />
 
       <Grid rows="small" columns="medium" gap="medium" pad="large">
         {workshops.map((workshop: any) => {
@@ -41,7 +41,7 @@ export default function HomeWorkshops() {
       </Grid>
 
       {workshops.length === 0 && (
-        <Heading textAlign="center" style={{maxWidth: '100%'}}>
+        <Heading textAlign="center" style={{ maxWidth: '100%' }}>
           {errorMessage}
         </Heading>
       )}

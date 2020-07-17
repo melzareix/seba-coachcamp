@@ -1,4 +1,4 @@
-import {Notification} from 'grommet-controls';
+import { Notification } from 'grommet-controls';
 import React from 'react';
 
 export default function ErrorBox(props: any) {

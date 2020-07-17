@@ -1,11 +1,15 @@
-import {HttpException, Injectable} from '@nestjs/common';
-import {JwtService} from '@nestjs/jwt';
-import {ReturnModelType} from '@typegoose/typegoose';
-import {InjectModel} from 'nestjs-typegoose';
-import {Workshop} from 'src/workshops/models/workshop.model';
-import {WorkshopsService} from 'src/workshops/services/workshops.service';
-import {InstructorCreateDto, InstructorLoginDto, InstructorLoginRespone,} from '../instructors.types';
-import {Instructor} from '../models/instructor.model';
+import { HttpException, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ReturnModelType } from '@typegoose/typegoose';
+import { InjectModel } from 'nestjs-typegoose';
+import { Workshop } from 'src/workshops/models/workshop.model';
+import { WorkshopsService } from 'src/workshops/services/workshops.service';
+import {
+  InstructorCreateDto,
+  InstructorLoginDto,
+  InstructorLoginRespone,
+} from '../instructors.types';
+import { Instructor } from '../models/instructor.model';
 
 @Injectable()
 export class InstructorsService {
@@ -14,8 +18,7 @@ export class InstructorsService {
     private readonly instructorModel: ReturnModelType<typeof Instructor>,
     private readonly workshopsService: WorkshopsService,
     private readonly jwtService: JwtService,
-  ) {
-  }
+  ) {}
 
   async create(instructor: InstructorCreateDto): Promise<Instructor> {
     return this.instructorModel.create(instructor);

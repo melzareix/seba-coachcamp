@@ -1,12 +1,15 @@
-import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
-import {InstructorsService} from './services/instructors.service';
-import {InstructorCreateDto, InstructorLoginDto, InstructorLoginRespone,} from './instructors.types';
-import {Workshop} from 'src/workshops/models/workshop.model';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { InstructorsService } from './services/instructors.service';
+import {
+  InstructorCreateDto,
+  InstructorLoginDto,
+  InstructorLoginRespone,
+} from './instructors.types';
+import { Workshop } from 'src/workshops/models/workshop.model';
 
 @Controller('instructors')
 export class InstructorsController {
-  constructor(public instructorsService: InstructorsService) {
-  }
+  constructor(public instructorsService: InstructorsService) {}
 
   @Post('/register')
   async registerInstructor(

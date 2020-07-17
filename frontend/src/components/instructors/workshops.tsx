@@ -1,7 +1,7 @@
-import {Box, Button, Table, TableBody, TableCell, TableHeader, TableRow} from 'grommet';
+import { Box, Button, Table, TableBody, TableCell, TableHeader, TableRow } from 'grommet';
 import jwt_decode from 'jwt-decode';
-import React, {useEffect, useState} from 'react';
-import {api, axios} from '../../utils/api';
+import React, { useEffect, useState } from 'react';
+import { api, axios } from '../../utils/api';
 
 export default function InstructorWorkshops() {
   const [workshops, setWorkshops] = useState([]);
@@ -24,7 +24,7 @@ export default function InstructorWorkshops() {
     setWorkshopsUpdateDate(new Date());
   };
   return (
-    <Table style={{width: '100%'}}>
+    <Table style={{ width: '100%' }}>
       <TableHeader>
         <TableRow>
           <TableCell scope="col" border="bottom">
