@@ -112,17 +112,17 @@ export class WorkshopsController {
     updatedWorkShop.offerings = [];
     // @ts-ignore
     updatedWorkShop._instructor = user.id;
-    const newWorkshop = await this.workshopService.create(updatedWorkShop);
     const createdOfferings = [];
     if(offerings){
       for (const offering of offerings) {
         createdOfferings.push(await this.offeringsService.create(offering))
       }
     }
+    updatedWorkShop.offerings = createdOfferings;
     // @ts-ignore
-    const returnWorkshop = await this.workshopService.update(newWorkshop._id, {offerings: createdOfferings});
+    const newWorkshop = await this.workshopService.create(updatedWorkShop);
 
-    return returnWorkshop;
+    return newWorkshop;
   }
 
   @Delete(':workshop_id')
