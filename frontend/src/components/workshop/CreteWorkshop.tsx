@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { useHistory, useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 // import axios from 'axios';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { api, axios } from '../../utils/api';
 import ErrorBox from '../common/error';
 // eslint-disable-next-line import/no-cycle
@@ -45,15 +45,10 @@ export default function CreateWorkshop() {
   const { register, control, handleSubmit, errors, reset } = useForm({
     defaultValues: {},
   });
-  const { remove } = useFieldArray({
-    control,
-    name: 'offerings',
-  });
 
   const [apiError, setApiError] = useState(null);
   const location = useLocation();
   const [offerings, setData] = useState<Offering[]>([]); // pass initilized offerings
-  const [value, setValue] = React.useState(Categories[0]);
 
   useEffect(() => {
     const url_toks = location.pathname.split('/');
@@ -82,20 +77,19 @@ export default function CreateWorkshop() {
           let dd = String(curDate.getDate());
           let mm = String(curDate.getMonth() + 1); // January is 0!
           let yyyy = curDate.getFullYear();
-          resp.data.data.offerings[i].startDate = `${dd}-${mm}-${yyyy}`;
+          resp.data.data.offerings[i].startDate = `${mm}-${dd}-${yyyy}`;
 
           const { endDate } = offering;
           curDate = new Date(endDate);
 
           dd = String(curDate.getDate());
-          mm = String(curDate.getMonth() + 1).padStart(2, '0'); // January is 0!
+          mm = String(curDate.getMonth() + 1) // January is 0!
           yyyy = curDate.getFullYear();
-          resp.data.data.offerings[i].endDate = `${dd}-${mm}-${yyyy}`;
+          resp.data.data.offerings[i].endDate = `${mm}-${dd}-${yyyy}`;
         }
 
         reset(resp.data.data);
         setData(resp.data.data.offerings);
-        setValue(resp.data.data.category);
       } catch (error) {
         setApiError(error.response.data?.message);
       }
@@ -112,12 +106,11 @@ export default function CreateWorkshop() {
         setApiError(null);
         const token = window.localStorage.getItem('token');
         // eslint-disable-next-line
-            const resp = await axios.put(api.ALL_WORKSHOPS + '/' + id, {...data, category: value}, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+            const resp = await axios.put(api.ALL_WORKSHOPS + '/' + id, data, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         toast.success('Update Successful');
 
         history.push(`/workshops/${id}`);
@@ -148,7 +141,6 @@ export default function CreateWorkshop() {
   const removeOffering = (removedIndex: number) => {
     const updatedOfferings = offerings.filter((offering, index) => removedIndex !== index);
     setData(updatedOfferings);
-    remove(removedIndex);
   };
 
   return (
@@ -197,12 +189,7 @@ export default function CreateWorkshop() {
         {offerings ? (
           offerings.map((offering, idx) => {
             return (
-              <div
-                key={
-                  Math.random().toString(36).substring(2, 15) +
-                  Math.random().toString(36).substring(2, 15)
-                }
-              >
+              <div key={idx || offering.id}>
                 <br />
                 <div>offering {idx + 1}</div>
                 <br />

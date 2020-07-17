@@ -12,6 +12,7 @@ interface IProps {
   errors: any;
   control: any;
   offering: Offering;
+  // locations: string[];
 }
 
 type Inputs = {
@@ -21,11 +22,11 @@ type Inputs = {
   location: string;
   address: string;
 };
-const Locations = ['Munich', 'Stuttgart', 'Toronto', 'New York', 'Cairo'];
+const Locations = ['', 'Munich', 'Stuttgart', 'Toronto', 'New York', 'Cairo'];
 
-export default function OfferingItem({ key, register, errors, offeringIndex, offering }: IProps) {
+export default function OfferingItem({ register, errors, offeringIndex, offering }: IProps) {
   return (
-    <div key={key}>
+    <div>
       <FormField label="StartDate">
         <TextInput
           defaultValue={offering.startDate}
@@ -77,6 +78,7 @@ export default function OfferingItem({ key, register, errors, offeringIndex, off
       <FormField label="Location">
         <select
           name={`offerings[${offeringIndex}].location`}
+          defaultValue={offering.location}
           // @ts-ignore
           ref={register({ required: { value: true, message: 'location is required.' } })}
         >
