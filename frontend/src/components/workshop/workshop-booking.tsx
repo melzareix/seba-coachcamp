@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Grid,Heading,Button,FormField,TextInput ,Form,Table,TableHeader,TableRow,TableCell,TableBody} from 'grommet';
+import { Text,Box, Grid,Heading,Button,FormField,TextInput ,Form,Table,TableHeader,TableRow,TableCell,TableBody} from 'grommet';
 import { api, axios } from '../../utils/api';
 import { useForm } from 'react-hook-form';
 import ErrorBox from '../common/error';
 import { toast } from 'react-toastify';
+import {CardElement, useStripe, useElements,Elements} from '@stripe/react-stripe-js';
+
 
 type Offering = {
     _id: string;
@@ -31,16 +33,37 @@ type Offering = {
     _coupon:string;
     
   };
+
 export default function Workshop(props:any) {
+
     const [offering, setOffering] = useState<Offering>();
     const [workshop,setWorkshop]= useState<Workshop>();
     const [apiError, setApiError] = useState(null);
     const { register, handleSubmit, errors } = useForm<Inputs>();
+    const stripe = useStripe();
+    const elements = useElements();
+
     const onSubmit = async (data: any) => {
       try {
         setApiError(null);
+        if (!stripe || !elements) {
+          return;
+        }
+      
+        const cardElement = elements.getElement(CardElement);
+      
+      if(!cardElement){
+        return;
+      }
+
+      const {token,error} = await stripe.createToken(cardElement );
+        if(error){
+          toast.error("Please check your credit card details");
+          return;
+        }
         data._workshop=workshop?._id
         data._offering=offering?._id;
+        data.token=token?.id;
         console.log(data);
         const resp = await axios.post(api.BOOK_WORKSHOP, data);
         toast.success('Booking Successful!');
@@ -164,17 +187,32 @@ export default function Workshop(props:any) {
     <TextInput name="_coupon" placeholder="Enter Coupon if available" ref={register()}/>
           </FormField>
 
+<Text margin ="xsmall">Total: {offering?.price}</Text>
 
-<div>   <p>Total :</p>
-  <p>{offering?.price}</p>
-  </div>
-
-      
-          <Button primary label="Book Now" type="submit" margin="small" size="small" />
+<Text textAlign="start" margin="small" size="medium"><u>Credit card Details</u></Text>
+  <CardElement
+  options={{
+    style: {
+      base: {
+        fontSize: '16px',
+        color: '#424770',
+        '::placeholder': {
+          color: '#aab7c4',
+        },
+      },
+      invalid: {
+        color: '#9e2146',
+      },
+    },
+  }}
+/>
+          <Button primary label="Book Now" type="submit" margin="small" disabled = {!stripe}size="small" />
       </Grid>
         </Box>
         <Box margin="medium">{apiError && <ErrorBox text={apiError} />}</Box>
         </Form>
+
+
         </Box>
         
   );
