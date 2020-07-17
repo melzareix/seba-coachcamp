@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Form, FormField, TextInput, Select, Button } from 'grommet';
-import { axios, api } from '../../utils/api';
+import React, {useEffect, useState} from 'react';
+import {Box, Button, Form, FormField, Select, TextInput} from 'grommet';
+import {api, axios} from '../../utils/api';
 
 export default function SearchForm(props: any) {
   const defaultState = props.defaultState || {
@@ -14,7 +14,8 @@ export default function SearchForm(props: any) {
   useEffect(() => {
     const fetchCategories = async () => {
       const allCategories = await axios.get(api.CATEGORIES);
-      setCategories(['', ...allCategories.data.data]);
+      const data = allCategories?.data?.data || [];
+      setCategories(['', ...data]);
     };
     fetchCategories();
   }, []);

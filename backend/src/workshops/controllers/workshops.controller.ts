@@ -1,26 +1,15 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Query,
-  Put,
-  Body,
-  Post,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
-import { WorkshopsService } from '../services/workshops.service';
-import { Workshop, Categories } from '../models/workshop.model';
-import { ApiTags } from '@nestjs/swagger';
-import { Locations, Offering } from '../models/offering.model';
-import { WorkshopSearchDto, WorkshopCreateDto } from '../workshops.types';
-import { OfferingsService } from '../services/offerings.service';
-import { OfferingCreateDto } from '../offerings.types';
-import { CouponsService } from '../services/coupons.service';
-import { InstructorLoggedIn, User } from 'src/instructors/decorators/instructor.auth';
-import { Instructor } from 'src/instructors/models/instructor.model';
-import { InstructorAuth } from 'src/instructors/decorators/instructor.auth';
-import { AuthGuard } from '@nestjs/passport';
+import {Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards,} from '@nestjs/common';
+import {WorkshopsService} from '../services/workshops.service';
+import {Categories, Workshop} from '../models/workshop.model';
+import {ApiTags} from '@nestjs/swagger';
+import {Locations, Offering} from '../models/offering.model';
+import {WorkshopCreateDto, WorkshopSearchDto} from '../workshops.types';
+import {OfferingsService} from '../services/offerings.service';
+import {OfferingCreateDto} from '../offerings.types';
+import {CouponsService} from '../services/coupons.service';
+import {InstructorAuth, InstructorLoggedIn, User,} from 'src/instructors/decorators/instructor.auth';
+import {Instructor} from 'src/instructors/models/instructor.model';
+import {AuthGuard} from '@nestjs/passport';
 
 @ApiTags('Workshops')
 @Controller('workshops')
@@ -29,7 +18,8 @@ export class WorkshopsController {
     public workshopService: WorkshopsService,
     public offeringsService: OfferingsService,
     public couponsService: CouponsService,
-  ) {}
+  ) {
+  }
 
   @Get()
   async getWorkshops(
@@ -112,23 +102,25 @@ export class WorkshopsController {
     updatedWorkShop.offerings = [];
     // @ts-ignore
     updatedWorkShop._instructor = user.id;
+    const newWorkshop = await this.workshopService.create(updatedWorkShop);
     const createdOfferings = [];
-    if(offerings){
+    if (offerings) {
       for (const offering of offerings) {
-        createdOfferings.push(await this.offeringsService.create(offering))
+        createdOfferings.push(await this.offeringsService.create(offering));
       }
     }
-    updatedWorkShop.offerings = createdOfferings;
     // @ts-ignore
-    const newWorkshop = await this.workshopService.create(updatedWorkShop);
+    const returnWorkshop = await this.workshopService.update(newWorkshop._id, {
+      offerings: createdOfferings,
+    });
 
-    return newWorkshop;
+    return returnWorkshop;
   }
 
   @Delete(':workshop_id')
   @InstructorAuth()
   async deleteWorkshop(
-    @Param(':workshop_id') workshopId: string,
+    @Param('workshop_id') workshopId: string,
   ): Promise<Workshop | null> {
     return await this.workshopService.deleteWorkshop(workshopId);
   }
