@@ -60,13 +60,8 @@ export default function CreateWorkshop() {
     const fetchData = async () => {
       try {
         setApiError(null);
-        const token = window.localStorage.getItem('token');
         // eslint-disable-next-line
-              const resp = await axios.get(api.ALL_WORKSHOPS + '/' + id, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const resp = await axios.get(api.ALL_WORKSHOPS + '/' + id);
 
         for (let i = 0; i < resp.data.data.offerings.length; i += 1) {
           const offering = resp.data.data.offerings[i];
@@ -87,11 +82,11 @@ export default function CreateWorkshop() {
           yyyy = curDate.getFullYear();
           resp.data.data.offerings[i].endDate = `${dd}-${mm}-${yyyy}`;
         }
-
+        resp.data.data.gallery = resp.data.data.gallery.join('\n');
         reset(resp.data.data);
         setData(resp.data.data.offerings);
       } catch (error) {
-        setApiError(error.response.data?.message);
+        setApiError(error.response?.data?.message || error.message);
       }
     };
     fetchData();
@@ -106,7 +101,7 @@ export default function CreateWorkshop() {
         setApiError(null);
         const token = window.localStorage.getItem('token');
         // eslint-disable-next-line
-            const resp = await axios.put(api.ALL_WORKSHOPS + '/' + id, data, {
+        const resp = await axios.put(api.ALL_WORKSHOPS + '/' + id, data, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -122,7 +117,11 @@ export default function CreateWorkshop() {
         setApiError(null);
         const token = window.localStorage.getItem('token');
         // eslint-disable-next-line
-            const resp = await axios.post(api.ALL_WORKSHOPS, {...data}, { headers: {
+        const resp = await axios.post(
+          api.ALL_WORKSHOPS,
+          { ...data },
+          {
+            headers: {
               Authorization: `Bearer ${token}`,
             },
           }

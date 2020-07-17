@@ -45,7 +45,7 @@ export default function InstructorProfile() {
           return (
             <WorkshopCard
               id={workshop._id}
-              image="https://media.istockphoto.com/photos/hourglass-and-calendar-picture-id886661830"
+              image={workshop.gallery.length > 0 ? workshop.gallery[0] : '#000'}
               title={workshop.name}
               subtitle={workshop.offerings.map((o: Offering) => o.location).join('/')}
               rating={5}
