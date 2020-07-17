@@ -1,21 +1,11 @@
-import {
-  Controller,
-  Query,
-  Get,
-  Param,
-  Body,
-  Post,
-  Delete,
-} from '@nestjs/common';
-import { Instructor } from './models/instructor.model';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { InstructorsService } from './services/instructors.service';
 import {
   InstructorCreateDto,
-  InstructorLoginRespone,
   InstructorLoginDto,
+  InstructorLoginRespone,
 } from './instructors.types';
 import { Workshop } from 'src/workshops/models/workshop.model';
-import { InstructorAuth } from './decorators/instructor.auth';
 
 @Controller('instructors')
 export class InstructorsController {
@@ -59,6 +49,7 @@ export class InstructorsController {
   async getInstructorWorkshops(
     @Param('id') id: string,
   ): Promise<Workshop[] | null> {
-    return this.instructorsService.findInstructorWorkshops(id);
+    const workshops = await this.instructorsService.findInstructorWorkshops(id);
+    return workshops;
   }
 }

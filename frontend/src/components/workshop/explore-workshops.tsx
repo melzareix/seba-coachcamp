@@ -1,10 +1,10 @@
 // @ts-ignore
-import { Box, Grid, Heading } from 'grommet';
+import {Box, Grid, Heading} from 'grommet';
 import qs from 'query-string';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import ReactPaginate from 'react-paginate';
-import { useHistory, useLocation } from 'react-router-dom';
-import { api, axios } from '../../utils/api';
+import {useHistory, useLocation} from 'react-router-dom';
+import {api, axios} from '../../utils/api';
 import SearchForm from '../common/searchForm';
 import WorkshopCard from '../common/workshopCard';
 
@@ -108,10 +108,12 @@ export default function WorkshopsList() {
           return (
             <WorkshopCard
               key={`${workshop._id}`}
+              id={workshop._id}
               image={`${workshop.gallery[0]}`}
               title={`${workshop.name}`}
               subtitle={`${workshop.description}`}
               rating={5}
+              onClick={() => history.push(`/workshops/${workshop._id}`)}
             />
           );
         })}

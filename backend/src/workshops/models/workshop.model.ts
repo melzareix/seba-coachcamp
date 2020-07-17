@@ -13,7 +13,7 @@ import { ObjectId } from 'mongodb';
 export enum Categories {
   COMMUNICATIONS = 'Communications',
   CREATIVITY = 'Creativity',
-  TEAMWORk = 'TeamWork',
+  TEAMWORK = 'TeamWork',
   EMOTIONALINTELLIGENCE = 'Emotional-Intelligence',
   ADAPTABILITY = 'Adaptability',
   LEADERSHIP = 'Leadership',
