@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Param, Post, Query,} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common';
 import {InstructorsService} from './services/instructors.service';
 import {InstructorCreateDto, InstructorLoginDto, InstructorLoginRespone,} from './instructors.types';
 import {Workshop} from 'src/workshops/models/workshop.model';
