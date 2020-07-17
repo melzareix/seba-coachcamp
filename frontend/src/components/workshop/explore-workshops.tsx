@@ -113,6 +113,7 @@ export default function WorkshopsList() {
               title={`${workshop.name}`}
               subtitle={`${workshop.description}`}
               rating={5}
+              onClick={() => history.push(`/workshops/${workshop._id}`)}
             />
           );
         })}

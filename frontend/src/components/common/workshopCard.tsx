@@ -6,16 +6,19 @@ import { useHistory } from 'react-router-dom';
 
 export default function WorkshopCard(props: any) {
   const history = useHistory();
+  const handleCard = () => {
+    history.push({
+      pathname: `/workshops/${props.id}`,
+    });
+  };
+
   return (
-    <Card background={{ image: `url(${props.image})` }} animation="fadeIn">
-      <Card.CardContent
-        background={{ color: 'rgba(51, 51, 51, 0.7)' }}
-        onClick={() => {
-          history.push({
-            pathname: `/workshops/${props.id}`,
-          });
-        }}
-      >
+    <Card
+      background={{ image: `url(${props.image})` }}
+      animation="fadeIn"
+      onClick={props.onClick || handleCard}
+    >
+      <Card.CardContent background={{ color: 'rgba(51, 51, 51, 0.7)' }}>
         <Heading textAlign="start" level="3">
           {props.title}
         </Heading>
