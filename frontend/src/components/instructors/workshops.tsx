@@ -1,8 +1,8 @@
 import { Box, Button, Table, TableBody, TableCell, TableHeader, TableRow } from 'grommet';
 import jwt_decode from 'jwt-decode';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { api, axios } from '../../utils/api';
+import { useHistory } from 'react-router-dom';
 
 export default function InstructorWorkshops() {
   const [workshops, setWorkshops] = useState([]);
@@ -14,22 +14,19 @@ export default function InstructorWorkshops() {
       const token = localStorage.getItem('token') || '';
       const instructor = jwt_decode(token) as Record<string, string>;
       const instructorWorkshops = await axios.get(api.instructorWorkshops(instructor.id));
-      setWorkshops(instructorWorkshops.data.data);
+      const workshops = instructorWorkshops?.data?.data || [];
+      setWorkshops(workshops);
     };
     fetchData();
   }, [workshopsUpdateDate]);
 
   const deleteWorkshop = async (id: string) => {
-    const token = localStorage.getItem('token') || '';
-    const resp = await axios.delete(api.singleWorkshop(id), {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    console.log(api.singleWorkshop(id));
+    await axios.delete(api.singleWorkshop(id));
     setWorkshopsUpdateDate(new Date());
   };
   return (
-    <Table>
+    <Table style={{ width: '100%' }}>
       <TableHeader>
         <TableRow>
           <TableCell scope="col" border="bottom">
@@ -55,7 +52,13 @@ export default function InstructorWorkshops() {
               </TableCell>
               <TableCell>
                 <Box direction="row" gap="medium">
-                  <Button secondary label="Edit" />
+                  <Button
+                    secondary
+                    label="Edit"
+                    onClick={async () => {
+                      history.push(`/workshops/edit/${workshop._id}`);
+                    }}
+                  />
                   <Button
                     primary
                     label="Delete"

@@ -2,7 +2,7 @@ import { Box, Button, Form, FormField, Heading, Text, TextInput } from 'grommet'
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router-dom';
-import { axios, api } from '../../utils/api';
+import { api, axios } from '../../utils/api';
 import ErrorBox from '../common/error';
 import { RouterAnchor } from '../common/routerLinks';
 
@@ -19,11 +19,11 @@ export default function Login() {
   const onSubmit = async (data: Inputs) => {
     try {
       setApiError(null);
-      const resp = await axios.post(api.LOGIN_INSTRUCTOR, data);
-      window.localStorage.setItem('token', resp.data.data.token);
+      const res = await axios.post(api.LOGIN_INSTRUCTOR, data);
+      window.localStorage.setItem('token', res.data.data.token);
       history.go(0);
     } catch (error) {
-      setApiError(error.response.data?.message);
+      setApiError(error.response?.data?.message || error.message);
     }
   };
   return (

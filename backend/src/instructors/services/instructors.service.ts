@@ -10,6 +10,7 @@ import {
   InstructorLoginRespone,
 } from '../instructors.types';
 import { Instructor } from '../models/instructor.model';
+
 @Injectable()
 export class InstructorsService {
   constructor(
@@ -20,7 +21,7 @@ export class InstructorsService {
   ) {}
 
   async create(instructor: InstructorCreateDto): Promise<Instructor> {
-    return await this.instructorModel.create(instructor);
+    return this.instructorModel.create(instructor);
   }
 
   async findById(id: string): Promise<Instructor | null> {
@@ -28,7 +29,7 @@ export class InstructorsService {
   }
 
   async findByEmail(email: string): Promise<Instructor | null> {
-    return await this.instructorModel.findOne({
+    return this.instructorModel.findOne({
       email,
     });
   }

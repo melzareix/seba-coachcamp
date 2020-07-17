@@ -13,7 +13,7 @@ import { ObjectId } from 'mongodb';
 export enum Categories {
   COMMUNICATIONS = 'Communications',
   CREATIVITY = 'Creativity',
-  TEAMWORk = 'TeamWork',
+  TEAMWORK = 'TeamWork',
   EMOTIONALINTELLIGENCE = 'Emotional-Intelligence',
   ADAPTABILITY = 'Adaptability',
   LEADERSHIP = 'Leadership',
@@ -42,8 +42,8 @@ export class Workshop {
   @prop({ enum: Categories })
   category: Categories;
 
-  @prop({ required: true, ref: Instructor })
-  _instructor: Ref<Instructor>;
+  @prop({ required: false, ref: Instructor })
+  _instructor?: Ref<Instructor>;
 
   @arrayProp({ items: Offering })
   offerings: Offering[];
