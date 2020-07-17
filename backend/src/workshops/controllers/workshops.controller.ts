@@ -1,17 +1,30 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards,} from '@nestjs/common';
-import {WorkshopsService} from '../services/workshops.service';
-import {Categories, Workshop} from '../models/workshop.model';
-import {ApiTags} from '@nestjs/swagger';
-import {Locations, Offering} from '../models/offering.model';
-import {WorkshopCreateDto, WorkshopSearchDto} from '../workshops.types';
-import {OfferingsService} from '../services/offerings.service';
-import {OfferingCreateDto} from '../offerings.types';
-import {CouponsService} from '../services/coupons.service';
-import {InstructorAuth, InstructorLoggedIn, User,} from 'src/instructors/decorators/instructor.auth';
-import {Instructor} from 'src/instructors/models/instructor.model';
-import {AuthGuard} from '@nestjs/passport';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { WorkshopsService } from '../services/workshops.service';
+import { Categories, Workshop } from '../models/workshop.model';
+import { ApiTags } from '@nestjs/swagger';
+import { Locations, Offering } from '../models/offering.model';
+import { WorkshopCreateDto, WorkshopSearchDto } from '../workshops.types';
+import { OfferingsService } from '../services/offerings.service';
+import { OfferingCreateDto } from '../offerings.types';
+import { CouponsService } from '../services/coupons.service';
+import {
+  InstructorAuth,
+  InstructorLoggedIn,
+  User,
+} from 'src/instructors/decorators/instructor.auth';
+import { Instructor } from 'src/instructors/models/instructor.model';
+import { AuthGuard } from '@nestjs/passport';
 import * as moment from 'moment';
-
 
 @ApiTags('Workshops')
 @Controller('workshops')
@@ -20,8 +33,7 @@ export class WorkshopsController {
     public workshopService: WorkshopsService,
     public offeringsService: OfferingsService,
     public couponsService: CouponsService,
-  ) {
-  }
+  ) {}
 
   @Get()
   async getWorkshops(

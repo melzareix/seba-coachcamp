@@ -31,6 +31,7 @@ export default function HomeWorkshops() {
         {workshops.map((workshop: any) => {
           return (
             <WorkshopCard
+              id={workshop._id}
               image="https://media.istockphoto.com/photos/hourglass-and-calendar-picture-id886661830"
               title={workshop.name}
               subtitle={workshop.offerings.map((o: Offering) => o.location).join('/')}

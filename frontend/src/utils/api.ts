@@ -15,6 +15,7 @@ const apiUrl = () => {
     CATEGORIES: `/workshops/categories`,
     REGISTER_INSTRUCTOR: `/instructors/register`,
     LOGIN_INSTRUCTOR: `/instructors/login`,
+    singleInstructor: (id: string) => `/instructors/${id}`,
     instructorWorkshops: (id: string) => {
       return `/instructors/${id}/workshops`;
     },
