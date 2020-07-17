@@ -25,7 +25,9 @@ import {
 import { Instructor } from 'src/instructors/models/instructor.model';
 import { AuthGuard } from '@nestjs/passport';
 import * as moment from 'moment';
-
+import { ReviewsService } from '../services/reviews.service';
+import { Review } from '../models/review.model';
+import { ReviewCreateDto } from '../reviews.types';
 
 @ApiTags('Workshops')
 @Controller('workshops')
@@ -34,6 +36,7 @@ export class WorkshopsController {
     public workshopService: WorkshopsService,
     public offeringsService: OfferingsService,
     public couponsService: CouponsService,
+    public reviewsService: ReviewsService
   ) {}
 
   @Get()
@@ -159,5 +162,14 @@ export class WorkshopsController {
     @Param('workshop_id') workshopId: string,
   ): Promise<Workshop | null> {
     return await this.workshopService.deleteWorkshop(workshopId);
+  }
+
+  @Post(':id/reviews')
+  async createReview(@Body() createReview: ReviewCreateDto): Promise< Review | null> {
+    return await this.reviewsService.create(createReview)
+  }
+  @Get(':id/reviews')
+  async getReviews(@Param('id') id: string): Promise<Review[] | null> {
+    return await this.reviewsService.findReviewsForWorkshop(id);
   }
 }
