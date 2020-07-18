@@ -47,6 +47,7 @@ export class BookingsController {
   // 6. save the booking
   @Post('')
   async createBooking(@Body() req: BookOfferingDto): Promise<Booking | null> {
+
     const workshop = await this.workshopsService.findById(
       String(req._workshop),
     );
@@ -72,14 +73,15 @@ export class BookingsController {
       // TODO: throw an error 400
     }
 
-    const coupon = await this.couponsService.findById(String(req._coupon));
+    let price = resultOffering.price * 100;
 
+    const coupon = await this.couponsService.findByCode(String(req._coupon));
+    if(req._coupon){
     if (!coupon || String(coupon._workshop) !== String(req._workshop)) {
       Logger.error('Coupon Invalid');
       return null;
       // TODO: Throw error. 400
     }
-    let price = resultOffering.price * 100;
 
     if (coupon) {
       const startDate = coupon.startDate.getTime();
@@ -89,7 +91,8 @@ export class BookingsController {
         price *= (100 - coupon.discount) / 100.0;
       }
     }
-
+  }
+    
     const transfer = await this.stripeClient.charges.create({
       amount: price,
       currency: 'eur',
@@ -111,12 +114,13 @@ export class BookingsController {
     const savedTransaction = await this.transactionsService.create(transaction);
     // @ts-ignore
     req._transaction = mongoose.Types.ObjectId(savedTransaction.id);
-
+    //@ts-ignore
+    let coupon_id = req._coupon?coupon.id:null;
     const booking = {
       _offering: req._offering,
       _workshop: req._workshop,
       _instructor: workshop._instructor,
-      _coupon: req._coupon,
+      _coupon: coupon_id  ,
       _transaction: req._transaction,
       status: BookingStatus.PENDING,
       date: new Date(),

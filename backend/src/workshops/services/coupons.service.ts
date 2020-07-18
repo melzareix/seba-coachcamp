@@ -14,6 +14,9 @@ export class CouponsService {
   async findById(id: string): Promise<Coupon> {
     return await this.couponModel.findById(id);
   }
+  async findByCode(code: string): Promise<Coupon> {
+    return await this.couponModel.findOne({"code":code});
+  }
 
   async create(createCoupon: CouponCreateDto): Promise<Coupon> {
     return await this.couponModel.create(createCoupon);
