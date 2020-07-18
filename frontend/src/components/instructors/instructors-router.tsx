@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import { GuardedRoute } from 'react-router-guards';
 import InstructorDashboard from './dashboard';
+import InstructorProfile from './profile';
 
 export default function InstructorsRouter() {
   const match = useRouteMatch();
@@ -12,7 +13,7 @@ export default function InstructorsRouter() {
       </GuardedRoute>
 
       <Route exact path={`${match.path}/:id`}>
-        <InstructorDashboard />
+        <InstructorProfile />
       </Route>
     </Switch>
   );

@@ -1,9 +1,7 @@
-// @ts-ignore
 import Skeleton from '@yisheng90/react-loading';
 import { Box, Grommet } from 'grommet';
 import React, { useState } from 'react';
 import BusProvider, { useListener } from 'react-gbus';
-// @ts-ignore
 import LoadingOverlay from 'react-loading-overlay';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { GuardFunction, GuardProvider } from 'react-router-guards';

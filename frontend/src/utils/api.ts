@@ -13,12 +13,10 @@ const apiUrl = () => {
       return `/workshops/${id}`;
     },
     CATEGORIES: `/workshops/categories`,
-    paginatedWorkshops: (skip: number, limit: number) => {
-      return `/workshops/paginated/${skip}/${limit}`;
-    },
     REGISTER_INSTRUCTOR: `/instructors/register`,
     BOOK_WORKSHOP:`/bookings`,
     LOGIN_INSTRUCTOR: `/instructors/login`,
+    singleInstructor: (id: string) => `/instructors/${id}`,
     instructorWorkshops: (id: string) => {
       return `/instructors/${id}/workshops`;
     },
@@ -36,12 +34,16 @@ export const axios = ax.create({
 
 axios.interceptors.request.use(
   (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
     emit(IS_AXIOS_LOADING, true);
     return config;
   },
   (error) => {
     emit(IS_AXIOS_LOADING, false);
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 );
 
@@ -52,6 +54,6 @@ axios.interceptors.response.use(
   },
   (error) => {
     emit(IS_AXIOS_LOADING, false);
-    Promise.reject(error);
+    return Promise.reject(error);
   }
 );
