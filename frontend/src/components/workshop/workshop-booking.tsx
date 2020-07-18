@@ -6,7 +6,6 @@ import ErrorBox from '../common/error';
 import { toast } from 'react-toastify';
 import {CardElement, useStripe, useElements,Elements} from '@stripe/react-stripe-js';
 
-
 type Offering = {
     _id: string;
     price: string;
@@ -58,14 +57,18 @@ export default function Workshop(props:any) {
 
       const {token,error} = await stripe.createToken(cardElement );
         if(error){
-          toast.error("Please check your credit card details");
+          toast.error("Please check your credit card details",{autoClose:2000});
           return;
         }
         data._workshop=workshop?._id
         data._offering=offering?._id;
         data.token=token?.id;
-        console.log(data);
         const resp = await axios.post(api.BOOK_WORKSHOP, data);
+
+        if(!resp.data.data){
+          toast.error("The Coupon you entered does not exist",{autoClose:2000});
+          return;
+        }
         toast.success('Booking Successful!');
       } catch (error) {
         setApiError(error.response.data?.message);
@@ -77,7 +80,7 @@ export default function Workshop(props:any) {
         console.log(result);
         const offering = result.offerings.find((o:any) => o._id === props.offering_id);
         if(!offering){
-            return ; //TODO:Throw Error
+            return ; //TODO:Throw Error Or Redirect to Error page
         }
 
         setWorkshop(result);

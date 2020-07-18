@@ -46,7 +46,7 @@ export class BookingsController {
   // 5.save the transaction
   // 6. save the booking
   @Post('')
-  async createBooking(@Body() req: BookOfferingDto): Promise<Booking | null> {
+  async createBooking(@Body() req: BookOfferingDto): Promise<Booking | null > {
 
     const workshop = await this.workshopsService.findById(
       String(req._workshop),
