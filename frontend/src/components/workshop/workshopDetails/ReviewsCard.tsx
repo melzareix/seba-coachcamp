@@ -16,8 +16,11 @@ const ReviewComponent = ({review, last}: ReviewComponentProps) => (
     <Box direction="row">
       {generateRatingStars(review.rating)}
     </Box>
+    <Text color="grey" size="medium" margin={{top: "small"}}>
+      {`by ${review.name}`}
+    </Text>
     <Paragraph style={{marginLeft: 5}}>
-      {review.text}
+      {review.description}
     </Paragraph>
   </Box>
 )

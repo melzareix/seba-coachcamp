@@ -6,6 +6,7 @@ export interface Workshop {
   offerings: Offering[];
   reviews: Review[];
   _instructor: Instructor;
+  rating: number;
 }
 
 export interface Instructor {
@@ -17,7 +18,9 @@ export interface Instructor {
 
 export interface Review {
   rating: number;
-  text: string;
+  description: string;
+  email: string;
+  name: string;
 }
 
 export interface Offering {

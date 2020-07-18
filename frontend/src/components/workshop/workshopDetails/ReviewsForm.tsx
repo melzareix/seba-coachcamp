@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
-import {Box, Text, TextArea, Button} from 'grommet';
+import {Box, Text, TextArea, Button, TextInput, Form, FormField} from 'grommet';
 import {Edit} from 'grommet-icons';
 import StarEmptyIcon from '../../../assets/icons/star-empty.svg';
 import StarFilledIcon from '../../../assets/icons/star-filled.svg';
+import { Review } from './types';
+import { useForm } from 'react-hook-form';
 
-const ReviewsForm = () => {
+interface props {
+  onSubmit: (data: Review) => void;
+}
+
+const ReviewsForm = ({onSubmit}: props) => {
   const [rating, setRating] = useState<number>(0);
-  const [review, setReview] = useState<string>("");
 
   const _generateRatingStars = () => {
     const stars = [];
@@ -21,6 +26,10 @@ const ReviewsForm = () => {
     }
     return stars;
   }
+  
+  const { register, control, handleSubmit, errors, reset } = useForm({
+    defaultValues: {},
+  });
 
   return (
     <Box 
@@ -44,25 +53,47 @@ const ReviewsForm = () => {
       </Box>
 
       {/* Review Form */}
-      <Box>
-        <Box direction="row" margin={{bottom: "medium"}}>
-          {_generateRatingStars()}
+      <Form onSubmit={handleSubmit((data: any) => onSubmit({rating, ...data}) )}>
+        <FormField label="Rating">
+          <Box direction="row" margin={{bottom: "medium", left: "small", top: "small"}}>
+            {_generateRatingStars()}
+          </Box>
+        </FormField>
+
+        <FormField label="Name">
+          <TextInput
+            placeholder="Type your name here"
+            name="name"
+            style={{marginBottom: 20}}
+            ref={register({ required: { value: true, message: 'name is required.' } })}
+          />
+        </FormField>
+        <div className="errors">{errors.name && errors.name.message}</div>
+
+        <FormField label="Email">
+          <TextInput
+            placeholder="Type your email here"
+            name="email"
+            style={{marginBottom: 20}}
+            ref={register({ required: { value: true, message: 'email is required.' } })}
+          />
+        </FormField>
+        <div className="errors">{errors.email && errors.email.message}</div>
+
+        <FormField label="Description">
+          <TextInput
+            placeholder="Type your Review here"
+            style={{marginBottom: 20}}
+            name="description"
+            ref={register({ required: { value: true, message: 'Description is required.' } })}
+          />
+        </FormField>
+        <div className="errors">{errors.description && errors.description.message}</div>
+        <Box align="end">
+          <Button type="submit" primary label="Submit" style={{marginTop: 20}}/>
         </Box>
-
-        <TextArea
-          placeholder="type here"
-          value={review}
-          onChange={(event: any) => setReview(event.target.value)}
-          style={{height: 200, fontWeight: 400}}
-        />
-
-        <Button 
-          label="Submit Review" 
-          alignSelf="end" 
-          margin={{top: "medium"}}
-          
-        />
-      </Box>
+      </Form>
+       
   </Box>
   );
 }

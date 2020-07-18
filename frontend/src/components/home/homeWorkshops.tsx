@@ -35,7 +35,7 @@ export default function HomeWorkshops() {
               id={workshop._id}
               title={workshop.name}
               subtitle={workshop.offerings.map((o: Offering) => o.location).join('/')}
-              rating={5}
+              rating={workshop.rating}
             />
           );
         })}
