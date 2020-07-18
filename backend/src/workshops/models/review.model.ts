@@ -1,15 +1,19 @@
 import { prop, Ref } from '@typegoose/typegoose';
-import { Instructor } from 'src/instructors/models/instructor.model';
+import { Workshop } from 'src/workshops/models/workshop.model';
 
 export class Review {
-  @prop({ ref: 'Instructor' })
-  _instructor: Ref<Instructor>;
+  @prop({ ref: 'Workshop' })
+  _workshop: Ref<Workshop>;
 
-  @prop({ default: 0 })
+  @prop({required: true })
   rating: number;
 
-  @prop({ required: true })
+  @prop()
   description: string;
+  @prop({ required: true })
+  email: string;
+  @prop({})
+  name: string;
 
   @prop({ default: 0 })
   reports: number;

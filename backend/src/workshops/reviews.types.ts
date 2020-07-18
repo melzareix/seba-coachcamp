@@ -5,5 +5,7 @@ export class ReviewCreateDto {
   rating: number;
   description: string;
   reports: number;
-  _instructor: ObjectId;
+  email:string;
+  name:string;
+  _workshop: ObjectId;
 }
