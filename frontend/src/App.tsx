@@ -56,13 +56,14 @@ function App() {
           <Box width="full" overflow="hidden">
             <LoadingOverlay active={isLoading} spinner text="Loading...">
               <AppHeader />
+              <Elements stripe={stripePromise}>
               <GuardProvider
                 guards={[requireLogin, redirectIfLoggedIn]}
                 loading={Skeleton}
                 error={NotFound}
               >
                 <Switch>   
-                   <Elements stripe={stripePromise}>
+
                   <Route exact path="/">
                     <Home />
                   </Route>
@@ -79,9 +80,10 @@ function App() {
                     <NotFound />
                   </Route>
                   <Route component={NotFound} />
-                  </Elements>
+             
                 </Switch>
               </GuardProvider>
+              </Elements>
               <ToastContainer closeOnClick draggable autoClose={1000} position="bottom-right" />
               <AppFooter />
             </LoadingOverlay>
