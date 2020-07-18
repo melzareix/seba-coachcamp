@@ -3,10 +3,6 @@ import {Box, Text, Calendar, Button} from 'grommet';
 import moment from 'moment';
 import { Offering } from './types';
 
-interface Props {
-  offerings: Offering[]
-}
-
 const getISODate = (date: Date) => new Date(date).toISOString()
 
 const generateDisabledDates = (offerings: Offering[]) => {
@@ -22,7 +18,12 @@ const generateDisabledDates = (offerings: Offering[]) => {
   return disabledDates;
 }
 
-const ReservationCard = ({offerings}: Props) => {
+interface Props {
+  offerings: Offering[];
+  onSubmit: (offeringId: string) => void;
+}
+
+const ReservationCard = ({offerings, onSubmit}: Props) => {
   const [currentOffering, setCurrentOffering] = useState<Offering>();
   return (
     <Box 
@@ -63,7 +64,7 @@ const ReservationCard = ({offerings}: Props) => {
         >
           <Text>{`Price: ${currentOffering.price}$`}</Text>
           <Text>{`Location: ${currentOffering.location}`}</Text>
-          <Button label="Book" margin={{top: "small"}}/>
+          <Button label="Book" margin={{top: "small"}} onClick={() => onSubmit(currentOffering._id)}/>
         </Box>
       )}
   </Box>
