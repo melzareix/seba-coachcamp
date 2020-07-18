@@ -20,6 +20,7 @@ const apiUrl = () => {
     instructorWorkshops: (id: string) => {
       return `/instructors/${id}/workshops`;
     },
+    postReview: (id: string) =>  `/workshops/${id}/reviews`,
   };
 };
 

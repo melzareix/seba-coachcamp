@@ -28,6 +28,7 @@ export enum Categories {
 @ModelOptions({
   schemaOptions: {
     toObject: { virtuals: true },
+    toJSON: {virtuals: true}
   },
 })
 export class Workshop {
@@ -51,8 +52,17 @@ export class Workshop {
   @arrayProp({ default: [], items: String })
   gallery?: string[];
 
-  @arrayProp({ ref: 'Review', default: [] })
-  reviews?: Ref<Review>[];
+  @arrayProp({ items: Review, default: [] })
+  reviews?: Review[];
+
+  get rating() {
+    const reviewCount = this.reviews.length;
+    if (reviewCount === 0) {
+      return 0;
+    }
+    const sumRating = this.reviews.reduce((acc, review) => review.rating + acc, 0);
+    return Math.round(sumRating / reviewCount);
+  }
 
   @prop({ default: false })
   _deleted?: boolean;

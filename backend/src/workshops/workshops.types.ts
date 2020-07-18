@@ -1,6 +1,7 @@
 import { Locations, Offering } from './models/offering.model';
 import { Categories } from './models/workshop.model';
 import { ObjectId } from 'mongodb';
+import { Review } from './models/review.model';
 
 export class WorkshopSearchDto {
   text?: string;
@@ -26,4 +27,5 @@ export class WorkshopUpdateDto {
   _instructor?: ObjectId;
   offerings?: Offering[];
   gallery?: string[];
+  reviews?: Review[];
 }
