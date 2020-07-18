@@ -74,6 +74,7 @@ export default function Workshop(props:any) {
     const fetchWorkshop = async (_id: string) => {
         try{
         const result = await (await axios.get(api.singleWorkshop(_id))).data.data;
+        console.log(result);
         const offering = result.offerings.find((o:any) => o._id === props.offering_id);
         if(!offering){
             return ; //TODO:Throw Error
@@ -127,8 +128,8 @@ export default function Workshop(props:any) {
   <TableBody>
     <TableRow>
   <TableCell>{workshop?.name}</TableCell>
-  <TableCell>{offering?.startDate}</TableCell>
-      <TableCell>{offering?.endDate}</TableCell>
+  <TableCell>{offering?.startDate.substr(0,10)}</TableCell>
+      <TableCell>{offering?.endDate.substr(0,10)}</TableCell>
       <TableCell>{offering?.location}</TableCell>
       <TableCell>{offering?.address}</TableCell>
       <TableCell>{offering?.price}</TableCell>
