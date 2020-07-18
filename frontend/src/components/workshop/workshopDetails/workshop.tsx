@@ -8,6 +8,7 @@ import ReservationCard from './ReservationCard';
 import ReviewsForm from './ReviewsForm';
 import ReviewsCard from './ReviewsCard';
 import GalleryCard from './GalleryCard';
+import ErrorBox from '../../common/error';
 import { generateRatingStars } from './utils';
 import { api, axios } from '../../../utils/api';
 import { Workshop, Offering } from './types';
@@ -28,7 +29,9 @@ export default function WorkshopComponent() {
     name: '',
     offerings: [],
     reviews: [],
+    rating: 0,
   });
+  const [apiError, setApiError] = useState(null);
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -46,6 +49,19 @@ export default function WorkshopComponent() {
     getWorkshop();
   }, [id]);
 
+  const submitReview = async (formData: any) => {
+    try {
+      setApiError(null);
+      const {data} = await axios.post(api.postReview(id), formData)
+      setWorkshop({
+        ...workshop,
+        reviews: [...workshop.reviews, data.data]
+      })
+    } catch (error) {
+      setApiError(error.response.data?.message);
+    }
+  }
+
   return (
     <>
       <Stack>
@@ -60,7 +76,7 @@ export default function WorkshopComponent() {
             </Text>
 
             <Box direction="row" margin={{ top: 'medium' }} align="center">
-              {generateRatingStars(3)}
+              {generateRatingStars(workshop.rating)}
               <Text
                 style={{ marginTop: 3, marginLeft: 20 }}
               >{`${workshop.reviews.length} Reviews`}</Text>
@@ -72,7 +88,8 @@ export default function WorkshopComponent() {
       <div className="workshopDetailsContent" id="middle">
         <div className="firstCol">
           <DescriptionCard description={workshop.description} />
-          <ReviewsForm />
+          <ReviewsForm onSubmit={submitReview}/>
+          {apiError && <ErrorBox text={apiError} />}
           <ReviewsCard reviews={workshop.reviews} />
         </div>
 

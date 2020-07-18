@@ -19,6 +19,7 @@ type Workshop = {
   gallery: string[];
   name: string;
   description: string;
+  rating: number;
 };
 
 const defaultSearchFilters = {
@@ -112,7 +113,7 @@ export default function WorkshopsList() {
               image={`${workshop.gallery[0]}`}
               title={`${workshop.name}`}
               subtitle={`${workshop.description}`}
-              rating={5}
+              rating={workshop.rating}
               onClick={() => history.push(`/workshops/${workshop._id}`)}
             />
           );
