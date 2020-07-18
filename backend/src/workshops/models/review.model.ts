@@ -10,9 +10,11 @@ export class Review {
 
   @prop()
   description: string;
+
   @prop({ required: true })
   email: string;
-  @prop({})
+
+  @prop()
   name: string;
 
   @prop({ default: 0 })

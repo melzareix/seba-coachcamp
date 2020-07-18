@@ -165,8 +165,22 @@ export class WorkshopsController {
   }
 
   @Post(':id/reviews')
-  async createReview(@Body() createReview: ReviewCreateDto): Promise< Review | null> {
-    return await this.reviewsService.create(createReview)
+  async createReview(
+    @Param('id') id: string,
+    @Body() createReview: ReviewCreateDto
+  ): Promise< Review | null> {
+    const review = await this.reviewsService.create(createReview);
+    const currentWorkshop = await this.workshopService.findById(id);
+
+    let reviews: Review[] = []
+    if (currentWorkshop.reviews) {
+      currentWorkshop.reviews.push(review);
+      reviews = currentWorkshop.reviews;
+    } else {
+      reviews = [review];
+    }
+    await this.workshopService.update(id, { reviews });
+    return review;
   }
   @Get(':id/reviews')
   async getReviews(@Param('id') id: string): Promise<Review[] | null> {

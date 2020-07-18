@@ -16,6 +16,7 @@ export class WorkshopsService {
   ) {}
 
   async create(workshop: WorkshopCreateDto): Promise<Workshop> {
+    //@ts-ignore
     return await this.workshopModel.create(workshop);
   }
 
