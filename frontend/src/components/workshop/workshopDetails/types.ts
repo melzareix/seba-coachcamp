@@ -7,6 +7,7 @@ export interface Workshop {
   reviews: Review[];
   _instructor: Instructor;
   rating: number;
+  _id: string;
 }
 
 export interface Instructor {

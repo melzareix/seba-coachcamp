@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Heading, Text, Box, Image, Stack } from 'grommet';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import './workshop.css';
 import DescriptionCard from './DescriptionCard';
 import InstructorCard from './InstuctorCard';
@@ -30,9 +30,11 @@ export default function WorkshopComponent() {
     offerings: [],
     reviews: [],
     rating: 0,
+    _id: ''
   });
   const [apiError, setApiError] = useState(null);
   const { id } = useParams<{ id: string }>();
+  const history = useHistory()
 
   useEffect(() => {
     const getWorkshop = async () => {
@@ -61,6 +63,10 @@ export default function WorkshopComponent() {
       setApiError(error.response.data?.message);
     }
   }
+
+  const redirectToBooking = (offeringId: string) => {
+    history.push(`/workshops/${workshop._id}/book/${offeringId}`)
+  } 
 
   return (
     <>
@@ -95,7 +101,7 @@ export default function WorkshopComponent() {
 
         <div className="secondCol">
           <InstructorCard instructor={workshop._instructor} />
-          <ReservationCard offerings={workshop.offerings} />
+          <ReservationCard offerings={workshop.offerings} onSubmit={redirectToBooking} />
           <GalleryCard gallery={workshop.gallery} />
         </div>
       </div>
