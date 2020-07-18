@@ -15,8 +15,8 @@ export default function WorkshopsRouter() {
   const match = useRouteMatch<MatchParams>();
   return (
     <Switch>
-        <Route path={`${match.path}/:id/book`}>
-        <WorkshopBooking offering_id="5ef9bab5efc0ff3405f7471e" workshop_id="5ef9bab5efc0ff3405f7471d"/>
+        <Route path={`${match.path}/:workshopId/book/:offeringId`}>
+        <WorkshopBooking/>
       </Route>
       <GuardedRoute path={`${match.path}/create`}>
         <CreateWorkshop />
