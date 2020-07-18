@@ -5,7 +5,7 @@ import WorkshopsList from './explore-workshops';
 import WorkshopBooking from './workshop-booking'
 import Workshop from './workshopDetails/workshop';
 import CreateWorkshop from './CreteWorkshop';
-
+import { GuardFunction, GuardProvider } from 'react-router-guards';
 interface MatchParams {
   id: string
 }

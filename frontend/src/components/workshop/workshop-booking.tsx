@@ -80,7 +80,8 @@ export default function Workshop(props:any) {
         console.log(result);
         const offering = result.offerings.find((o:any) => o._id === props.offering_id);
         if(!offering){
-            return ; //TODO:Throw Error Or Redirect to Error page
+          window.location.href = "/lost";
+          return ; 
         }
 
         setWorkshop(result);
