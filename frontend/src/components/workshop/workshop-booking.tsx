@@ -110,6 +110,10 @@ export default function Workshop() {
     fetchWorkshop(workshopId);
   },[]);
 
+  if(offering && offering.occupied === offering.capacity) {
+    return <Heading textAlign="center">Sorry, this offering is fully booked</Heading>
+  }
+
   return (
     <Box>
       <Box>
