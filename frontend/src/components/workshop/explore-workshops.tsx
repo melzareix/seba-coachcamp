@@ -7,6 +7,7 @@ import {useHistory, useLocation} from 'react-router-dom';
 import {api, axios} from '../../utils/api';
 import SearchForm from '../common/searchForm';
 import WorkshopCard from '../common/workshopCard';
+import { getOfferingsLocations } from '../../utils/utils';
 
 type SearchFilters = {
   text: string;
@@ -14,12 +15,17 @@ type SearchFilters = {
   category: string;
 };
 
+type Offering = {
+  location: string;
+}
+
 type Workshop = {
   _id: string;
   gallery: string[];
   name: string;
   description: string;
   rating: number;
+  offerings: Offering[];
 };
 
 const defaultSearchFilters = {
@@ -112,7 +118,7 @@ export default function WorkshopsList() {
               id={workshop._id}
               image={`${workshop.gallery[0]}`}
               title={`${workshop.name}`}
-              subtitle={`${workshop.description}`}
+              subtitle={getOfferingsLocations(workshop.offerings)}
               rating={workshop.rating}
               onClick={() => history.push(`/workshops/${workshop._id}`)}
             />

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box, Paragraph, Text} from 'grommet';
 import {Review} from './types';
-import { generateRatingStars } from './utils';
+import { generateRatingStars } from '../../../utils/utils';
 
 interface ReviewComponentProps {
   review: Review;

@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form';
 import ErrorBox from '../common/error';
 import { toast } from 'react-toastify';
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import moment from 'moment';
 
 type Offering = {
@@ -53,10 +53,11 @@ export default function Workshop() {
   const [offering, setOffering] = useState<Offering>();
   const [workshop,setWorkshop]= useState<Workshop>();
   const [apiError, setApiError] = useState(null);
-  const { register, handleSubmit, errors } = useForm<Inputs>();
+  const { register, handleSubmit, errors, reset } = useForm<Inputs>();
   const stripe = useStripe();
   const elements = useElements();
   const { offeringId, workshopId } = useParams<{ offeringId: string, workshopId: string }>();
+  const history = useHistory();
 
   const onSubmit = async (data: any) => {
     try {
@@ -86,6 +87,8 @@ export default function Workshop() {
         return;
       }
       toast.success('Booking Successful!');
+      reset();
+      history.push(`/workshops/${workshopId}`)
     } catch (error) {
       setApiError(error.response.data?.message);
     }
@@ -111,7 +114,7 @@ export default function Workshop() {
   },[]);
 
   if(offering && offering.occupied === offering.capacity) {
-    return <Heading textAlign="center">Sorry, this offering is fully booked</Heading>
+    return <Heading style={{ maxWidth: '100%' }} className="full-height" textAlign="center">Sorry, this offering is fully booked</Heading>
   }
 
   return (

@@ -126,10 +126,8 @@ export class BookingsController {
 
     requstedOffering.occupied = requstedOffering.occupied + 1;
     this.offeringsService.update(offeringId, requstedOffering);
-    console.log('here', requestedWorkshop.offerings)
     // @ts-ignore
     const otherWorkshopOfferings = requestedWorkshop.offerings.filter(offering => offering.id !== offeringId);
-    console.log('wow', otherWorkshopOfferings);
     this.workshopsService.update(workshopId, {offerings: [...otherWorkshopOfferings, requstedOffering]})
     return bookingCreated;
   }

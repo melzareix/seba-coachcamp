@@ -7,7 +7,7 @@ import { Review } from './types';
 import { useForm } from 'react-hook-form';
 
 interface props {
-  onSubmit: (data: Review) => void;
+  onSubmit: (data: Review, reset: any, setRating: any) => void;
 }
 
 const ReviewsForm = ({onSubmit}: props) => {
@@ -27,7 +27,7 @@ const ReviewsForm = ({onSubmit}: props) => {
     return stars;
   }
   
-  const { register, control, handleSubmit, errors, reset } = useForm({
+  const { register, handleSubmit, errors, reset } = useForm({
     defaultValues: {},
   });
 
@@ -53,7 +53,7 @@ const ReviewsForm = ({onSubmit}: props) => {
       </Box>
 
       {/* Review Form */}
-      <Form onSubmit={handleSubmit((data: any) => onSubmit({rating, ...data}) )}>
+      <Form onSubmit={handleSubmit((data: any) => onSubmit({rating, ...data}, reset, setRating) )}>
         <FormField label="Rating">
           <Box direction="row" margin={{bottom: "medium", left: "small", top: "small"}}>
             {_generateRatingStars()}

@@ -77,8 +77,13 @@ export class WorkshopsController {
     const updatedOfferings: Offering[] = [];
 
     //@ts-ignore
-    updatedWorkShop.gallery = updatedWorkShop.gallery.trim().split('\n');
-
+    let gallery = updatedWorkShop.gallery.trim();
+    if (gallery.length == 0) {
+      gallery = []
+    } else {
+      gallery = gallery.split('\n')
+    }
+    
     if (offerings) {
       for (const offering of offerings) {
         // @ts-ignore
@@ -133,8 +138,15 @@ export class WorkshopsController {
     const newWorkshop = await this.workshopService.create(updatedWorkShop);
     const createdOfferings = [];
 
+    
+
     //@ts-ignore
-    const gallery = updatedWorkShop.gallery.trim().split('\n');
+    let gallery = updatedWorkShop.gallery.trim();
+    if (gallery.length == 0) {
+      gallery = []
+    } else {
+      gallery = gallery.split('\n')
+    }
 
     if (offerings) {
       for (const offering of offerings) {

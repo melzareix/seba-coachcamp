@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Heading, Text, Box, Image, Stack } from 'grommet';
+import { toast } from 'react-toastify';
 import { useParams, useHistory } from 'react-router-dom';
 import './workshop.css';
 import DescriptionCard from './DescriptionCard';
@@ -9,7 +10,7 @@ import ReviewsForm from './ReviewsForm';
 import ReviewsCard from './ReviewsCard';
 import GalleryCard from './GalleryCard';
 import ErrorBox from '../../common/error';
-import { generateRatingStars } from './utils';
+import { generateRatingStars } from '../../../utils/utils';
 import { api, axios } from '../../../utils/api';
 import { Workshop, Offering } from './types';
 
@@ -51,14 +52,17 @@ export default function WorkshopComponent() {
     getWorkshop();
   }, [id]);
 
-  const submitReview = async (formData: any) => {
+  const submitReview = async (formData: any, reset: any, setRating: any) => {
     try {
       setApiError(null);
-      const {data} = await axios.post(api.postReview(id), formData)
+      const {data} = await axios.post(api.postReview(id), formData);
       setWorkshop({
         ...workshop,
         reviews: [...workshop.reviews, data.data]
-      })
+      });
+      reset();
+      setRating(0);
+      toast.success('Review Posted');
     } catch (error) {
       setApiError(error.response.data?.message);
     }
@@ -67,12 +71,17 @@ export default function WorkshopComponent() {
   const redirectToBooking = (offeringId: string) => {
     history.push(`/workshops/${workshop._id}/book/${offeringId}`)
   } 
-
+  console.log('here', workshop.gallery)
   return (
     <>
       <Stack>
         <div className="workshopDetailsHeader">
-          <Image src={workshop.gallery[0]} fit="cover" fill="horizontal" style={{ height: 400 }} />
+          {workshop.gallery.length > 0? (
+            <Image src={workshop.gallery[0]} fit="cover" fill="horizontal" style={{ height: 400 }} />
+          ) :(
+            <Box style={{ height: 400, backgroundColor: "rgba(51,51,51,0.7)" }} fill="horizontal"/>
+          )}
+         
 
           <div className="workshopDetailsHeaderTextContainer">
             <Heading color="white">{workshop.name}</Heading>
