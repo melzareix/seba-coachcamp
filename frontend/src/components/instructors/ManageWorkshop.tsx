@@ -51,7 +51,7 @@ const ManageWorkshop = () => {
   }
 
   return (
-    <Box align="center"> 
+    <Box align="center" className="full-height"> 
       {apiError && <ErrorBox text={apiError} />}
       <h2>List of Attendees</h2>
       <Table style={{ width: '90%' }} >
