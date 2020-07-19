@@ -5,7 +5,7 @@ import { Box, Form, FormField, TextInput, Button } from 'grommet';
 export default function HomeSearch() {
   const searchFormAnimatedProps = useSpring({
     opacity: 1,
-    from: { opacity: 0 },
+    from: { opacity: 0 }
   });
   return (
     <animated.div style={searchFormAnimatedProps}>

@@ -24,13 +24,13 @@ export class BookingsService {
   }
 
   async findAttendeesForWorkshop(workshopId: string): Promise<Booking[]> {
-    return await this.bookingModel.find({"_workshop":workshopId, _deleted: false });
+    return await this.bookingModel.find({
+      _workshop: workshopId,
+      _deleted: false,
+    });
   }
 
   async deleteBooking(bookingId: string): Promise<Booking> {
-    return this.bookingModel.findByIdAndUpdate(
-      bookingId,
-      { _deleted: true }
-    );
+    return this.bookingModel.findByIdAndUpdate(bookingId, { _deleted: true });
   }
 }

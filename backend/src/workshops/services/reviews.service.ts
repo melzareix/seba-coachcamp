@@ -26,8 +26,6 @@ export class ReviewsService {
     return await this.reviewModel.findById(id);
   }
   async findReviewsForWorkshop(workshopId: string): Promise<Review[]> {
-    return await this.reviewModel.find({"_workshop":workshopId});
+    return await this.reviewModel.find({ _workshop: workshopId });
   }
-
-
 }

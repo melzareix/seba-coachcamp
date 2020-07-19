@@ -27,7 +27,7 @@ export default function Login() {
     }
   };
   return (
-    <Box width="full" pad={{ horizontal: '15%', vertical: 'medium' }} fill>
+    <Box className="full-height" width="full" pad={{ horizontal: '15%', vertical: 'medium' }} fill>
       <Heading size="medium" textAlign="center" style={{ maxWidth: '100%' }}>
         Login to your Instructor account
       </Heading>
@@ -71,7 +71,7 @@ export default function Login() {
         </FormField>
         <div className="errors">{errors.password && errors.password.message}</div>
 
-        <Box direction="row" gap="medium" fill>
+        <Box direction="row" gap="medium">
           <Button type="submit" size="medium" primary label="Login" />
         </Box>
       </Form>

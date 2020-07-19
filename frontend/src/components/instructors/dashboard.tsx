@@ -6,7 +6,7 @@ import { RouterButton } from '../common/routerLinks';
 
 export default function InstructorDashboard() {
   return (
-    <Box width="full" pad="large" fill>
+    <Box className="full-height" width="full" pad="large" fill>
       <Tabs>
         <Tab title="My Workshops">
           <RouterButton primary label="Create Workshop" icon={<Add />} path="/workshops/create" />

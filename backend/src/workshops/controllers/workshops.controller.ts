@@ -13,7 +13,11 @@ import { WorkshopsService } from '../services/workshops.service';
 import { Categories, Workshop } from '../models/workshop.model';
 import { ApiTags } from '@nestjs/swagger';
 import { Locations, Offering } from '../models/offering.model';
-import { WorkshopCreateDto, WorkshopSearchDto, WorkshopAttendeesDto } from '../workshops.types';
+import {
+  WorkshopCreateDto,
+  WorkshopSearchDto,
+  WorkshopAttendeesDto,
+} from '../workshops.types';
 import { OfferingsService } from '../services/offerings.service';
 import { OfferingCreateDto } from '../offerings.types';
 import { CouponsService } from '../services/coupons.service';
@@ -28,7 +32,7 @@ import * as moment from 'moment';
 import { ReviewsService } from '../services/reviews.service';
 import { Review } from '../models/review.model';
 import { ReviewCreateDto } from '../reviews.types';
-import {BookingsService} from '../services/bookings.service';
+import { BookingsService } from '../services/bookings.service';
 import { StudentInfo } from '../bookings.types';
 
 @ApiTags('Workshops')
@@ -39,7 +43,7 @@ export class WorkshopsController {
     public offeringsService: OfferingsService,
     public couponsService: CouponsService,
     public reviewsService: ReviewsService,
-    public bookingsService: BookingsService
+    public bookingsService: BookingsService,
   ) {}
 
   @Get()
@@ -82,11 +86,12 @@ export class WorkshopsController {
     //@ts-ignore
     let gallery = updatedWorkShop.gallery.trim();
     if (gallery.length == 0) {
-      gallery = []
+      gallery = [];
     } else {
-      gallery = gallery.split('\n')
+      gallery = gallery.split('\n');
     }
-    
+    updatedWorkShop.gallery = gallery;
+
     if (offerings) {
       for (const offering of offerings) {
         // @ts-ignore
@@ -139,14 +144,14 @@ export class WorkshopsController {
     // @ts-ignore
     updatedWorkShop._instructor = user.id;
     const newWorkshop = await this.workshopService.create(updatedWorkShop);
-    const createdOfferings = [];    
+    const createdOfferings = [];
 
     //@ts-ignore
     let gallery = updatedWorkShop.gallery.trim();
     if (gallery.length == 0) {
-      gallery = []
+      gallery = [];
     } else {
-      gallery = gallery.split('\n')
+      gallery = gallery.split('\n');
     }
 
     if (offerings) {
@@ -182,8 +187,9 @@ export class WorkshopsController {
   async getAttendees(
     @Param('workshop_id') workshopId: string,
   ): Promise<StudentInfo[] | null> {
-    const bookings = await this.bookingsService.findAttendeesForWorkshop(workshopId);
-    console.log('jere', bookings);
+    const bookings = await this.bookingsService.findAttendeesForWorkshop(
+      workshopId,
+    );
     return bookings.map(booking => ({
       firstName: booking.firstName,
       lastName: booking.lastName,
@@ -191,18 +197,18 @@ export class WorkshopsController {
       phoneNumber: booking.phoneNumber,
       // @ts-ignore
       bookingId: booking.id,
-    }))
+    }));
   }
 
   @Post(':id/reviews')
   async createReview(
     @Param('id') id: string,
-    @Body() createReview: ReviewCreateDto
-  ): Promise< Review | null> {
+    @Body() createReview: ReviewCreateDto,
+  ): Promise<Review | null> {
     const review = await this.reviewsService.create(createReview);
     const currentWorkshop = await this.workshopService.findById(id);
 
-    let reviews: Review[] = []
+    let reviews: Review[] = [];
     if (currentWorkshop.reviews) {
       currentWorkshop.reviews.push(review);
       reviews = currentWorkshop.reviews;

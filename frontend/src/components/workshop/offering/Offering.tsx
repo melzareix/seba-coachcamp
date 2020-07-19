@@ -36,12 +36,12 @@ export default function OfferingItem({ register, errors, offeringIndex, offering
           ref={register({
             required: {
               value: true,
-              message: 'start date is required.',
+              message: 'start date is required.'
             },
             pattern: {
               value: /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
-              message: 'invalid date format.',
-            },
+              message: 'invalid date format.'
+            }
           })}
         />
       </FormField>
@@ -60,12 +60,12 @@ export default function OfferingItem({ register, errors, offeringIndex, offering
           ref={register({
             required: {
               value: true,
-              message: 'end date is required.',
+              message: 'end date is required.'
             },
             pattern: {
               value: /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
-              message: 'invalid date format.',
-            },
+              message: 'invalid date format.'
+            }
           })}
         />
       </FormField>
@@ -82,7 +82,7 @@ export default function OfferingItem({ register, errors, offeringIndex, offering
           // @ts-ignore
           ref={register({ required: { value: true, message: 'location is required.' } })}
         >
-          {Locations.map((location) => (
+          {Locations.map(location => (
             <option key={location} value={location}>
               {location}
             </option>
@@ -105,8 +105,8 @@ export default function OfferingItem({ register, errors, offeringIndex, offering
             required: { value: true, message: 'price is required.' },
             pattern: {
               value: /^[0-9]+$/,
-              message: 'invalid format. Only number allowes',
-            },
+              message: 'invalid format. Only number allowes'
+            }
           })}
         />
       </FormField>
@@ -126,8 +126,8 @@ export default function OfferingItem({ register, errors, offeringIndex, offering
             required: { value: true, message: 'capacity is required.' },
             pattern: {
               value: /^[0-9]+$/,
-              message: 'invalid format. Only number allowes',
-            },
+              message: 'invalid format. Only number allowes'
+            }
           })}
         />
       </FormField>

@@ -69,9 +69,9 @@ export class WorkshopsSeed {
         rating: faker.random.number(10),
         description: faker.random.words(7),
         reports: faker.random.number(10),
-        _workshop: new ObjectId(id),  
-        email:faker.random.words(2),
-        name:faker.random.words(1),
+        _workshop: new ObjectId(id),
+        email: faker.random.words(2),
+        name: faker.random.words(1),
       });
     }
   }

@@ -14,8 +14,8 @@ export default function WorkshopCard(props: any) {
         history.push({
           pathname: '/workshops',
           search: qs.stringify({
-            category: props.title,
-          }),
+            category: props.title
+          })
         });
       }}
     >

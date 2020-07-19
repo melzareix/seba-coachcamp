@@ -5,7 +5,6 @@ import { WorkshopsModule } from './workshops/workshops.module';
 import configuration from './config/configuration';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { InstructorsModule } from './instructors/instructors.module';
-import { StudentsModule } from './students/students.module';
 import { SeedsModule } from './seeds/seeds.module';
 import { StripeModule } from 'nestjs-stripe';
 import Stripe from 'stripe';
@@ -25,7 +24,6 @@ import Stripe from 'stripe';
     }),
     WorkshopsModule,
     InstructorsModule,
-    StudentsModule,
     SeedsModule,
     StripeModule.forRootAsync({
       useFactory: (configService: ConfigService) => {

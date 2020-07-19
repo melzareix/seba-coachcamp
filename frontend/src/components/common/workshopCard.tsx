@@ -8,7 +8,7 @@ export default function WorkshopCard(props: any) {
   const history = useHistory();
   const handleCard = () => {
     history.push({
-      pathname: `/workshops/${props.id}`,
+      pathname: `/workshops/${props.id}`
     });
   };
 
@@ -24,7 +24,7 @@ export default function WorkshopCard(props: any) {
         </Heading>
         <Text className="subtitle">
           {props.subtitle}
-          <Box direction="row" margin={{vertical: "medium"}}>
+          <Box direction="row" margin={{ vertical: 'medium' }}>
             {generateRatingStars(props.rating)}
           </Box>
         </Text>

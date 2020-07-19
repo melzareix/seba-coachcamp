@@ -16,10 +16,10 @@ import Home from './components/home/home';
 import InstructorsRouter from './components/instructors/instructors-router';
 import WorkshopsRouter from './components/workshop/workshops-router';
 import { IS_AXIOS_LOADING } from './utils/api';
-import{ STRIPE_KEY } from './utils/api'
+import { STRIPE_KEY } from './utils/api';
 import theme from './utils/theme';
-import {Elements} from '@stripe/react-stripe-js';
-import {loadStripe} from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 const stripePromise = loadStripe(STRIPE_KEY);
 
 const requireLogin: GuardFunction = (to, from, next) => {
@@ -55,32 +55,30 @@ function App() {
             <LoadingOverlay active={isLoading} spinner text="Loading...">
               <AppHeader />
               <Elements stripe={stripePromise}>
-              <GuardProvider
-                guards={[requireLogin, redirectIfLoggedIn]}
-                loading={Skeleton}
-                error={NotFound}
-              >
-                <Switch>   
-
-                  <Route exact path="/">
-                    <Home />
-                  </Route>
-                  <Route path="/instructors">
-                    <InstructorsRouter />
-                  </Route>
-                  <Route path="/workshops">
-                    <WorkshopsRouter />
-                  </Route>
-                  <Route path="/auth">
-                    <AuthRouter />
-                  </Route>
-                  <Route path="/lost">
-                    <NotFound />
-                  </Route>
-                  <Route component={NotFound} />
-             
-                </Switch>
-              </GuardProvider>
+                <GuardProvider
+                  guards={[requireLogin, redirectIfLoggedIn]}
+                  loading={Skeleton}
+                  error={NotFound}
+                >
+                  <Switch>
+                    <Route exact path="/">
+                      <Home />
+                    </Route>
+                    <Route path="/instructors">
+                      <InstructorsRouter />
+                    </Route>
+                    <Route path="/workshops">
+                      <WorkshopsRouter />
+                    </Route>
+                    <Route path="/auth">
+                      <AuthRouter />
+                    </Route>
+                    <Route path="/lost">
+                      <NotFound />
+                    </Route>
+                    <Route component={NotFound} />
+                  </Switch>
+                </GuardProvider>
               </Elements>
               <ToastContainer closeOnClick draggable autoClose={1000} position="bottom-right" />
               <AppFooter />

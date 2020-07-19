@@ -30,29 +30,21 @@ export class Booking {
   @prop({ default: BookingStatus.PENDING, enum: BookingStatus })
   status: BookingStatus;
 
-  @prop()
-  date: Date;
+  @prop() date: Date;
 
-  @prop()
-  firstName: string;
+  @prop() firstName: string;
 
-  @prop()
-  lastName: string;
+  @prop() lastName: string;
 
-  @prop()
-  address: string;
+  @prop() address: string;
 
-  @prop()
-  postCode: string;
+  @prop() postCode: string;
 
-  @prop()
-  city: string;
+  @prop() city: string;
 
-  @prop()
-  phoneNumber: string;
+  @prop() phoneNumber: string;
 
-  @prop()
-  email: string;
+  @prop() email: string;
 
   @prop({ default: false })
   _deleted?: boolean;
