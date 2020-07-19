@@ -28,7 +28,7 @@ export enum Categories {
 @ModelOptions({
   schemaOptions: {
     toObject: { virtuals: true },
-    toJSON: {virtuals: true}
+    toJSON: { virtuals: true },
   },
 })
 export class Workshop {
@@ -60,7 +60,10 @@ export class Workshop {
     if (reviewCount === 0) {
       return 0;
     }
-    const sumRating = this.reviews.reduce((acc, review) => review.rating + acc, 0);
+    const sumRating = this.reviews.reduce(
+      (acc, review) => review.rating + acc,
+      0,
+    );
     return Math.round(sumRating / reviewCount);
   }
 

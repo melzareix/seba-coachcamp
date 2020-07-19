@@ -6,7 +6,10 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { WorkshopsGuard, CreateWorkshopsGaurd } from '../guards/workshops.guard';
+import {
+  WorkshopsGuard,
+  CreateWorkshopsGaurd,
+} from '../guards/workshops.guard';
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function InstructorAuth() {
   return applyDecorators(

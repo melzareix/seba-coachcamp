@@ -5,7 +5,7 @@ export class BookingCreateDto {
   _offering: ObjectId;
   _workshop: ObjectId;
   _instructor: ObjectId;
-  _coupon: ObjectId|null
+  _coupon: ObjectId | null;
   _transaction: ObjectId;
   status: BookingStatus;
   date: Date;
@@ -42,4 +42,4 @@ export type StudentInfo = {
   phoneNumber: string;
   email: string;
   bookingId: string;
-}
+};

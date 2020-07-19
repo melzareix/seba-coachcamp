@@ -9,8 +9,7 @@ export enum Locations {
 }
 
 export class Offering {
-  @prop()
-  price: number;
+  @prop() price: number;
 
   @prop({ required: true })
   startDate: Date;
@@ -21,12 +20,9 @@ export class Offering {
   @prop({ enum: Locations })
   location: Locations;
 
-  @prop()
-  address: string;
+  @prop() address: string;
 
-  @prop()
-  capacity: number;
+  @prop() capacity: number;
 
-  @prop()
-  occupied: number;
+  @prop() occupied: number;
 }

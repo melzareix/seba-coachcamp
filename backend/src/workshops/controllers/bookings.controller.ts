@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Param,
-  Body,
-  Post,
-  Logger,
-  Delete
-} from '@nestjs/common';
+import { Controller, Param, Body, Post, Logger, Delete } from '@nestjs/common';
 import { Workshop, Categories } from '../models/workshop.model';
 import { ApiTags } from '@nestjs/swagger';
 import { Locations, Offering } from '../models/offering.model';
@@ -44,7 +37,7 @@ export class BookingsController {
   // 5.save the transaction
   // 6. save the booking
   @Post('')
-  async createBooking(@Body() req: BookOfferingDto): Promise<Booking | null > {
+  async createBooking(@Body() req: BookOfferingDto): Promise<Booking | null> {
     const workshopId = String(req._workshop);
     const offeringId = String(req._offering);
     const requestedWorkshop = await this.workshopsService.findById(workshopId);
@@ -71,7 +64,7 @@ export class BookingsController {
     let price = resultOffering.price * 100;
 
     const coupon = await this.couponsService.findByCode(String(req._coupon));
-    if(req._coupon){
+    if (req._coupon) {
       if (!coupon || String(coupon._workshop) !== workshopId) {
         Logger.error('Coupon Invalid');
         return null;
@@ -109,7 +102,7 @@ export class BookingsController {
     // @ts-ignore
     req._transaction = mongoose.Types.ObjectId(savedTransaction.id);
     // @ts-ignore
-    let coupon_id = req._coupon?coupon.id:null;
+    let coupon_id = req._coupon ? coupon.id : null;
     const booking = {
       _offering: req._offering,
       _workshop: req._workshop,
@@ -131,9 +124,12 @@ export class BookingsController {
 
     requstedOffering.occupied = requstedOffering.occupied + 1;
     this.offeringsService.update(offeringId, requstedOffering);
-    // @ts-ignore
-    const otherWorkshopOfferings = requestedWorkshop.offerings.filter(offering => offering.id !== offeringId);
-    this.workshopsService.update(workshopId, {offerings: [...otherWorkshopOfferings, requstedOffering]})
+    const otherWorkshopOfferings = requestedWorkshop.offerings.filter(
+      (offering) => offering['id'] !== offeringId,
+    );
+    this.workshopsService.update(workshopId, {
+      offerings: [...otherWorkshopOfferings, requstedOffering],
+    });
     return bookingCreated;
   }
 
