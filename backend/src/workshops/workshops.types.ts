@@ -29,3 +29,7 @@ export class WorkshopUpdateDto {
   gallery?: string[];
   reviews?: Review[];
 }
+
+export class WorkshopAttendeesDto {
+  workshop_id: ObjectId;
+}

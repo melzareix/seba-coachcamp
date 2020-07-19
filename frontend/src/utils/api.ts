@@ -21,6 +21,7 @@ const apiUrl = () => {
       return `/instructors/${id}/workshops`;
     },
     postReview: (id: string) =>  `/workshops/${id}/reviews`,
+    getAttendees: (id: string) =>  `/workshops/${id}/attendees`,
   };
 };
 

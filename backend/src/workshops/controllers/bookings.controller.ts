@@ -116,10 +116,17 @@ export class BookingsController {
       _offering: req._offering,
       _workshop: req._workshop,
       _instructor: requestedWorkshop._instructor,
-      _coupon: coupon_id  ,
+      _coupon: coupon_id,
       _transaction: req._transaction,
       status: BookingStatus.PENDING,
       date: new Date(),
+      firstName: req.firstName,
+      lastName: req.lastName,
+      phoneNumber: req.phoneNumber,
+      email: req.emailAddress,
+      address: req.address,
+      postCode: req.postCode,
+      city: req.city,
     } as BookingCreateDto;
 
     const bookingCreated = await this.bookingService.create(booking);

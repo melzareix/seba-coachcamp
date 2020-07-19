@@ -22,4 +22,8 @@ export class BookingsService {
   async findById(id: string): Promise<Booking> {
     return await this.bookingModel.findById(id);
   }
+
+  async findAttendeesForWorkshop(workshopId: string): Promise<Booking[]> {
+    return await this.bookingModel.find({"_workshop":workshopId});
+  }
 }
