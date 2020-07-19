@@ -9,6 +9,7 @@ import ReservationCard from './ReservationCard';
 import ReviewsForm from './ReviewsForm';
 import ReviewsCard from './ReviewsCard';
 import GalleryCard from './GalleryCard';
+import RecommendationsCard from './RecommendationsCard';
 import ErrorBox from '../../common/error';
 import { generateRatingStars } from '../../../utils/utils';
 import { api, axios } from '../../../utils/api';
@@ -33,9 +34,21 @@ export default function WorkshopComponent() {
     rating: 0,
     _id: ''
   });
+  const [recommendedWorkshops, setRecommendedWorkshops] = useState<Workshop[]>([]);
   const [apiError, setApiError] = useState(null);
   const { id } = useParams<{ id: string }>();
-  const history = useHistory()
+  const history = useHistory();
+
+  const getRecommendations = async (category: any, ) => {
+    const {data} = await axios.get(api.ALL_WORKSHOPS, {
+      params: {category},
+    });
+    let workshopsData = data.data;
+    if(workshopsData) {
+      workshopsData = workshopsData.filter((workshop: any) => workshop._id !== id);
+      setRecommendedWorkshops(workshopsData.slice(0, Math.min(3, workshopsData.length)))
+    }
+  }
 
   useEffect(() => {
     const getWorkshop = async () => {
@@ -48,6 +61,7 @@ export default function WorkshopComponent() {
         workshopData.offerings = workshopData.offerings.sort(compare);
       }
       setWorkshop(workshopData);
+      getRecommendations(workshopData.category);
     };
     getWorkshop();
   }, [id]);
@@ -71,7 +85,6 @@ export default function WorkshopComponent() {
   const redirectToBooking = (offeringId: string) => {
     history.push(`/workshops/${workshop._id}/book/${offeringId}`)
   } 
-  console.log('here', workshop.gallery)
   return (
     <>
       <Stack>
@@ -112,6 +125,7 @@ export default function WorkshopComponent() {
           <InstructorCard instructor={workshop._instructor} />
           <ReservationCard offerings={workshop.offerings} onSubmit={redirectToBooking} />
           <GalleryCard gallery={workshop.gallery} />
+          <RecommendationsCard workshops={recommendedWorkshops}/>
         </div>
       </div>
     </>
