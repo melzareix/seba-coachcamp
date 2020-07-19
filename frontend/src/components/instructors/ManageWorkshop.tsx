@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-  Box,
-  Button,
-  Heading
-} from 'grommet';
-import {useParams} from 'react-router-dom';
+import { Table, TableBody, TableCell, TableHeader, TableRow, Box, Button, Heading } from 'grommet';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ErrorBox from '../common/error';
-import {axios, api} from '../../utils/api';
+import { axios, api } from '../../utils/api';
 
 interface StudentInfo {
   firstName: string;
@@ -31,9 +22,8 @@ const ManageWorkshop = () => {
     const getAttendees = async () => {
       const { data } = await axios.get(api.getAttendees(id));
       const studentData = data.data;
-      if(studentData) {
+      if (studentData) {
         setStudents(studentData);
-        console.log('hrer', studentData)
       }
     };
     getAttendees();
@@ -44,17 +34,17 @@ const ManageWorkshop = () => {
       setApiError(null);
       await axios.delete(api.removeAttendee(id, bookingId));
       toast.success('Attendee Removed');
-      setStudents(students.filter(student => student.bookingId !== bookingId));
+      setStudents(students.filter((student) => student.bookingId !== bookingId));
     } catch (error) {
       setApiError(error.response.data?.message);
     }
-  }
+  };
 
   return (
-    <Box align="center" className="full-height"> 
+    <Box align="center" className="full-height">
       {apiError && <ErrorBox text={apiError} />}
       <h2>List of Attendees</h2>
-      <Table style={{ width: '90%' }} >
+      <Table style={{ width: '90%' }}>
         <TableHeader>
           <TableRow>
             <TableCell scope="col" border="bottom" align="center">
@@ -75,7 +65,7 @@ const ManageWorkshop = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-        {students.map((student: StudentInfo) => {
+          {students.map((student: StudentInfo) => {
             return (
               <TableRow>
                 <TableCell scope="row" align="center">
@@ -106,9 +96,9 @@ const ManageWorkshop = () => {
           })}
         </TableBody>
       </Table>
-      {students.length === 0 && (<Heading>No one registered for this workshop yet</Heading>)}
+      {students.length === 0 && <Heading>No one registered for this workshop yet</Heading>}
     </Box>
-  )
-}
+  );
+};
 
 export default ManageWorkshop;

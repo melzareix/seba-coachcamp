@@ -15,7 +15,7 @@ export default function Home() {
         onSubmit={({ value: params }: any) => {
           history.push({
             pathname: '/workshops',
-            search: qs.stringify(params),
+            search: qs.stringify(params)
           });
         }}
       />

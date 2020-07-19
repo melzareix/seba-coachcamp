@@ -1,10 +1,10 @@
 // @ts-ignore
-import {Box, Grid, Heading} from 'grommet';
+import { Box, Grid, Heading } from 'grommet';
 import qs from 'query-string';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import {useHistory, useLocation} from 'react-router-dom';
-import {api, axios} from '../../utils/api';
+import { useHistory, useLocation } from 'react-router-dom';
+import { api, axios } from '../../utils/api';
 import SearchForm from '../common/searchForm';
 import WorkshopCard from '../common/workshopCard';
 import { getOfferingsLocations } from '../../utils/utils';
@@ -17,7 +17,7 @@ type SearchFilters = {
 
 type Offering = {
   location: string;
-}
+};
 
 type Workshop = {
   _id: string;
@@ -31,12 +31,12 @@ type Workshop = {
 const defaultSearchFilters = {
   name: '',
   location: '',
-  category: '',
+  category: ''
 };
 
 const fetchWorkshopsCount = async (params: SearchFilters) => {
   const resultsCount = await axios.get(api.WORKSHOPS_COUNT, {
-    params,
+    params
   });
   return resultsCount.data.data;
 };
@@ -60,12 +60,12 @@ export default function WorkshopsList() {
           params: {
             ...queryParams,
             skip,
-            limit: pageLimit,
-          },
+            limit: pageLimit
+          }
         });
         setWorkshops(paginatedWorkshops.data.data);
         window.scrollTo({
-          top: 0,
+          top: 0
         });
       } catch (error) {
         setErrorMessage('Failed to load workshops.');
@@ -74,27 +74,30 @@ export default function WorkshopsList() {
     [loc.search]
   );
 
-  useEffect(() => {
-    const getInitialCount = async () => {
-      try {
-        const queryParams = qs.parse(loc.search) as SearchFilters;
-        const count = await fetchWorkshopsCount(queryParams);
-        setMaxPages(Math.ceil(count / pageLimit));
-        if (count === 0) {
-          setErrorMessage('No Workshops found :(');
+  useEffect(
+    () => {
+      const getInitialCount = async () => {
+        try {
+          const queryParams = qs.parse(loc.search) as SearchFilters;
+          const count = await fetchWorkshopsCount(queryParams);
+          setMaxPages(Math.ceil(count / pageLimit));
+          if (count === 0) {
+            setErrorMessage('No Workshops found :(');
+          }
+          changePageNumber(0);
+        } catch (error) {
+          setErrorMessage('Failed to load workshops.');
         }
-        changePageNumber(0);
-      } catch (error) {
-        setErrorMessage('Failed to load workshops.');
-      }
-    };
-    getInitialCount();
-  }, [loc.search, changePageNumber]);
+      };
+      getInitialCount();
+    },
+    [loc.search, changePageNumber]
+  );
 
   async function search({ value: params }: any) {
     history.push({
       pathname: '/workshops',
-      search: qs.stringify(params),
+      search: qs.stringify(params)
     });
   }
 
@@ -111,7 +114,7 @@ export default function WorkshopsList() {
       />
 
       <Grid rows="small" columns="medium" gap="large" pad="medium">
-        {workshops.map((workshop) => {
+        {workshops.map(workshop => {
           return (
             <WorkshopCard
               key={`${workshop._id}`}

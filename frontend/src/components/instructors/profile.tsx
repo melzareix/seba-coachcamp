@@ -48,7 +48,7 @@ export default function InstructorProfile() {
               image={workshop.gallery.length > 0 ? workshop.gallery[0] : '#000'}
               title={workshop.name}
               subtitle={workshop.offerings.map((o: Offering) => o.location).join('/')}
-              rating={5}
+              rating={workshop.rating}
             />
           );
         })}

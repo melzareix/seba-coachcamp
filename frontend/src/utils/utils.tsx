@@ -20,25 +20,18 @@ export const randomArrayElements = (arr: [], count: number) => {
 
 export const generateRatingStars = (rating: number) => {
   const stars = [];
-  for (let i = 1; i<=5; i++) {
-    stars.push(
-      <img 
-        src={rating >= i? StarFilledIcon: StarEmptyIcon} 
-        className="starIcon"
-      />
-    )
+  for (let i = 1; i <= 5; i++) {
+    stars.push(<img src={rating >= i ? StarFilledIcon : StarEmptyIcon} className="starIcon" />);
   }
   return stars;
-}
+};
 
 type Offering = {
   location: string;
-}
+};
 
 export const getOfferingsLocations = (offerings: Offering[]) => {
   const uniqueLocations = Array.from(new Set(offerings.map(offering => offering.location)));
-  if(uniqueLocations.length == 0) {
-    return "----";
-  }
+  if (uniqueLocations.length === 0) return [];
   return uniqueLocations.map((location: any) => location).join('/');
-}
+};

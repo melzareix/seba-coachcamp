@@ -14,15 +14,16 @@ const apiUrl = () => {
     },
     CATEGORIES: `/workshops/categories`,
     REGISTER_INSTRUCTOR: `/instructors/register`,
-    BOOK_WORKSHOP:`/bookings`,
+    BOOK_WORKSHOP: `/bookings`,
     LOGIN_INSTRUCTOR: `/instructors/login`,
     singleInstructor: (id: string) => `/instructors/${id}`,
     instructorWorkshops: (id: string) => {
       return `/instructors/${id}/workshops`;
     },
-    postReview: (id: string) =>  `/workshops/${id}/reviews`,
-    getAttendees: (id: string) =>  `/workshops/${id}/attendees`,
-    removeAttendee: (workshopId: string, bookingId: string) => `/bookings/${workshopId}/${bookingId}`,
+    postReview: (id: string) => `/workshops/${id}/reviews`,
+    getAttendees: (id: string) => `/workshops/${id}/attendees`,
+    removeAttendee: (workshopId: string, bookingId: string) =>
+      `/bookings/${workshopId}/${bookingId}`
   };
 };
 
@@ -30,13 +31,13 @@ export const api = apiUrl();
 export const axios = ax.create({
   baseURL: api.BASE_URL,
   headers: {
-    'content-type': 'application/json',
+    'content-type': 'application/json'
   },
-  responseType: 'json',
+  responseType: 'json'
 });
 
 axios.interceptors.request.use(
-  (config) => {
+  config => {
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -44,18 +45,22 @@ axios.interceptors.request.use(
     emit(IS_AXIOS_LOADING, true);
     return config;
   },
-  (error) => {
+  error => {
     emit(IS_AXIOS_LOADING, false);
     return Promise.reject(error);
   }
 );
 
 axios.interceptors.response.use(
-  (response) => {
+  response => {
+    // token expired
+    if (response.status === 401) {
+      localStorage.removeItem('token');
+    }
     emit(IS_AXIOS_LOADING, false);
     return response;
   },
-  (error) => {
+  error => {
     emit(IS_AXIOS_LOADING, false);
     return Promise.reject(error);
   }

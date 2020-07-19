@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {Box, Grid, Heading} from 'grommet';
+import React, { useEffect, useState } from 'react';
+import { Box, Grid, Heading } from 'grommet';
 import CategoryCard from '../common/categoryCard';
-import {randomArrayElements} from '../../utils/utils';
-import {api, axios} from '../../utils/api';
+import { randomArrayElements } from '../../utils/utils';
+import { api, axios } from '../../utils/api';
 
 export default function HomeCategories() {
   const [categories, setCategories] = useState([]);
@@ -27,7 +27,7 @@ export default function HomeCategories() {
       <hr style={{ width: '50%', color: 'rgba(0, 0, 0, 0.33)' }} />
 
       <Grid rows="small" columns="medium" gap="medium" pad="large">
-        {categories.map((category) => {
+        {categories.map(category => {
           return (
             <CategoryCard
               image={`/categories/${(category as string).toLowerCase()}.jpg`}
