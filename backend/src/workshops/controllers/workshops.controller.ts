@@ -13,7 +13,7 @@ import { WorkshopsService } from '../services/workshops.service';
 import { Categories, Workshop } from '../models/workshop.model';
 import { ApiTags } from '@nestjs/swagger';
 import { Locations, Offering } from '../models/offering.model';
-import { WorkshopCreateDto, WorkshopSearchDto } from '../workshops.types';
+import { WorkshopCreateDto, WorkshopSearchDto, WorkshopAttendeesDto } from '../workshops.types';
 import { OfferingsService } from '../services/offerings.service';
 import { OfferingCreateDto } from '../offerings.types';
 import { CouponsService } from '../services/coupons.service';
@@ -28,6 +28,8 @@ import * as moment from 'moment';
 import { ReviewsService } from '../services/reviews.service';
 import { Review } from '../models/review.model';
 import { ReviewCreateDto } from '../reviews.types';
+import {BookingsService} from '../services/bookings.service';
+import { StudentInfo } from '../bookings.types';
 
 @ApiTags('Workshops')
 @Controller('workshops')
@@ -36,7 +38,8 @@ export class WorkshopsController {
     public workshopService: WorkshopsService,
     public offeringsService: OfferingsService,
     public couponsService: CouponsService,
-    public reviewsService: ReviewsService
+    public reviewsService: ReviewsService,
+    public bookingsService: BookingsService
   ) {}
 
   @Get()
@@ -77,8 +80,13 @@ export class WorkshopsController {
     const updatedOfferings: Offering[] = [];
 
     //@ts-ignore
-    updatedWorkShop.gallery = updatedWorkShop.gallery.trim().split('\n');
-
+    let gallery = updatedWorkShop.gallery.trim();
+    if (gallery.length == 0) {
+      gallery = []
+    } else {
+      gallery = gallery.split('\n')
+    }
+    
     if (offerings) {
       for (const offering of offerings) {
         // @ts-ignore
@@ -131,10 +139,15 @@ export class WorkshopsController {
     // @ts-ignore
     updatedWorkShop._instructor = user.id;
     const newWorkshop = await this.workshopService.create(updatedWorkShop);
-    const createdOfferings = [];
+    const createdOfferings = [];    
 
     //@ts-ignore
-    const gallery = updatedWorkShop.gallery.trim().split('\n');
+    let gallery = updatedWorkShop.gallery.trim();
+    if (gallery.length == 0) {
+      gallery = []
+    } else {
+      gallery = gallery.split('\n')
+    }
 
     if (offerings) {
       for (const offering of offerings) {
@@ -162,6 +175,23 @@ export class WorkshopsController {
     @Param('workshop_id') workshopId: string,
   ): Promise<Workshop | null> {
     return await this.workshopService.deleteWorkshop(workshopId);
+  }
+
+  @InstructorAuth()
+  @Get(':workshop_id/attendees')
+  async getAttendees(
+    @Param('workshop_id') workshopId: string,
+  ): Promise<StudentInfo[] | null> {
+    const bookings = await this.bookingsService.findAttendeesForWorkshop(workshopId);
+    console.log('jere', bookings);
+    return bookings.map(booking => ({
+      firstName: booking.firstName,
+      lastName: booking.lastName,
+      email: booking.email,
+      phoneNumber: booking.phoneNumber,
+      // @ts-ignore
+      bookingId: booking.id,
+    }))
   }
 
   @Post(':id/reviews')

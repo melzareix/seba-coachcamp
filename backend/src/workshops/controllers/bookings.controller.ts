@@ -1,12 +1,10 @@
 import {
   Controller,
-  Get,
   Param,
-  Query,
-  Put,
   Body,
   Post,
   Logger,
+  Delete
 } from '@nestjs/common';
 import { Workshop, Categories } from '../models/workshop.model';
 import { ApiTags } from '@nestjs/swagger';
@@ -16,7 +14,6 @@ import { BookingsService } from '../services/bookings.service';
 import { WorkshopsService } from '../services/workshops.service';
 import { BookingCreateDto, BookOfferingDto } from '../bookings.types';
 import { Booking, BookingStatus } from '../models/booking.model';
-import { get } from 'http';
 import { CouponsService } from '../services/coupons.service';
 import Stripe from 'stripe';
 import { InjectStripe } from 'nestjs-stripe';
@@ -24,6 +21,7 @@ import { OfferingsService } from '../services/offerings.service';
 import { mongoose } from '@typegoose/typegoose';
 import { TransactionCreateDto } from '../transactions.types';
 import { TransactionsService } from '../services/transactions.service';
+import { InstructorAuth } from 'src/instructors/decorators/instructor.auth';
 
 @ApiTags('Bookings')
 @Controller('bookings')
@@ -47,16 +45,13 @@ export class BookingsController {
   // 6. save the booking
   @Post('')
   async createBooking(@Body() req: BookOfferingDto): Promise<Booking | null > {
-
-    const workshop = await this.workshopsService.findById(
-      String(req._workshop),
-    );
-    const requstedOffering = await this.offeringsService.findById(
-      String(req._offering),
-    );
+    const workshopId = String(req._workshop);
+    const offeringId = String(req._offering);
+    const requestedWorkshop = await this.workshopsService.findById(workshopId);
+    const requstedOffering = await this.offeringsService.findById(offeringId);
 
     let resultOffering: Offering;
-    for (const offering of workshop.offerings) {
+    for (const offering of requestedWorkshop.offerings) {
       if (
         offering.startDate.getTime() === requstedOffering.startDate.getTime() &&
         offering.endDate.getTime() === requstedOffering.endDate.getTime() &&
@@ -77,22 +72,21 @@ export class BookingsController {
 
     const coupon = await this.couponsService.findByCode(String(req._coupon));
     if(req._coupon){
-    if (!coupon || String(coupon._workshop) !== String(req._workshop)) {
-      Logger.error('Coupon Invalid');
-      return null;
-      // TODO: Throw error. 400
-    }
+      if (!coupon || String(coupon._workshop) !== workshopId) {
+        Logger.error('Coupon Invalid');
+        return null;
+        // TODO: Throw error. 400
+      }
 
-    if (coupon) {
-      const startDate = coupon.startDate.getTime();
-      const endDate = coupon.endDate.getTime();
-      const currentDate = Date.now();
-      if (currentDate >= startDate && currentDate <= endDate) {
-        price *= (100 - coupon.discount) / 100.0;
+      if (coupon) {
+        const startDate = coupon.startDate.getTime();
+        const endDate = coupon.endDate.getTime();
+        const currentDate = Date.now();
+        if (currentDate >= startDate && currentDate <= endDate) {
+          price *= (100 - coupon.discount) / 100.0;
+        }
       }
     }
-  }
-    
     const transfer = await this.stripeClient.charges.create({
       amount: price,
       currency: 'eur',
@@ -104,7 +98,7 @@ export class BookingsController {
       Logger.error('Transaction not processed.');
     }
     const transaction = {
-      _instructor: workshop._instructor,
+      _instructor: requestedWorkshop._instructor,
       _student: null, // get auth user? or email?
       stripe_charge: transfer.id,
       amount: price,
@@ -114,18 +108,41 @@ export class BookingsController {
     const savedTransaction = await this.transactionsService.create(transaction);
     // @ts-ignore
     req._transaction = mongoose.Types.ObjectId(savedTransaction.id);
-    //@ts-ignore
+    // @ts-ignore
     let coupon_id = req._coupon?coupon.id:null;
     const booking = {
       _offering: req._offering,
       _workshop: req._workshop,
-      _instructor: workshop._instructor,
-      _coupon: coupon_id  ,
+      _instructor: requestedWorkshop._instructor,
+      _coupon: coupon_id,
       _transaction: req._transaction,
       status: BookingStatus.PENDING,
       date: new Date(),
+      firstName: req.firstName,
+      lastName: req.lastName,
+      phoneNumber: req.phoneNumber,
+      email: req.emailAddress,
+      address: req.address,
+      postCode: req.postCode,
+      city: req.city,
     } as BookingCreateDto;
 
-    return await this.bookingService.create(booking);
+    const bookingCreated = await this.bookingService.create(booking);
+
+    requstedOffering.occupied = requstedOffering.occupied + 1;
+    this.offeringsService.update(offeringId, requstedOffering);
+    // @ts-ignore
+    const otherWorkshopOfferings = requestedWorkshop.offerings.filter(offering => offering.id !== offeringId);
+    this.workshopsService.update(workshopId, {offerings: [...otherWorkshopOfferings, requstedOffering]})
+    return bookingCreated;
+  }
+
+  @Delete(':workshop_id/:booking_id')
+  @InstructorAuth()
+  async deleteWorkshop(
+    @Param('workshop_id') workshopId: string,
+    @Param('booking_id') bookingId: string,
+  ): Promise<Booking | null> {
+    return await this.bookingService.deleteBooking(bookingId);
   }
 }

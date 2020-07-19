@@ -33,6 +33,27 @@ export class Booking {
   @prop()
   date: Date;
 
+  @prop()
+  firstName: string;
+
+  @prop()
+  lastName: string;
+
+  @prop()
+  address: string;
+
+  @prop()
+  postCode: string;
+
+  @prop()
+  city: string;
+
+  @prop()
+  phoneNumber: string;
+
+  @prop()
+  email: string;
+
   @prop({ default: false })
   _deleted?: boolean;
 }

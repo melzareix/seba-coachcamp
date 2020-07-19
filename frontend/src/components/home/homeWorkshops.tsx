@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Grid, Heading } from 'grommet';
 import WorkshopCard from '../common/workshopCard';
 import { api, axios } from '../../utils/api';
-import { randomArrayElements } from '../../utils/utils';
-import { Offering } from '../workshop/CreteWorkshop';
+import { randomArrayElements, getOfferingsLocations } from '../../utils/utils';
 
 export default function HomeWorkshops() {
   const [workshops, setWorkshops] = useState([]);
@@ -20,6 +19,7 @@ export default function HomeWorkshops() {
     };
     fetchData();
   }, []);
+
   return (
     <Box justify="center" width="full">
       <Heading textAlign="center" style={{ maxWidth: '100%' }}>
@@ -34,7 +34,7 @@ export default function HomeWorkshops() {
               image={workshop.gallery.length > 0 ? workshop.gallery[0] : '#000'}
               id={workshop._id}
               title={workshop.name}
-              subtitle={workshop.offerings.map((o: Offering) => o.location).join('/')}
+              subtitle={getOfferingsLocations(workshop.offerings)}
               rating={workshop.rating}
             />
           );

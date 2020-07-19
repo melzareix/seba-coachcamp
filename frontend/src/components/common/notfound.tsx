@@ -3,7 +3,7 @@ import { Box, Heading } from 'grommet';
 
 export default function NotFound() {
   return (
-    <Box fill justify="center" alignContent="center">
+    <Box fill justify="center" alignContent="center" className="full-height">
       <Heading color="dark-2" textAlign="center" size="medium" style={{ maxWidth: '100%' }}>
         Oops! This page doesn&#39;t exist (yet).
       </Heading>

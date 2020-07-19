@@ -22,4 +22,15 @@ export class BookingsService {
   async findById(id: string): Promise<Booking> {
     return await this.bookingModel.findById(id);
   }
+
+  async findAttendeesForWorkshop(workshopId: string): Promise<Booking[]> {
+    return await this.bookingModel.find({"_workshop":workshopId, _deleted: false });
+  }
+
+  async deleteBooking(bookingId: string): Promise<Booking> {
+    return this.bookingModel.findByIdAndUpdate(
+      bookingId,
+      { _deleted: true }
+    );
+  }
 }

@@ -9,6 +9,13 @@ export class BookingCreateDto {
   _transaction: ObjectId;
   status: BookingStatus;
   date: Date;
+  address: string;
+  postCode: string;
+  city: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
 }
 
 export class BookOfferingDto {
@@ -20,4 +27,19 @@ export class BookOfferingDto {
   status: BookingStatus;
   date: Date;
   token: string;
+  firstName: string;
+  lastName: string;
+  address: string;
+  postCode: string;
+  city: string;
+  phoneNumber: string;
+  emailAddress: string;
+}
+
+export type StudentInfo = {
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+  bookingId: string;
 }

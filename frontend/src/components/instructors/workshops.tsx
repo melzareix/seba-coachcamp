@@ -21,7 +21,6 @@ export default function InstructorWorkshops() {
   }, [workshopsUpdateDate]);
 
   const deleteWorkshop = async (id: string) => {
-    console.log(api.singleWorkshop(id));
     await axios.delete(api.singleWorkshop(id));
     setWorkshopsUpdateDate(new Date());
   };
@@ -57,6 +56,13 @@ export default function InstructorWorkshops() {
                     label="Edit"
                     onClick={async () => {
                       history.push(`/workshops/edit/${workshop._id}`);
+                    }}
+                  />
+                  <Button
+                    secondary
+                    label="Manage"
+                    onClick={async () => {
+                      history.push(`/instructors/workshops/${workshop._id}/manage`);
                     }}
                   />
                   <Button

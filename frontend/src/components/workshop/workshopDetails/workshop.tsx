@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Heading, Text, Box, Image, Stack } from 'grommet';
+import { toast } from 'react-toastify';
 import { useParams, useHistory } from 'react-router-dom';
 import './workshop.css';
 import DescriptionCard from './DescriptionCard';
@@ -8,8 +9,9 @@ import ReservationCard from './ReservationCard';
 import ReviewsForm from './ReviewsForm';
 import ReviewsCard from './ReviewsCard';
 import GalleryCard from './GalleryCard';
+import RecommendationsCard from './RecommendationsCard';
 import ErrorBox from '../../common/error';
-import { generateRatingStars } from './utils';
+import { generateRatingStars } from '../../../utils/utils';
 import { api, axios } from '../../../utils/api';
 import { Workshop, Offering } from './types';
 
@@ -32,9 +34,21 @@ export default function WorkshopComponent() {
     rating: 0,
     _id: ''
   });
+  const [recommendedWorkshops, setRecommendedWorkshops] = useState<Workshop[]>([]);
   const [apiError, setApiError] = useState(null);
   const { id } = useParams<{ id: string }>();
-  const history = useHistory()
+  const history = useHistory();
+
+  const getRecommendations = async (category: any) => {
+    const {data} = await axios.get(api.ALL_WORKSHOPS, {
+      params: {category},
+    });
+    let workshopsData = data.data;
+    if(workshopsData) {
+      workshopsData = workshopsData.filter((workshop: any) => workshop._id !== id);
+      setRecommendedWorkshops(workshopsData.slice(0, Math.min(3, workshopsData.length)))
+    }
+  }
 
   useEffect(() => {
     const getWorkshop = async () => {
@@ -47,18 +61,22 @@ export default function WorkshopComponent() {
         workshopData.offerings = workshopData.offerings.sort(compare);
       }
       setWorkshop(workshopData);
+      getRecommendations(workshopData.category);
     };
     getWorkshop();
   }, [id]);
 
-  const submitReview = async (formData: any) => {
+  const submitReview = async (formData: any, reset: any, setRating: any) => {
     try {
       setApiError(null);
-      const {data} = await axios.post(api.postReview(id), formData)
+      const {data} = await axios.post(api.postReview(id), formData);
       setWorkshop({
         ...workshop,
         reviews: [...workshop.reviews, data.data]
-      })
+      });
+      reset();
+      setRating(0);
+      toast.success('Review Posted');
     } catch (error) {
       setApiError(error.response.data?.message);
     }
@@ -67,12 +85,16 @@ export default function WorkshopComponent() {
   const redirectToBooking = (offeringId: string) => {
     history.push(`/workshops/${workshop._id}/book/${offeringId}`)
   } 
-
   return (
     <>
       <Stack>
         <div className="workshopDetailsHeader">
-          <Image src={workshop.gallery[0]} fit="cover" fill="horizontal" style={{ height: 400 }} />
+          {workshop.gallery.length > 0? (
+            <Image src={workshop.gallery[0]} fit="cover" fill="horizontal" style={{ height: 400 }} />
+          ) :(
+            <Box style={{ height: 400, backgroundColor: "rgba(51,51,51,0.7)" }} fill="horizontal"/>
+          )}
+         
 
           <div className="workshopDetailsHeaderTextContainer">
             <Heading color="white">{workshop.name}</Heading>
@@ -103,6 +125,7 @@ export default function WorkshopComponent() {
           <InstructorCard instructor={workshop._instructor} />
           <ReservationCard offerings={workshop.offerings} onSubmit={redirectToBooking} />
           <GalleryCard gallery={workshop.gallery} />
+          <RecommendationsCard workshops={recommendedWorkshops}/>
         </div>
       </div>
     </>
