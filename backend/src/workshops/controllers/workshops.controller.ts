@@ -28,10 +28,9 @@ import * as moment from 'moment';
 import { ReviewsService } from '../services/reviews.service';
 import { Review } from '../models/review.model';
 import { ReviewCreateDto } from '../reviews.types';
-import { Student } from '../../students/models/student.model';
 import {BookingsService} from '../services/bookings.service';
 import { StudentInfo } from '../bookings.types';
-import { resolve } from 'path';
+
 @ApiTags('Workshops')
 @Controller('workshops')
 export class WorkshopsController {
@@ -190,6 +189,8 @@ export class WorkshopsController {
       lastName: booking.lastName,
       email: booking.email,
       phoneNumber: booking.phoneNumber,
+      // @ts-ignore
+      bookingId: booking.id,
     }))
   }
 

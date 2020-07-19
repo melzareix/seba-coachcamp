@@ -39,7 +39,7 @@ export default function WorkshopComponent() {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
 
-  const getRecommendations = async (category: any, ) => {
+  const getRecommendations = async (category: any) => {
     const {data} = await axios.get(api.ALL_WORKSHOPS, {
       params: {category},
     });

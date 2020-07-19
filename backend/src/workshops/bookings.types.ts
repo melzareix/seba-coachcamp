@@ -41,4 +41,5 @@ export type StudentInfo = {
   lastName: string;
   phoneNumber: string;
   email: string;
+  bookingId: string;
 }

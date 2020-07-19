@@ -1,12 +1,10 @@
 import {
   Controller,
-  Get,
   Param,
-  Query,
-  Put,
   Body,
   Post,
   Logger,
+  Delete
 } from '@nestjs/common';
 import { Workshop, Categories } from '../models/workshop.model';
 import { ApiTags } from '@nestjs/swagger';
@@ -16,7 +14,6 @@ import { BookingsService } from '../services/bookings.service';
 import { WorkshopsService } from '../services/workshops.service';
 import { BookingCreateDto, BookOfferingDto } from '../bookings.types';
 import { Booking, BookingStatus } from '../models/booking.model';
-import { get } from 'http';
 import { CouponsService } from '../services/coupons.service';
 import Stripe from 'stripe';
 import { InjectStripe } from 'nestjs-stripe';
@@ -24,6 +21,7 @@ import { OfferingsService } from '../services/offerings.service';
 import { mongoose } from '@typegoose/typegoose';
 import { TransactionCreateDto } from '../transactions.types';
 import { TransactionsService } from '../services/transactions.service';
+import { InstructorAuth } from 'src/instructors/decorators/instructor.auth';
 
 @ApiTags('Bookings')
 @Controller('bookings')
@@ -137,5 +135,14 @@ export class BookingsController {
     const otherWorkshopOfferings = requestedWorkshop.offerings.filter(offering => offering.id !== offeringId);
     this.workshopsService.update(workshopId, {offerings: [...otherWorkshopOfferings, requstedOffering]})
     return bookingCreated;
+  }
+
+  @Delete(':workshop_id/:booking_id')
+  @InstructorAuth()
+  async deleteWorkshop(
+    @Param('workshop_id') workshopId: string,
+    @Param('booking_id') bookingId: string,
+  ): Promise<Booking | null> {
+    return await this.bookingService.deleteBooking(bookingId);
   }
 }

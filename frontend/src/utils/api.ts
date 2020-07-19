@@ -22,6 +22,7 @@ const apiUrl = () => {
     },
     postReview: (id: string) =>  `/workshops/${id}/reviews`,
     getAttendees: (id: string) =>  `/workshops/${id}/attendees`,
+    removeAttendee: (workshopId: string, bookingId: string) => `/bookings/${workshopId}/${bookingId}`,
   };
 };
 
